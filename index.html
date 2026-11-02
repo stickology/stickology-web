@@ -326,6 +326,9 @@ footer .tl{font-family:var(--f-hand);font-size:20px;color:var(--ink)}
 .sky-text{display:inline-block;padding-left:100%;animation:ticker var(--dur,18s) linear infinite}
 @media (prefers-reduced-motion:reduce){.sky-cloud{animation:none;left:16px;transform:none}.sky-text{animation:none;padding-left:0}}
 /* kampung */
+.kp-back{justify-self:start;display:inline-flex;align-items:center;gap:6px;background:none;border:2px solid var(--stroke);border-radius:999px;padding:5px 14px 5px 10px;font:inherit;font-weight:800;font-size:14px;color:var(--ink);cursor:pointer}
+.kp-back span{font-size:17px;line-height:1}
+.kp-back:hover{background:var(--paper)}
 .kp-wallet{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:16px;background:var(--paper);border:2px solid var(--stroke);border-radius:14px;padding:8px 12px}
 .kp-wallet b{font-size:22px}
 .kp-wallet small{margin-left:auto;color:var(--ink-soft);font-size:13px}
@@ -1983,10 +1986,16 @@ var Snd=(function(){
   actBtns.forEach(function(b){b.addEventListener('click',function(){joinNotice='';shopMsg='';panelOpen=panelOpen===b.dataset.kp?null:b.dataset.kp;renderPanel();if(panelOpen&&!mapEl.classList.contains('expanded'))panel.scrollIntoView({block:'nearest',behavior:'smooth'})})});
   function renderPanel(){
     actBtns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.kp===panelOpen?'true':'false')});
-    if(!panelOpen){panel.hidden=true;panel.innerHTML='';return}
+    if(!panelOpen){panel.hidden=true;panel.innerHTML='';panelHist=[];panelPrev=null;return}
+    if(panelPrev&&panelPrev!==panelOpen){if(panelHist[panelHist.length-1]===panelOpen)panelHist.pop();else panelHist.push(panelPrev);if(panelHist.length>8)panelHist.shift()}
+    panelPrev=panelOpen;
     panel.hidden=false;
     if(panelOpen==='join')renderJoin();else if(panelOpen==='chat')renderChat();else if(panelOpen==='usulan')renderUsul();else if(panelOpen==='top')renderTop();else if(panelOpen==='poll')renderPoll();else if(panelOpen==='donasi')renderDonasi();else if(panelOpen==='kerja')renderKerja();else if(panelOpen==='toko')renderToko();else renderDonorPanel();
+    var to=panelHist[panelHist.length-1];
+    panel.insertAdjacentHTML('afterbegin','<button type="button" class="kp-back" id="kp-back"><span aria-hidden="true">←</span> '+(to?'Kembali ke '+(PNAME[to]||'sebelumnya'):'Kembali ke peta')+'</button>');
+    $('kp-back').onclick=function(){var t=panelHist.pop()||null;panelPrev=t;joinNotice='';shopMsg='';panelOpen=t;renderPanel();if(!t&&mapEl)mapEl.scrollIntoView({block:'nearest',behavior:'smooth'})};
   }
+  var panelHist=[],panelPrev=null,PNAME={join:'Data warga',chat:'Chat',usulan:'Usulan Topik',top:'Top Donatur',poll:'Polling',donasi:'Donasi',kerja:'Kerja',toko:'Toko',donatur:'Donatur'};
   var joinNotice='';
   function showJoinNotice(){var m=$('kp-jmsg');if(!m||!joinNotice)return;m.innerHTML=joinNotice;var bc=$('kp-backchat');if(bc)bc.onclick=function(){joinNotice='';panelOpen='chat';renderPanel()}}
   var leaveArmed=false;
