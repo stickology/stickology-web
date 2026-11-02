@@ -1100,7 +1100,7 @@ var Snd=(function(){
   });FOREST.sort(function(a,b){return a[1]-b[1]})})();
 
   var REGIONS=[['Pegunungan',3500,1250],['Hutan Barat',1500,2700],['Hutan Timur',5650,2550],['Sawah',FARM.x+FARM.w/2,FARM.y+FARM.h/2],['Kampung',CX,CY-130],['Pantai & Dermaga',PIER.x,PIER_Y+40],['Laut Lepas',CX,5150]];
-  var houses=[],houseByOwner={},lotOwner={},bornT={},housesReady=false,roadExt=700;
+  var houses=[],houseByOwner={},lotOwner={},bornT={},housesReady=false,wargaLoaded=false,roadExt=700;
   var WB={x0:0,y0:0,x1:WX,y1:WY},CLOUDS=[],BOATS=[[PIER.x+110,PIER_Y+170,0],[PIER.x-150,PIER_Y+240,1.7],[CX-900,PIER_Y+330,3.1]];
   for(var ci=0;ci<40;ci++)CLOUDS.push({x:rw()*WX,y:rw()*WY,s:0.7+rw()*1.1,v:6+rw()*12});
   function buildHouses(){
@@ -1112,10 +1112,10 @@ var Snd=(function(){
       if(lot>=CELLS.length)return;
       taken[lot]=w.id;var c=CELLS[lot];
       var h={x:c.x,y:c.y,w:80,h:60,roof:w.look.cap==='#1B2433'?'#4A5770':w.look.cap,owner:w.id,lot:lot,donor:!!w.dkey};
-      if(housesReady&&!houseByOwner[w.id])bornT[w.id]=performance.now();
+      if(housesReady&&!houseByOwner[w.id]&&Date.now()-(w.at||0)<180000)bornT[w.id]=performance.now();
       out.push(h);byO[w.id]=h;
     });
-    houses=out;houseByOwner=byO;lotOwner=taken;housesReady=true;
+    houses=out;houseByOwner=byO;lotOwner=taken;housesReady=wargaLoaded;
     var ext=600;out.forEach(function(h){ext=Math.max(ext,Math.abs(h.x+40-CX)+120,Math.abs(h.y+30-CY)+120)});roadExt=ext;
   }
   function freeLot(){var n=0;while(lotOwner[n]&&lotOwner[n]!==uid)n++;return n}
@@ -1514,7 +1514,7 @@ var Snd=(function(){
   function subscribe(){
     var timer=setTimeout(function(){if(mode==='connecting')setMode('slow')},10000);
     db.collection('warga').onSnapshot(function(snap){
-      warga=snap.docs.filter(function(d){return d.exists}).map(norm);
+      warga=snap.docs.filter(function(d){return d.exists}).map(norm);wargaLoaded=true;
       myDoc=null;if(uid)for(var i=0;i<warga.length;i++)if(warga[i].id===uid)myDoc=warga[i];
       sync();
       if(!snap.metadata.fromCache){clearTimeout(timer);if(mode!=='live'&&mode!=='view')setMode(writable()?'live':'view')}
