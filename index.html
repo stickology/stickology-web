@@ -326,6 +326,12 @@ footer .tl{font-family:var(--f-hand);font-size:20px;color:var(--ink)}
 .sky-text{display:inline-block;padding-left:100%;animation:ticker var(--dur,18s) linear infinite}
 @media (prefers-reduced-motion:reduce){.sky-cloud{animation:none;left:16px;transform:none}.sky-text{animation:none;padding-left:0}}
 /* kampung */
+.kp-code{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.kp-code span{font:900 28px ui-monospace,Menlo,monospace;letter-spacing:.06em;background:var(--paper);border:2.5px dashed var(--stroke);border-radius:12px;padding:6px 14px;user-select:all}
+.kp-ok{font-weight:800;color:#1B7A4B;background:color-mix(in srgb,#9EE3C6 45%,var(--paper));border-radius:10px;padding:8px 12px;margin:0}
+.kp-warn{background:color-mix(in srgb,var(--sun) 35%,var(--paper));border-radius:10px;padding:8px 12px;font-size:14px}
+.kp-src{display:inline-block;margin-top:4px;font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px;background:var(--paper-line);color:var(--ink-soft)}
+.kp-src.saweria{background:#2FA36B;color:#fff}
 .kp-msgside{text-align:right;display:grid;justify-items:end;gap:2px}
 .kp-quote{display:block;width:100%;text-align:left;font:13px var(--f-body);color:var(--ink-soft);background:var(--sticker);border:0;border-left:3px solid var(--cap);border-radius:6px;padding:4px 8px;margin-bottom:4px;cursor:pointer;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .kp-quote b{color:var(--ink);margin-right:6px;font-weight:800}
@@ -600,7 +606,7 @@ kbd{font-family:var(--f-body);font-weight:800;font-size:13px;border:2px solid va
         <div class="kp-card" id="kp-card" hidden></div>
         <div class="kp-xbar" id="kp-xbar">
           <button type="button" class="btn btn-ghost btn-sm" data-kp="chat" aria-pressed="false">Chat</button>
-          <a class="btn btn-donate btn-sm" href="https://saweria.co/stickologyid" target="_blank" rel="noopener">Donasi</a>
+          <button type="button" class="btn btn-donate btn-sm" data-kp="donasi" aria-pressed="false">Donasi</button>
           <button type="button" class="btn btn-ghost btn-sm" id="kp-xfind">Cari stickman-ku</button>
         </div>
       </div>
@@ -609,12 +615,13 @@ kbd{font-family:var(--f-body);font-weight:800;font-size:13px;border:2px solid va
           <div class="kp-donor-latest" id="kp-donor-latest">Belum ada donatur. Dukung lewat Saweria, namamu bakal tampil di kampung.</div>
           <div class="kp-ticker" id="kp-ticker-wrap" hidden><div class="kp-ticker-track" id="kp-ticker"></div></div>
         </div>
-        <a class="btn btn-sm kp-donor-btn" href="https://saweria.co/stickologyid" target="_blank" rel="noopener">Donasi</a>
+        <button type="button" class="btn btn-sm kp-donor-btn" data-kp="donasi" aria-pressed="false">Donasi</button>
       </div>
       <div class="kp-actions">
         <button class="btn btn-donate" data-kp="join" id="kp-joinbtn" aria-pressed="false">+ Jadi Warga</button>
         <button class="btn btn-ghost" id="kp-find">Cari stickman-ku</button>
         <button class="btn btn-ghost" data-kp="chat" aria-pressed="false">Chat</button>
+        <button class="btn btn-donate" data-kp="donasi" aria-pressed="false">Donasi &amp; Jadi Warga</button>
         <button class="btn btn-ghost" data-kp="usulan" aria-pressed="false">Usulan Topik</button>
         <button class="btn btn-ghost" data-kp="poll" aria-pressed="false">Polling</button>
         <button class="btn btn-ghost" data-kp="top" aria-pressed="false">Top Donatur</button>
@@ -1104,7 +1111,7 @@ var Snd=(function(){
       if(lot<0){while(taken[next])next++;lot=next}
       if(lot>=CELLS.length)return;
       taken[lot]=w.id;var c=CELLS[lot];
-      var h={x:c.x,y:c.y,w:80,h:60,roof:w.look.cap==='#1B2433'?'#4A5770':w.look.cap,owner:w.id,lot:lot};
+      var h={x:c.x,y:c.y,w:80,h:60,roof:w.look.cap==='#1B2433'?'#4A5770':w.look.cap,owner:w.id,lot:lot,donor:!!w.dkey};
       if(housesReady&&!houseByOwner[w.id])bornT[w.id]=performance.now();
       out.push(h);byO[w.id]=h;
     });
@@ -1159,18 +1166,64 @@ var Snd=(function(){
     var fx=x+w-14;ctx.beginPath();ctx.moveTo(fx,y);ctx.lineTo(fx,y-46);ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#E5484D';ctx.fillRect(fx,y-46,26,9);ctx.fillStyle='#FFFFFF';ctx.fillRect(fx,y-37,26,9);ctx.strokeRect(fx,y-46,26,18);
     if(cam.z>0.45)label(b.label,x+w/2,y+h+6);
   }
+  function tukang(x,y,t,ph,dir){
+    var sw=Math.sin(t*9+ph);ctx.save();ctx.translate(x,y);ctx.scale(dir,1);ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.strokeStyle=INK;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,-14);ctx.lineTo(0,-30);ctx.moveTo(0,-14);ctx.lineTo(-5,0);ctx.moveTo(0,-14);ctx.lineTo(5,0);
+    ctx.moveTo(0,-26);ctx.lineTo(-7,-18);var ax=8+sw*2,ay=-30-sw*8;ctx.moveTo(0,-26);ctx.lineTo(ax,ay);ctx.stroke();
+    ctx.fillStyle='#FF8A3D';ctx.fillRect(-5,-29,10,13);ctx.strokeRect(-5,-29,10,13);
+    ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.arc(0,-38,7,0,7);ctx.fill();ctx.lineWidth=2.4;ctx.stroke();
+    ctx.fillStyle='#F5B400';ctx.beginPath();ctx.arc(0,-40,8,Math.PI,0);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-9,-40);ctx.lineTo(10,-40);ctx.stroke();
+    ctx.save();ctx.translate(ax,ay);ctx.rotate(-0.6+sw*.7);ctx.strokeStyle='#8C5A2B';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-10);ctx.stroke();ctx.fillStyle='#6F7B8C';ctx.fillRect(-4,-14,8,5);ctx.restore();
+    if(sw>.92){ctx.strokeStyle=INK;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(ax+6,ay-12);ctx.lineTo(ax+11,ay-16);ctx.moveTo(ax+7,ay-7);ctx.lineTo(ax+13,ay-7);ctx.stroke()}
+    ctx.restore();
+  }
+  var buildDone={};
   function house(hs,now){
-    var x=hs.x,y=hs.y,w=hs.w,h=hs.h;if(!vis(x-10,y-10,w+20,h+20))return;
+    var x=hs.x,y=hs.y,w=hs.w,h=hs.h;if(!vis(x-30,y-50,w+60,h+70))return;
+    var b=bornT[hs.owner],dur=hs.donor?9000:6000,k=b?(now-b)/dur:2;
+    if(b&&k>1.25){delete bornT[hs.owner]}
+    if(k<1){
+      var tt=now/1000;
+      if(cam.z<0.3){ctx.fillStyle='#E9C89A';ctx.fillRect(x,y+18+(h-18)*(1-k),w,(h-18)*k);ctx.strokeStyle='#F5B400';ctx.lineWidth=3;ctx.strokeRect(x-4,y,w+8,h);return}
+      ctx.save();ctx.lineJoin='round';
+      // kavling
+      ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(27,36,51,.5)';ctx.lineWidth=1.5;ctx.strokeRect(x-6,y+14,w+12,h-12);ctx.setLineDash([]);
+      var wallTop=y+18,wallH=h-18;
+      if(k>.04){ctx.fillStyle='#B9AE9A';ctx.fillRect(x-4,y+h-4,w+8,6);ctx.strokeStyle=INK;ctx.lineWidth=2;ctx.strokeRect(x-4,y+h-4,w+8,6)}
+      var wk=Math.max(0,Math.min(1,(k-.1)/.42)),wh=wallH*wk;
+      if(wh>0){ctx.fillStyle='#FFFDF6';ctx.fillRect(x,y+h-wh,w,wh);ctx.strokeStyle=INK;ctx.lineWidth=3;ctx.strokeRect(x,y+h-wh,w,wh);
+        ctx.strokeStyle='rgba(160,113,79,.35)';ctx.lineWidth=1;for(var by=y+h-8;by>y+h-wh;by-=8){ctx.beginPath();ctx.moveTo(x+2,by);ctx.lineTo(x+w-2,by);ctx.stroke()}}
+      if(k>.56){var rk=Math.min(1,(k-.56)/.14),e=1-Math.pow(1-rk,3);ctx.save();ctx.translate(x+w/2,y+20);ctx.scale(e,e);ctx.translate(-(x+w/2),-(y+20));ctx.beginPath();ctx.moveTo(x-6,y+20);ctx.lineTo(x+w/2,y-8);ctx.lineTo(x+w+6,y+20);ctx.closePath();ctx.fillStyle=hs.roof;ctx.fill();ctx.strokeStyle=INK;ctx.lineWidth=3;ctx.stroke();ctx.restore()}
+      if(k>.74){ctx.fillStyle='#A0714F';ctx.fillRect(x+w/2-8,y+h-24,16,24);ctx.strokeStyle=INK;ctx.lineWidth=3;ctx.strokeRect(x+w/2-8,y+h-24,16,24)}
+      if(k>.84){ctx.fillStyle='#BFDBFE';ctx.fillRect(x+8,y+28,14,12);ctx.strokeRect(x+8,y+28,14,12);ctx.fillRect(x+w-22,y+28,14,12);ctx.strokeRect(x+w-22,y+28,14,12)}
+      // perancah
+      if(k<.94){ctx.strokeStyle='#8C6A48';ctx.lineWidth=2.4;[x-10,x+w+10].forEach(function(px){ctx.beginPath();ctx.moveTo(px,y+h);ctx.lineTo(px,y-6);ctx.stroke()});
+        for(var sy=y+h-14;sy>y-4;sy-=16){ctx.beginPath();ctx.moveTo(x-10,sy);ctx.lineTo(x-2,sy);ctx.moveTo(x+w+2,sy);ctx.lineTo(x+w+10,sy);ctx.stroke()}}
+      // debu
+      for(var i=0;i<6;i++){var a=(tt*1.3+i*.37)%1,dx=x+w/2+Math.sin(i*2.1+tt)*(w*.6),dy=y+h-a*22;ctx.fillStyle='rgba(200,180,150,'+(0.5*(1-a)).toFixed(2)+')';ctx.beginPath();ctx.arc(dx,dy,3+a*7,0,7);ctx.fill()}
+      // tukang
+      tukang(x-20,y+h+14,tt,0,1);tukang(x+w+20,y+h+14,tt,1.7,-1);
+      if(hs.donor)tukang(x+w/2,y+h+22,tt,3.1,1);
+      // papan progres
+      var pct=Math.floor(Math.min(1,k)*100),lw=96,lx=x+w/2-lw/2,ly=y-44;
+      ctx.fillStyle=INK;ctx.beginPath();ctx.roundRect?ctx.roundRect(lx,ly,lw,26,6):ctx.rect(lx,ly,lw,26);ctx.fill();
+      ctx.fillStyle='#FFD95E';ctx.font='800 9.5px Figtree, system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(hs.donor?'RUMAH DONATUR':'SEDANG DIBANGUN',x+w/2,ly+8);
+      ctx.fillStyle='#3A4560';ctx.fillRect(lx+8,ly+15,lw-16,6);ctx.fillStyle='#2FA36B';ctx.fillRect(lx+8,ly+15,(lw-16)*Math.min(1,k),6);
+      ctx.restore();
+      if(sel==='house:'+hs.owner){ctx.lineWidth=4;ctx.strokeStyle='#2F6FEB';ctx.strokeRect(x-6,y-12,w+12,h+18)}
+      return;
+    }
+    if(b&&!buildDone[hs.owner]){buildDone[hs.owner]=1;if(window.Snd)Snd.sfx('right')}
     if(cam.z<0.3){ctx.fillStyle='#FFFDF6';ctx.fillRect(x,y+18,w,h-18);ctx.fillStyle=hs.roof;ctx.fillRect(x-4,y,w+8,22);return}
-    var b=bornT[hs.owner],k=b?Math.min(1,(now-b)/700):1;if(k>=1&&b)delete bornT[hs.owner];
-    ctx.save();if(k<1){var e=1-Math.pow(1-k,3);ctx.translate(x+w/2,y+h);ctx.scale(e,e);ctx.translate(-(x+w/2),-(y+h))}
-    ctx.lineJoin='round';ctx.fillStyle='rgba(27,36,51,.14)';ctx.fillRect(x+5,y+24,w,h-18);ctx.fillStyle='#FFFDF6';ctx.fillRect(x,y+18,w,h-18);ctx.lineWidth=3;ctx.strokeStyle=INK;ctx.strokeRect(x,y+18,w,h-18);
+    ctx.save();ctx.lineJoin='round';ctx.fillStyle='rgba(27,36,51,.14)';ctx.fillRect(x+5,y+24,w,h-18);ctx.fillStyle='#FFFDF6';ctx.fillRect(x,y+18,w,h-18);ctx.lineWidth=3;ctx.strokeStyle=INK;ctx.strokeRect(x,y+18,w,h-18);
     ctx.beginPath();ctx.moveTo(x-6,y+20);ctx.lineTo(x+w/2,y-8);ctx.lineTo(x+w+6,y+20);ctx.closePath();ctx.fillStyle=hs.roof;ctx.fill();ctx.stroke();
     ctx.fillStyle='#A0714F';ctx.fillRect(x+w/2-8,y+h-24,16,24);ctx.strokeRect(x+w/2-8,y+h-24,16,24);
     ctx.fillStyle='#BFDBFE';ctx.fillRect(x+8,y+28,14,12);ctx.strokeRect(x+8,y+28,14,12);ctx.fillRect(x+w-22,y+28,14,12);ctx.strokeRect(x+w-22,y+28,14,12);
+    if(hs.donor){ctx.fillStyle='#FFD95E';ctx.beginPath();var sx=x+w/2,sy2=y-14;for(var i2=0;i2<10;i2++){var ang=-Math.PI/2+i2*Math.PI/5,rr2=i2%2?3.5:8;ctx.lineTo(sx+Math.cos(ang)*rr2,sy2+Math.sin(ang)*rr2)}ctx.closePath();ctx.fill();ctx.lineWidth=1.8;ctx.stroke()}
+    if(b&&k<1.25){var sp=(k-1)/.25;for(var j=0;j<8;j++){var an=j*Math.PI/4,r=20+sp*40;ctx.globalAlpha=1-sp;ctx.fillStyle='#FFD95E';ctx.beginPath();ctx.arc(x+w/2+Math.cos(an)*r,y+h/2+Math.sin(an)*r*.7,4*(1-sp)+1,0,7);ctx.fill();ctx.globalAlpha=1}}
     if(sel==='house:'+hs.owner){ctx.lineWidth=4;ctx.strokeStyle='#2F6FEB';ctx.strokeRect(x-6,y-12,w+12,h+18)}
     ctx.restore();
-    if(k>=1)wins.push([x+8,y+28,14,12],[x+w-22,y+28,14,12]);
+    wins.push([x+8,y+28,14,12],[x+w-22,y+28,14,12]);
   }
   function farm(){
     var f=FARM;if(!vis(f.x-10,f.y-10,f.w+20,f.h+20))return;
@@ -1261,10 +1314,10 @@ var Snd=(function(){
   function sync(){
     buildHouses();
     var seen={__npc:1};ensure(NPC);
-    var presDoc=null;
-    warga.forEach(function(w){if(presUid&&w.id===presUid){presDoc=w;return}w.special=specialRoles[w.id]||'';seen[w.id]=1;ensure(w)});
+    var presDoc=null;donorTop=aggDonors(donors,false);var dmap={};donorTop.forEach(function(a){dmap[a.id.slice(4)]=a});var housed={};housedKeys=housed;
+    warga.forEach(function(w){if(presUid&&w.id===presUid){presDoc=w;return}w.special=specialRoles[w.id]||'';var a=w.dkey?dmap[w.dkey]:null;w.dinfo=a||null;w.rank=a?a.rank:0;if(w.dkey)housed[w.dkey]=1;seen[w.id]=1;ensure(w)});
     NPC.status=presDoc&&presDoc.status?presDoc.status:'Selamat datang di Kampung Stickman!';ensure(NPC);
-    donorTop=aggDonors(donors,false);donorTop.slice(0,30).forEach(function(d){seen[d.id]=1;ensure(d)});
+    donorTop.filter(function(d){return !housed[d.id.slice(4)]}).slice(0,30).forEach(function(d){seen[d.id]=1;ensure(d)});
     for(var k in sprites)if(!seen[k]){delete sprites[k];if(sel===k)hideCard()}
     if(sel&&sel.indexOf('house:')===0&&!houseByOwner[sel.slice(6)])hideCard();
     countEl.textContent=(warga.length-(presDoc?1:0)).toLocaleString('id-ID');
@@ -1313,7 +1366,7 @@ var Snd=(function(){
       if(!s.img||!s.img.complete||!s.img.naturalWidth)return;
       var bob=s.moving?Math.abs(Math.sin(t*9+s.x*0.01))*3:0;
       ctx.save();ctx.translate(s.x,s.y);ctx.scale(s.dir,1);ctx.drawImage(s.img,-28,-51-bob,56,56);ctx.restore();
-      if(s.d.donor)crown(s.x+s.dir*2,s.y-bob,s.d.rank);
+      if(s.d.donor||s.d.dinfo)crown(s.x+s.dir*2,s.y-bob,s.d.rank);
     });
     drawClouds();
     var dk=darkness();
@@ -1393,15 +1446,27 @@ var Snd=(function(){
     else if(d.special)h+='<small><b style="font-family:inherit;font-size:13px;display:inline;color:#B4232A">★ '+esc(d.special)+'</b></small>';
     else if(!d.donor&&d.role)h+='<small>'+esc(ROLEOK[d.role]||'Warga')+'</small>';
     if(d.donor)h+='<small>Peringkat #'+d.rank+' donatur · total '+rupiah(d.amount)+(d.count>1?' dari '+d.count+' donasi':'')+'</small>';
+    if(d.dinfo)h+='<small>Donatur peringkat #'+d.dinfo.rank+' · total '+rupiah(d.dinfo.amount)+'</small>';
     else if(!d.npc&&houseByOwner[d.id])h+='<small>Rumah no. '+(houseByOwner[d.id].lot+1)+(uid&&d.id===uid?' · ini kamu':'')+'</small>';
     if(d.status)h+='<p>“'+esc(d.status)+'”</p>';
     if(d.at)h+='<small>'+(d.donor?'Berdonasi ':'Warga sejak ')+fmtDate(d.at)+'</small>';
+    if(isOwner&&d.donor&&db)h+='<button class="btn btn-donate btn-sm" id="kp-buildd" style="margin-top:6px">Bangun rumah</button>';
     if(isOwner&&!d.npc&&!d.donor&&db)h+='<button class="kp-del" id="kp-kick">'+(kickArmed?'Yakin hapus? Ketuk lagi':(d.donor?'Hapus donatur':'Keluarkan dari kampung'))+'</button>';
     h+='</div><button class="kp-x" id="kp-cx" aria-label="Tutup">×</button>';
     cardEl.innerHTML=h;cardEl.hidden=false;
     $('kp-cx').onclick=hideCard;
     var kb=$('kp-kick');
     if(kb)kb.onclick=function(){if(!kickArmed){kickArmed=true;showCard(id,true);return}db.doc(d.donor?'donatur/'+d.did:'warga/'+id).delete().then(hideCard,function(){kb.textContent='Gagal, coba lagi'})};
+    var bd=$('kp-buildd');if(bd)bd.onclick=function(){bd.disabled=true;bd.textContent='Membangun…';buildDonorHome(d.id.slice(4)).catch(function(){bd.disabled=false;bd.textContent='Gagal, coba lagi'})};
+  }
+  function buildDonorHome(key){
+    var a=null;donorTop.forEach(function(x){if(x.id==='don_'+key)a=x});if(!a)return Promise.reject(new Error('nf'));
+    var hid=a.uid||('donor_'+key);
+    function focus(){setTimeout(function(){var hs=houseByOwner[hid];if(hs){mapEl.scrollIntoView({block:'nearest',behavior:'smooth'});flyTo(hs.x+40,hs.y+40,Math.max(cam.z,1.2));showHouse(hid)}},500)}
+    var ex=null;warga.forEach(function(w){if(w.id===hid)ex=w});
+    if(ex&&ex.dkey===key&&houseByOwner[hid]){focus();return Promise.resolve()}
+    if(ex)return db.doc('warga/'+hid).update({donorKey:key}).then(focus);
+    return db.doc('warga/'+hid).set({name:clean(a.name,18)||'Donatur',status:clean(a.status||'',60),look:okLook(a.look||donorLook(a.name)),role:a.role||'warga',lot:freeLot(),at:Date.now(),donorKey:key}).then(focus);
   }
   function showHouse(owner){
     var hs=houseByOwner[owner],s=sprites[owner];if(!hs||!s)return;sel='house:'+owner;delete cardEl.dataset.photo;var d=s.d;
@@ -1435,8 +1500,9 @@ var Snd=(function(){
   function writable(){return !!db&&!!uid&&canWrite!==false}
   function lockedNote(){if(!db)return'Kampung belum tersambung di tampilan ini, jadi kamu baru bisa lihat-lihat. Fitur warga, chat, dan usulan aktif saat kampung tersambung.';return'Kamu bisa lihat kampung dan baca obrolan, tapi akun ini belum bisa ikut menulis.'}
   function errText(e){var c=e&&e.code;if(c==='quota_exceeded')return'Kampung lagi penuh. Coba lagi nanti.';if(c==='resource_exhausted')return'Pelan-pelan dulu, coba lagi sebentar.';if(c==='invalid_argument'){canWrite=false;return'Akun ini belum bisa menulis di kampung.'}return'Gagal tersambung. Coba lagi.'}
-  function norm(doc){var d=doc.data()||{};return{id:doc.id,name:clean(d.name,18)||'Warga',status:clean(d.status,60),look:okLook(d.look),lot:typeof d.lot==='number'?Math.floor(d.lot):-1,role:ROLEOK[d.role]?d.role:'warga',at:+d.at||0}}
-  function normDonor(doc){var d=doc.data()||{},name=clean(d.name,24)||'Anonim';return{id:'don_'+doc.id,did:doc.id,donor:true,name:name,amount:Math.max(0,Math.round(+d.amount||0)),status:clean(d.msg,100),look:donorLook(name),at:+d.at||0}}
+  function norm(doc){var d=doc.data()||{};return{id:doc.id,name:clean(d.name,18)||'Warga',status:clean(d.status,60),look:okLook(d.look),lot:typeof d.lot==='number'?Math.floor(d.lot):-1,role:ROLEOK[d.role]?d.role:'warga',dkey:typeof d.donorKey==='string'?d.donorKey.slice(0,40):'',at:+d.at||0}}
+  function normDonor(doc){var d=doc.data()||{},name=clean(d.name,24)||'Anonim',u=typeof d.uid==='string'?d.uid.slice(0,64):'';return{id:'don_'+doc.id,did:doc.id,donor:true,src:d.src==='saweria'?'saweria':'manual',uid:u,code:clean(d.code,10),role:ROLEOK[d.role]?d.role:'warga',name:name,amount:Math.max(0,Math.round(+d.amount||0)),status:clean(d.msg,100),look:d.look&&typeof d.look==='object'?okLook(d.look):donorLook(name),at:+d.at||0}}
+  function aggKey(d){return d.uid?('u'+d.uid.replace(/[^A-Za-z0-9]/g,'').slice(0,38)):donorKey(d.name)}
   function connect(){
     var c=window.claude;if(!(c&&c.use)){setMode('off');return}
     Promise.all([c.use('db'),c.use('user')]).then(function(r){
@@ -1456,6 +1522,7 @@ var Snd=(function(){
       if(panelOpen==='chat')updateChatHint();
       if(panelOpen==='usulan'){updateUsulHint();renderUsulList()}
       if(panelOpen==='poll')renderPollList();
+      if(panelOpen==='donatur')renderDonorList();
     },function(){clearTimeout(timer);setMode('off')});
     db.collection('chat').orderBy('at','desc').limit(60).onSnapshot(function(snap){
       chats=snap.docs.map(function(doc){var d=doc.data()||{};return{id:doc.id,uid:String(d.uid||''),name:clean(d.name,18)||'Warga',cap:CAPOK.test(d.cap)?d.cap:'#2F6FEB',text:clean(d.text,140),at:+d.at||0,reply:d.reply&&typeof d.reply==='object'?{id:String(d.reply.id||''),name:clean(d.reply.name,18)||'Warga',text:clean(d.reply.text,60)}:null}}).filter(function(m){return m.text}).reverse();
@@ -1480,6 +1547,12 @@ var Snd=(function(){
       polls=snap.docs.filter(function(d){return d.exists}).map(normPoll).filter(function(p){return p.q&&p.options.length>=2});
       pollBtnDot();if(panelOpen==='poll')renderPollList();
     },function(){});
+    if(uid)db.collection('pesanan').where('uid','==',uid).onSnapshot(function(snap){
+      var prev={};myOrders.forEach(function(o){prev[o.id]=o.status});
+      myOrders=snap.docs.filter(function(d){return d.exists}).map(normOrder);
+      myOrders.forEach(function(o){if(prev[o.id]==='pending'&&o.status==='paid'){if(window.Snd)Snd.sfx('right');toast('Pembayaran diterima! Karaktermu sudah di kampung.')}if(o.status==='pending'&&o.exp<Date.now()){db.doc('pesanan/'+o.id).delete().catch(function(){})}});
+      if(panelOpen==='donasi')renderPanel();
+    },function(){});
     db.collection('roles').onSnapshot(function(snap){
       var m={};snap.docs.forEach(function(doc){if(!doc.exists)return;var t=clean((doc.data()||{}).title,30);if(t)m[doc.id]=t});specialRoles=m;sync();
       if(panelOpen==='join')renderReqStatus();
@@ -1501,7 +1574,7 @@ var Snd=(function(){
   function celebrate(d){
     donorBar.classList.remove('flash');void donorBar.offsetWidth;donorBar.classList.add('flash');
     if(window.Snd)Snd.sfx('atom');
-    var s=sprites['don_'+donorKey(d.name)];if(s)flyTo(s.x,s.y-40,Math.max(cam.z,1));
+    var s=sprites['don_'+aggKey(d)];if(s)flyTo(s.x,s.y-40,Math.max(cam.z,1));
     toast('Donatur baru! '+d.name+' traktir '+rupiah(d.amount)+'. Terima kasih!',window.SMBuild({cap:d.look.cap,outfit:d.look.outfit,face:'laugh',acc:d.look.acc,pose:'yay',bg:'#FFD95E',name:''}));
   }
 
@@ -1528,8 +1601,8 @@ var Snd=(function(){
     var m={},now=new Date(Date.now()+7*3600e3),ym=now.getUTCFullYear()*12+now.getUTCMonth();
     list.forEach(function(d){
       if(monthOnly){var t=new Date(d.at+7*3600e3);if(t.getUTCFullYear()*12+t.getUTCMonth()!==ym)return}
-      var k=donorKey(d.name);if(k==='anonim')return;
-      var a=m[k];if(!a)a=m[k]={id:'don_'+k,donor:true,name:d.name,amount:0,count:0,at:0,status:'',look:donorLook(d.name)};
+      var k=aggKey(d);if(k==='anonim')return;
+      var a=m[k];if(!a)a=m[k]={id:'don_'+k,donor:true,name:d.name,uid:d.uid,role:d.role,amount:0,count:0,at:0,status:'',look:d.look};
       a.amount+=d.amount;a.count++;if(d.at>a.at){a.at=d.at;if(d.status)a.status=d.status}
     });
     var arr=Object.keys(m).map(function(k){return m[k]}).sort(function(a,b){return b.amount-a.amount||a.at-b.at});
@@ -1599,6 +1672,58 @@ var Snd=(function(){
   });
   setInterval(function(){if(panelOpen==='poll')renderPollList();pollBtnDot()},30000);
 
+  /* --- donasi & jadi warga (pesanan berkode) --- */
+  var myOrders=[],orderLook=null,orderRole='warga',housedKeys={},ORDER_MIN=5000,ORDER_TTL=864e5;
+  function genCode(){var c='ABCDEFGHJKMNPQRSTUVWXYZ23456789',s='',a=new Uint32Array(4);try{crypto.getRandomValues(a)}catch(e){for(var i=0;i<4;i++)a[i]=Math.random()*1e9}for(var j=0;j<4;j++)s+=c[a[j]%c.length];return'KS-'+s}
+  function normOrder(doc){var d=doc.data()||{};return{id:doc.id,name:clean(d.name,18),status:String(d.status||'pending'),at:+d.at||0,exp:+d.exp||0,paidAt:+d.paidAt||0,paidAmount:+d.paidAmount||0,look:okLook(d.look),special:clean(d.special,30),role:ROLEOK[d.role]?d.role:'warga'}}
+  function dismissed(id){try{return localStorage.getItem('stk-ord-x-'+id)==='1'}catch(e){return false}}
+  function activeOrder(){var now=Date.now(),best=null;myOrders.forEach(function(o){if(dismissed(o.id))return;var ok=(o.status==='pending'&&o.exp>now)||((o.status==='paid'||o.status==='kurang')&&now-(o.paidAt||o.at)<3*864e5);if(ok&&(!best||o.at>best.at))best=o});return best}
+  function randLook(){function p(a){return a[Math.floor(Math.random()*a.length)]}return{cap:p(CAPS),outfit:p(OUTOK),face:p(FACEOK),acc:p(ACCOK)}}
+  function lookSvg(l,bg){return window.SMBuild({cap:l.cap,outfit:l.outfit,face:l.face,acc:l.acc,pose:'wave',bg:bg||'#FFD95E',name:''})}
+  function renderDonasi(){
+    var h='<h3>Donasi &amp; Jadi Warga</h3>';
+    if(!db||!uid){panel.innerHTML=h+'<p class="kp-note">Fitur ini aktif saat kampung tersambung. Sementara itu kamu tetap bisa donasi langsung di <a href="https://saweria.co/stickologyid" target="_blank" rel="noopener">Saweria</a>.</p>';return}
+    var o=activeOrder();if(o)return renderOrderStatus(o);
+    if(!orderLook)orderLook=okLook(window.SMGet());
+    h+='<p class="kp-note">Donasi minimal <b>'+rupiah(ORDER_MIN)+'</b>, dan karakter buatanmu langsung tinggal di kampung. Presiden yang akan membangun rumahmu.</p>';
+    h+='<div class="kp-join"><div class="kp-mini" id="kp-olook">'+lookSvg(orderLook)+'</div><div class="kp-form">';
+    h+='<div class="kp-row"><button type="button" class="btn btn-ghost btn-sm" id="kp-oacak">Acak karakter</button><button type="button" class="btn btn-ghost btn-sm" id="kp-ostudio">Pakai dari Studio</button></div><p class="kp-note" style="margin:0">Mau desain sendiri? <a href="#studio">Atur di Studio Stickman</a>, lalu tekan "Pakai dari Studio".</p>';
+    h+='<label class="ctl-label" for="kp-oname">Nama di kampung</label><input class="sm-input" id="kp-oname" maxlength="18" autocomplete="off" placeholder="misal: Jamal" value="'+esc(myDoc?myDoc.name:'')+'">';
+    h+='<span class="ctl-label">Mau jadi apa?</span><div class="opts" id="kp-oroles">'+ROLES.map(function(r){return'<button type="button" class="outfit-btn" data-orole="'+r[0]+'" aria-pressed="'+(r[0]===orderRole?'true':'false')+'">'+r[1]+'</button>'}).join('')+'</div>';
+    h+='<label class="ctl-label" for="kp-ospecial">Role nyeleneh (opsional)</label><input class="sm-input" id="kp-ospecial" maxlength="30" autocomplete="off" placeholder="misal: Menteri Rebahan"><p class="kp-note" style="margin:0">Langsung aktif setelah pembayaran diterima.</p>';
+    h+='<label class="ctl-label" for="kp-omsg">Pesan (opsional)</label><input class="sm-input" id="kp-omsg" maxlength="60" autocomplete="off" placeholder="Salam buat warga kampung">';
+    h+='<div class="kp-row"><button type="button" class="btn btn-donate" id="kp-ogo">Lanjut ke pembayaran</button></div><p class="kp-note" id="kp-omsgout" role="status"></p></div></div>';
+    panel.innerHTML=h;
+    $('kp-oacak').onclick=function(){orderLook=randLook();$('kp-olook').innerHTML=lookSvg(orderLook)};
+    $('kp-ostudio').onclick=function(){orderLook=okLook(window.SMGet());$('kp-olook').innerHTML=lookSvg(orderLook)};
+    $('kp-oroles').onclick=function(e){var b=e.target.closest('[data-orole]');if(!b)return;orderRole=b.dataset.orole;this.querySelectorAll('[data-orole]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')})};
+    $('kp-ogo').onclick=function(){
+      var out=$('kp-omsgout'),name=clean($('kp-oname').value,18);if(!name){out.textContent='Isi nama dulu ya.';return}
+      var btn=this;btn.disabled=true;out.textContent='Menyiapkan kode…';var now=Date.now();
+      function tryCreate(n){var code=genCode();var doc={uid:uid,name:name,look:orderLook,role:orderRole,special:clean($('kp-ospecial').value,30),msg:clean($('kp-omsg').value,60),at:now,exp:now+ORDER_TTL,status:'pending',min:ORDER_MIN};
+        return db.doc('pesanan/'+code).set(doc).then(function(){myOrders=myOrders.concat([{id:code,name:name,status:'pending',at:now,exp:now+ORDER_TTL,look:orderLook,special:doc.special,role:orderRole}]);renderPanel()},function(err){if(n<2)return tryCreate(n+1);btn.disabled=false;out.textContent=errText(err)})}
+      tryCreate(0);
+    };
+  }
+  function renderOrderStatus(o){
+    var h='<h3>Donasi &amp; Jadi Warga</h3><div class="kp-join"><div class="kp-mini">'+lookSvg(o.look,o.status==='paid'?'#9EE3C6':'#FFD95E')+'</div><div class="kp-form">';
+    if(o.status==='pending'){
+      h+='<p class="kp-note" style="margin:0">Kode pesananmu:</p><div class="kp-code"><span id="kp-ocode">'+esc(o.id)+'</span><button type="button" class="btn btn-main btn-sm" id="kp-ocopy">Salin kode</button></div>';
+      h+='<ol class="kp-steps"><li>Salin kode di atas.</li><li>Tekan <b>Bayar di Saweria</b>, donasi minimal <b>'+rupiah(ORDER_MIN)+'</b>.</li><li><b>Tempel kode</b> di kolom pesan Saweria.</li><li>Tunggu sebentar. Halaman ini berubah sendiri setelah pembayaran diterima.</li></ol>';
+      h+='<div class="kp-row"><a class="btn btn-donate" href="https://saweria.co/stickologyid" target="_blank" rel="noopener">Bayar di Saweria</a><button type="button" class="kp-del" id="kp-ocancel">Batalkan</button></div>';
+      h+='<p class="kp-note">Atas nama <b>'+esc(o.name)+'</b>'+(o.special?' · role <b>★ '+esc(o.special)+'</b>':'')+'. Kode berlaku sampai '+fmtTime(o.exp)+' WIB '+(new Date(o.exp+7*3600e3).getUTCDate()!==new Date(Date.now()+7*3600e3).getUTCDate()?'besok':'hari ini')+'.</p><p class="kp-note" id="kp-omsgout" role="status"></p>';
+    }else if(o.status==='paid'){
+      var home=!!houseByOwner[uid];
+      h+='<p class="kp-ok">Pembayaran diterima! Terima kasih, '+esc(o.name)+'.</p><p class="kp-note">'+(home?'Rumahmu sudah jadi. Selamat datang, warga baru!':'Karaktermu sudah tinggal di alun-alun kampung. Tinggal tunggu Presiden membangun rumahmu.')+(o.special?' Role <b>★ '+esc(o.special)+'</b> sudah aktif.':'')+'</p><div class="kp-row"><button type="button" class="btn btn-main btn-sm" id="kp-ofind">Lihat karakterku</button><button type="button" class="kp-del" id="kp-onew">Donasi lagi</button></div>';
+    }else{
+      h+='<p class="kp-note"><b>Donasi masuk '+rupiah(o.paidAmount)+'</b>, terima kasih! Tapi nominalnya di bawah '+rupiah(ORDER_MIN)+', jadi karakter custom belum aktif. Kamu tetap tercatat sebagai donatur.</p><div class="kp-row"><button type="button" class="kp-del" id="kp-onew">Buat pesanan baru</button></div>';
+    }
+    panel.innerHTML=h+'</div></div>';
+    var cp=$('kp-ocopy');if(cp)cp.onclick=function(){var t=o.id;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){cp.textContent='Tersalin!'},function(){var r=document.createRange();r.selectNodeContents($('kp-ocode'));var s=getSelection();s.removeAllRanges();s.addRange(r);cp.textContent='Tekan lama untuk salin'})};
+    var cn=$('kp-ocancel');if(cn)cn.onclick=function(){if(!cn.dataset.armed){cn.dataset.armed='1';cn.textContent='Yakin batal?';return}db.doc('pesanan/'+o.id).delete().then(function(){myOrders=myOrders.filter(function(x){return x.id!==o.id});renderPanel()},function(err){$('kp-omsgout').textContent=errText(err)})};
+    var nw=$('kp-onew');if(nw)nw.onclick=function(){try{localStorage.setItem('stk-ord-x-'+o.id,'1')}catch(e){}renderPanel()};
+    var fd=$('kp-ofind');if(fd)fd.onclick=function(){var s=sprites[uid]||sprites['don_'+aggKey({uid:uid})];if(s){mapEl.scrollIntoView({block:'nearest',behavior:'smooth'});flyTo(s.x,s.y-40,Math.max(cam.z,1.2));showCard(s.id)}};
+  }
   /* --- panel --- */
   var actBtns=document.querySelectorAll('[data-kp]');
   actBtns.forEach(function(b){b.addEventListener('click',function(){joinNotice='';panelOpen=panelOpen===b.dataset.kp?null:b.dataset.kp;renderPanel();if(panelOpen&&!mapEl.classList.contains('expanded'))panel.scrollIntoView({block:'nearest',behavior:'smooth'})})});
@@ -1606,7 +1731,7 @@ var Snd=(function(){
     actBtns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.kp===panelOpen?'true':'false')});
     if(!panelOpen){panel.hidden=true;panel.innerHTML='';return}
     panel.hidden=false;
-    if(panelOpen==='join')renderJoin();else if(panelOpen==='chat')renderChat();else if(panelOpen==='usulan')renderUsul();else if(panelOpen==='top')renderTop();else if(panelOpen==='poll')renderPoll();else renderDonorPanel();
+    if(panelOpen==='join')renderJoin();else if(panelOpen==='chat')renderChat();else if(panelOpen==='usulan')renderUsul();else if(panelOpen==='top')renderTop();else if(panelOpen==='poll')renderPoll();else if(panelOpen==='donasi')renderDonasi();else renderDonorPanel();
   }
   var joinNotice='';
   function showJoinNotice(){var m=$('kp-jmsg');if(!m||!joinNotice)return;m.innerHTML=joinNotice;var bc=$('kp-backchat');if(bc)bc.onclick=function(){joinNotice='';panelOpen='chat';renderPanel()}}
@@ -1643,7 +1768,8 @@ var Snd=(function(){
       var name=clean($('kp-name').value,18),stat=clean($('kp-stat').value,60);
       if(!name){msg.textContent='Isi nama dulu ya.';return}
       save.disabled=true;msg.textContent='Menyimpan…';var wasMember=!!myDoc;
-      db.doc('warga/'+uid).set({name:name,status:stat,look:okLook(window.SMGet()),role:pickedRole,lot:houseByOwner[uid]?houseByOwner[uid].lot:freeLot(),at:myDoc&&myDoc.at?myDoc.at:Date.now(),updated:Date.now()}).then(function(){
+      var wdoc={name:name,status:stat,look:okLook(window.SMGet()),role:pickedRole,lot:houseByOwner[uid]?houseByOwner[uid].lot:freeLot(),at:myDoc&&myDoc.at?myDoc.at:Date.now(),updated:Date.now()};if(myDoc&&myDoc.dkey)wdoc.donorKey=myDoc.dkey;
+      db.doc('warga/'+uid).set(wdoc).then(function(){
         save.disabled=false;joinNotice=wasMember?'Tersimpan.':'Selamat datang! Rumahmu lagi dibangun di kampung. '+(pendingChat?'<button class="btn btn-main btn-sm" type="button" id="kp-backchat">Lanjut kirim pesanmu</button>':'');showJoinNotice();
         setTimeout(function(){var hs=houseByOwner[uid];if(hs){flyTo(hs.x+40,hs.y+40,Math.max(cam.z,1.2));showHouse(uid)}},400);
       },function(e){save.disabled=false;msg.textContent=errText(e)});
@@ -1742,7 +1868,7 @@ var Snd=(function(){
   }
   function renderDonorPanel(){
     if(!isOwner||!db){panel.innerHTML='<h3>Donatur</h3><p class="kp-note">Panel ini khusus pemilik kampung.</p>';return}
-    var h='<h3>Masukkan donatur ke kampung</h3><p class="kp-note">Salin dari notifikasi Saweria. Donatur langsung muncul bermahkota di alun-alun, dan semua yang lagi buka kampung dapat notif. Tulis nama atau username saja, jangan email atau nomor HP.</p>';
+    var h='<h3>Masukkan donatur ke kampung</h3><p class="kp-warn"><b>Donasi lewat Saweria udah masuk otomatis.</b> Form ini cuma buat donasi di luar Saweria (transfer langsung, dll.), biar nggak dobel.</p><p class="kp-note"> Donatur langsung muncul bermahkota di alun-alun, dan semua yang lagi buka kampung dapat notif. Tulis nama atau username saja, jangan email atau nomor HP.</p>';
     h+='<form class="kp-form" id="kp-donform"><label class="ctl-label" for="kp-dname">Nama donatur</label><input class="sm-input" id="kp-dname" maxlength="24" autocomplete="off" placeholder="misal: kheyrr_">';
     h+='<label class="ctl-label" for="kp-damt">Nominal (Rp)</label><input class="sm-input" id="kp-damt" type="number" inputmode="numeric" min="1" step="1" placeholder="5000">';
     h+='<label class="ctl-label" for="kp-dmsg">Pesan (opsional)</label><input class="sm-input" id="kp-dmsg" maxlength="100" autocomplete="off" placeholder="Pesan dari donatur">';
@@ -1755,16 +1881,20 @@ var Snd=(function(){
       if(!(amt>0)){out.textContent='Isi nominal donasinya.';return}
       if(/@|\d{8,}/.test(name)){out.textContent='Sepertinya itu email atau nomor HP. Pakai nama atau username saja.';return}
       out.textContent='Menyimpan…';
-      db.collection('donatur').add({name:name,amount:amt,msg:msg,at:Date.now()}).then(function(){out.textContent='Masuk! '+name+' sekarang ada di alun-alun.';$('kp-dname').value='';$('kp-damt').value='';$('kp-dmsg').value=''},function(err){out.textContent=errText(err)});
+      var key=name.toLowerCase(),dup=null;for(var i=0;i<donors.length;i++){var x=donors[i];if(x.name.toLowerCase()===key&&x.amount===amt&&Date.now()-x.at<6*3600e3){dup=x;break}}
+      var form=$('kp-donform');if(dup&&form.dataset.confirm!==key+'|'+amt){form.dataset.confirm=key+'|'+amt;out.textContent='Donasi '+name+' sebesar '+rupiah(amt)+' udah tercatat'+(dup.src==='saweria'?' otomatis dari Saweria':'')+' '+fmtTime(dup.at)+'. Kalau ini memang donasi kedua, tekan Masukkan ke kampung sekali lagi.';return}
+      delete form.dataset.confirm;
+      db.collection('donatur').add({name:name,amount:amt,msg:msg,at:Date.now(),src:'manual'}).then(function(){out.textContent='Masuk! '+name+' sekarang ada di alun-alun.';$('kp-dname').value='';$('kp-damt').value='';$('kp-dmsg').value=''},function(err){out.textContent=errText(err)});
     };
   }
   function renderDonorList(){
     var el=$('kp-donlist');if(!el)return;
     if(!donors.length){el.innerHTML='<p class="kp-note">Belum ada donatur yang dimasukkan.</p>';return}
-    el.innerHTML=donors.map(function(d){return'<div class="kp-msg"><div class="txt"><span class="kp-who">'+esc(d.name)+'</span>'+rupiah(d.amount)+(d.status?' · “'+esc(d.status)+'”':'')+'</div><div style="text-align:right"><time>'+fmtDate(d.at)+'</time><br><button class="kp-del" data-del="donatur/'+esc(d.did)+'">hapus</button></div></div>'}).join('');
+    el.innerHTML=donors.map(function(d){return'<div class="kp-msg"><div class="txt"><span class="kp-who">'+esc(d.name)+'</span>'+rupiah(d.amount)+(d.status?' · “'+esc(d.status)+'”':'')+'<br><span class="kp-src '+d.src+'">'+(d.src==='saweria'?'Saweria otomatis':'Manual')+'</span>'+(d.code?' <span class="kp-src saweria" style="background:#8B5CF6">Kode '+esc(d.code)+'</span>':'')+(housedKeys[aggKey(d)]?' <span class="kp-src saweria" style="background:#2F6FEB">Sudah punya rumah</span>':(aggKey(d)==='anonim'?'':' <button type="button" class="kp-del" data-dbuild="'+esc(aggKey(d))+'">bangun rumah</button>'))+'</div><div style="text-align:right"><time>'+fmtDate(d.at)+' '+fmtTime(d.at)+'</time><br><button class="kp-del" data-del="donatur/'+esc(d.did)+'">hapus</button></div></div>'}).join('');
   }
   panel.addEventListener('click',function(e){try{onPanelClick(e)}catch(err){}});
   function onPanelClick(e){
+    var db_=e.target.closest('[data-dbuild]');if(db_&&isOwner&&db){db_.disabled=true;db_.textContent='membangun…';buildDonorHome(db_.dataset.dbuild).then(function(){renderDonorList()},function(){db_.disabled=false;db_.textContent='gagal, coba lagi'});return}
     var ap=e.target.closest('[data-approve]'),rj=e.target.closest('[data-reject]');
     if((ap||rj)&&db&&isOwner){var id=(ap||rj).dataset[ap?'approve':'reject'],r=null;for(var i=0;i<roleReqs.length;i++)if(roleReqs[i].id===id)r=roleReqs[i];if(!r)return;(ap||rj).disabled=true;
       if(ap)db.doc('roles/'+id).set({title:r.title,at:Date.now()}).then(function(){return db.doc('rolereq/'+id).update({status:'ok'})}).catch(function(){ap.disabled=false;ap.textContent='Gagal'});
