@@ -10,19 +10,19 @@ const total = T.lead + T.voiceDuration + T.tail;
 const art = (f) => `${T.artDir ?? 'art'}/${f}`;
 const INK = '#3b3a34', BLUE = '#5f86a6', BRICK = '#c0704f', SUN_DARK = '#c99a3e';
 
-// Sitting figure on the hill (art drawn at 1x, placed at 1.5x).
-const S = 1.5, BX = 150, BY = 755;
-const shoulder = [BX + 205 * S, BY + 262 * S];
-const ARM_UP = -2.5;
+// Sitting figure on the hill wearing the Stickology blue cap (art drawn at 1x, placed at 2.1x).
+const S = 2.1, BX = 40, BY = 470;
+const shoulder = [BX + 216 * S, BY + 306 * S]; // on the torso, below the head
+const ARM_UP = -2.21; // points at the sun, clear of the head and cap brim
 const figure = ({armKeys, armAngle, heads}) => [
   {type: 'image', path: art('body-sit.png'), x: BX, y: BY, w: 560 * S},
-  {type: 'image', path: art('arm.png'), x: shoulder[0] - 12, y: shoulder[1] - 12, w: 60 * S, angle: armAngle, keys: armKeys},
-  ...heads.map(({file, from, to, keys}) => ({type: 'image', path: art(file), x: BX + 195 * S - 135, y: 915, w: 180 * S, from, to, keys}))
+  {type: 'image', path: art('arm.png'), x: shoulder[0] - 8 * S, y: shoulder[1] - 8 * S, w: 60 * S, angle: armAngle, keys: armKeys},
+  ...heads.map(({file, from, to, keys}) => ({type: 'image', path: art(file), x: BX + 195 * S - 100 * S, y: BY + 200 * S - 130 * S, w: 260 * S, from, to, keys}))
 ];
 const scene = (extra, skyBlueKeys) => [
   {type: 'image', path: art('sky-paper.png'), x: 0, y: 0, w: 1280},
   ...(skyBlueKeys ? [{type: 'image', path: art('sky-blue.png'), x: 0, y: 0, w: 1280, keys: skyBlueKeys}] : []),
-  {type: 'image', path: art('sun.png'), x: 830, y: 290, w: 260},
+  {type: 'image', path: art('sun.png'), x: 872, y: 600, w: 260},
   {type: 'image', path: art('hill.png'), x: 0, y: 0, w: 1280},
   ...extra
 ];
@@ -32,8 +32,8 @@ const aEnd = T.split;
 const shotA = {start: 0, end: aEnd, layers: scene([
   ...figure({armAngle: -0.3, armKeys: [{t: 0.35, angle: -0.3}, {t: 0.9, angle: ARM_UP}],
     heads: [{file: 'head-forward.png', to: 0.4}, {file: 'head-up.png', from: 0.4}]}),
-  {type: 'text', text: '?', x: 690, y: 640, w: 300, size: 260, bold: true, color: BRICK, from: 0.75,
-    keys: [{t: 0.75, alpha: 0, y: 680}, {t: 1.0, alpha: 1, y: 640}]}
+  {type: 'text', text: '?', x: 640, y: 470, w: 300, size: 260, bold: true, color: BRICK, from: 0.75,
+    keys: [{t: 0.75, alpha: 0, y: 510}, {t: 1.0, alpha: 1, y: 470}]}
 ])};
 
 // --- Shot B: person-free diagram card — sunlight meets air, blue scatters everywhere, reaches the eye.
@@ -73,8 +73,8 @@ const shotB = {start: aEnd, end: payoff, layers: [
 // --- Shot C: back on the hill, the sky is blue; delighted reaction on "biru".
 const shotC = {start: payoff, end: total, layers: scene([
   ...figure({armAngle: ARM_UP, heads: [{file: 'head-up.png', to: 0.3}, {file: 'head-smile.png', from: 0.3}]}),
-  {type: 'text', text: 'biru!', x: 380, y: 520, w: 600, size: 230, color: '#4f7ea3', from: 0.2,
-    keys: [{t: 0.2, alpha: 0, y: 560}, {t: 0.45, alpha: 1, y: 520}]}
+  {type: 'text', text: 'biru!', x: 150, y: 330, w: 600, size: 230, color: '#4f7ea3', from: 0.2,
+    keys: [{t: 0.2, alpha: 0, y: 370}, {t: 0.45, alpha: 1, y: 330}]}
 ], [{t: 0, alpha: 0.35}, {t: 0.4, alpha: 1}])};
 
 // The runtime requires keyframe times inside each shot: trim keys that would land after the cut.

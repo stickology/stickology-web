@@ -63,9 +63,9 @@ for (const [name, color] of [['sky-paper.png', SKY_PAPER], ['sky-blue.png', SKY_
   ink(ctx, [[0, CAPTION_TOP], [W, CAPTION_TOP]], 4, 'rgba(59,58,52,.5)');
   for (let i = 0; i < 26; i++) { const x = 40 + rnd() * 1200, y = hillY(x) + 60 + rnd() * 300; ink(ctx, [[x, y], [x + 6, y - 22]], 3, '#6f7a50', 0.6); ink(ctx, [[x + 10, y], [x + 18, y - 16]], 3, '#6f7a50', 0.6); }
   // small tree, right
-  ink(ctx, [[1080, hillY(1080) + 4], [1086, hillY(1080) - 190]], 10, '#7a5a3e', 1);
-  blob(ctx, 1088, hillY(1080) - 270, 105, 95, '#8f9a6e', INK, 5, 3);
-  blob(ctx, 1040, hillY(1080) - 225, 55, 45, '#9fa97c', INK, 4, 2);
+  ink(ctx, [[1175, hillY(1175) + 4], [1181, hillY(1175) - 190]], 10, '#7a5a3e', 1);
+  blob(ctx, 1183, hillY(1175) - 270, 105, 95, '#8f9a6e', INK, 5, 3);
+  blob(ctx, 1135, hillY(1175) - 225, 55, 45, '#9fa97c', INK, 4, 2);
   save('hill.png', c);
 }
 
@@ -100,15 +100,31 @@ for (const [name, color] of [['sky-paper.png', SKY_PAPER], ['sky-blue.png', SKY_
 }
 
 // 6. heads: forward, looking up, delighted. Facing right; dot eyes and a short mouth.
-const head = (name, eyes, mouth) => {
-  const [c, ctx] = make(180, 180);
-  blob(ctx, 90, 90, 64, 64, HEAD, INK, 5, 1);
-  for (const [x, y] of eyes) blob(ctx, x, y, 6, 7, INK, null);
-  mouth(ctx); save(name, c);
+// Each head wears the Stickology mascot cap (blue dome, forward brim, yellow button), as in index.html.
+// Canvas 260x220, head centre (100,130), radius 64.
+const CAP = '#2F6FEB', BUTTON = '#FFD95E';
+function cap(ctx, cx, cy, r, tilt = 0) {
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(tilt); ctx.translate(-cx, -cy);
+  const y0 = cy - 0.32 * r, xl = cx - 1.05 * r, xr = cx + 1.05 * r;
+  const dome = []; for (let i = 0; i <= 24; i++) { const t = i / 24, u = 1 - t;
+    dome.push([u * u * xl + 2 * u * t * cx + t * t * xr, u * u * y0 + 2 * u * t * (cy - 1.73 * r) + t * t * y0]); }
+  ctx.beginPath(); ctx.moveTo(...dome[0]); dome.forEach(p => ctx.lineTo(...p)); ctx.closePath();
+  ctx.fillStyle = CAP; ctx.fill();
+  ink(ctx, [...dome, dome[0]], 5, INK, 0.8);
+  ink(ctx, [[cx + 0.91 * r, cy - 0.34 * r], [cx + 1.91 * r, cy - 0.23 * r]], 8, INK, 0.6);   // brim
+  blob(ctx, cx, cy - 1.14 * r, 0.14 * r, 0.14 * r, BUTTON, INK, 3.5, 0.3);              // button
+  ctx.restore();
+}
+const head = (name, eyes, mouth, tilt) => {
+  const [c, ctx] = make(260, 220), cx = 100, cy = 130;
+  blob(ctx, cx, cy, 64, 64, HEAD, INK, 5, 1);
+  for (const [x, y] of eyes) blob(ctx, x + 10, y + 40, 6, 7, INK, null);
+  ctx.save(); ctx.translate(10, 40); mouth(ctx); ctx.restore();
+  cap(ctx, cx, cy, 64, tilt); save(name, c);
 };
-head('head-forward.png', [[104, 84], [132, 84]], ctx => ink(ctx, [[110, 114], [128, 113]], 4));
-head('head-up.png', [[108, 66], [134, 63]], ctx => blob(ctx, 124, 104, 8, 9, null, INK, 4, 0.4));
-head('head-smile.png', [[108, 68], [134, 65]], ctx => { ctx.save(); ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(122, 98, 16, 0.25, Math.PI - 0.25); ctx.stroke(); ctx.restore(); blob(ctx, 152, 102, 9, 6, 'rgba(192,112,79,.45)', null); });
+head('head-forward.png', [[104, 84], [132, 84]], ctx => ink(ctx, [[110, 114], [128, 113]], 4), 0);
+head('head-up.png', [[108, 74], [134, 71]], ctx => blob(ctx, 124, 108, 8, 9, null, INK, 4, 0.4), -0.18);
+head('head-smile.png', [[108, 76], [134, 73]], ctx => { ctx.save(); ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(122, 102, 16, 0.25, Math.PI - 0.25); ctx.stroke(); ctx.restore(); blob(ctx, 152, 106, 9, 6, 'rgba(192,112,79,.45)', null); }, -0.18);
 
 // 7. diagram card on paper (person-free explanatory closeup)
 {
