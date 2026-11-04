@@ -1,8 +1,8 @@
 # Status
 
-Preview 5 detik selesai dengan narasi ElevenLabs (Sabiq, `eleven_multilingual_v2`).
+Preview 5 detik selesai dengan narasi ElevenLabs (Bambang, `eleven_multilingual_v2`).
 
-- `narration.mp3` = keluaran asli ElevenLabs; `narration.wav` = konversi 44,1 kHz mono untuk renderer.
+- `narration.mp3` = keluaran asli ElevenLabs; `narration.wav` = konversi 44,1 kHz mono untuk renderer, volume dinaikkan ke −16 LUFS (loudnorm; rekaman Bambang aslinya −25 LUFS).
 - `words.json` = cap waktu per kata dari endpoint `with-timestamps` ElevenLabs.
 - `timings.json` diisi dari `words.json` (+ `lead` 0,15 dtk): `split` = "Karena", `hit` = "udara", `biru` = "biru" terakhir.
 

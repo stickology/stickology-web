@@ -3,22 +3,22 @@
  "voiceDuration": 4.783,
  "lead": 0.15,
  "tail": 0.45,
- "split": 1.729,
- "hit": 2.182,
- "biru": 4.306,
+ "split": 1.787,
+ "hit": 2.275,
+ "biru": 4.26,
  "captions": [
   {
    "start": 0.15,
-   "end": 1.485,
+   "end": 1.346,
    "text": "Kenapa langit biru?"
   },
   {
-   "start": 1.729,
-   "end": 3.122,
+   "start": 1.787,
+   "end": 3.203,
    "text": "Karena udara paling banyak"
   },
   {
-   "start": 3.169,
+   "start": 3.25,
    "end": 4.933,
    "text": "menghamburkan cahaya biru."
   }
@@ -26,8 +26,9 @@
  "voiceSource": {
   "provider": "ElevenLabs",
   "model": "eleven_multilingual_v2",
-  "voice": "Sabiq",
-  "voice_id": "KKXAp01L2aZHbsBTR7QG",
-  "settings": "default"
+  "voice": "Bambang",
+  "voice_id": "j7n5yC6BN3oA2ZIWImty",
+  "settings": "default",
+  "postprocess": "loudnorm I=-16 LUFS TP=-1.5 (level only; narration.mp3 is the untouched provider output)"
  }
 }
