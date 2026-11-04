@@ -1,0 +1,7 @@
+{"voice": "narration.wav", "voiceDuration": 4.6, "lead": 0.15, "tail": 0.35,
+ "split": 1.55, "hit": 2.4, "biru": 4.4,
+ "captions": [
+  {"start": 0.2, "end": 1.5, "text": "Kenapa langit biru?"},
+  {"start": 1.6, "end": 3.2, "text": "Karena udara paling banyak"},
+  {"start": 3.2, "end": 4.9, "text": "menghamburkan cahaya biru."}],
+ "television": {"enabled": true, "intensity": 0.45}}
