@@ -1,0 +1,54 @@
+{
+ "words": [
+  {
+   "word": "Kenapa",
+   "start": 0.0,
+   "end": 0.511
+  },
+  {
+   "word": "langit",
+   "start": 0.592,
+   "end": 0.882
+  },
+  {
+   "word": "biru?",
+   "start": 0.929,
+   "end": 1.335
+  },
+  {
+   "word": "Karena",
+   "start": 1.579,
+   "end": 1.962
+  },
+  {
+   "word": "udara",
+   "start": 2.032,
+   "end": 2.345
+  },
+  {
+   "word": "paling",
+   "start": 2.403,
+   "end": 2.67
+  },
+  {
+   "word": "banyak",
+   "start": 2.705,
+   "end": 2.972
+  },
+  {
+   "word": "menghamburkan",
+   "start": 3.019,
+   "end": 3.704
+  },
+  {
+   "word": "cahaya",
+   "start": 3.773,
+   "end": 4.11
+  },
+  {
+   "word": "biru.",
+   "start": 4.156,
+   "end": 4.783
+  }
+ ]
+}

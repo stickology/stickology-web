@@ -1,6 +1,33 @@
-{"voice": "narration.wav", "voiceDuration": 4.6, "lead": 0.15, "tail": 0.45,
- "split": 1.55, "hit": 2.4, "biru": 4.4,
+{
+ "voice": "narration.wav",
+ "voiceDuration": 4.783,
+ "lead": 0.15,
+ "tail": 0.45,
+ "split": 1.729,
+ "hit": 2.182,
+ "biru": 4.306,
  "captions": [
-  {"start": 0.2, "end": 1.5, "text": "Kenapa langit biru?"},
-  {"start": 1.6, "end": 3.2, "text": "Karena udara paling banyak"},
-  {"start": 3.2, "end": 4.9, "text": "menghamburkan cahaya biru."}]}
+  {
+   "start": 0.15,
+   "end": 1.485,
+   "text": "Kenapa langit biru?"
+  },
+  {
+   "start": 1.729,
+   "end": 3.122,
+   "text": "Karena udara paling banyak"
+  },
+  {
+   "start": 3.169,
+   "end": 4.933,
+   "text": "menghamburkan cahaya biru."
+  }
+ ],
+ "voiceSource": {
+  "provider": "ElevenLabs",
+  "model": "eleven_multilingual_v2",
+  "voice": "Sabiq",
+  "voice_id": "KKXAp01L2aZHbsBTR7QG",
+  "settings": "default"
+ }
+}

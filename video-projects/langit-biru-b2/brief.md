@@ -4,7 +4,8 @@
 - Rasio: 9:16 (1080×1920)
 - Gaya: B2 Colorful Hand-Drawn (dipilih pengguna, menggantikan rancangan B3 di ../langit-biru-b3)
 - Bahasa narasi: Indonesia
-- Suara: Gemini TTS, voice **Fola** (default B2), tanpa instruksi gaya tambahan
+- Suara: **ElevenLabs**, voice **Sabiq** (`KKXAp01L2aZHbsBTR7QG`), model `eleven_multilingual_v2`,
+  `language_code: id`, pengaturan bawaan, tanpa instruksi gaya (pilihan pengguna, menggantikan default B2 Fola)
 - Durasi: ±5 detik (permintaan pengguna)
 - Gambar: dilukis lewat kode `art.mjs` (asli, bisa diedit), bukan generator gambar
 

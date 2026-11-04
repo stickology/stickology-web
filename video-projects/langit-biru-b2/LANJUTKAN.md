@@ -1,18 +1,17 @@
-# Cara melanjutkan (butuh GEMINI_API_KEY)
+# Status
 
-Status: naskah, ledger, gambar (`art/`, dibuat oleh `node art.mjs`) dan susunan adegan selesai;
-uji gerakan tanpa suara sudah dicek. Belum ada: rekaman narasi.
+Preview 5 detik selesai dengan narasi ElevenLabs (Sabiq, `eleven_multilingual_v2`).
 
-Dari folder skill `.claude/skills/directing-stickman-videos`:
+- `narration.mp3` = keluaran asli ElevenLabs; `narration.wav` = konversi 44,1 kHz mono untuk renderer.
+- `words.json` = cap waktu per kata dari endpoint `with-timestamps` ElevenLabs.
+- `timings.json` diisi dari `words.json` (+ `lead` 0,15 dtk): `split` = "Karena", `hit` = "udara", `biru` = "biru" terakhir.
+
+Render ulang (dari folder skill `.claude/skills/directing-stickman-videos`):
 
 ```bash
-npm ci
 P=/home/user/stickology-web/video-projects/langit-biru-b2
-node scripts/gemini-media.mjs speech --text $P/narration.txt --output $P/narration.wav \
-  --model <MODEL_TTS_YANG_TERSEDIA> --voice Fola --allow-network
-node scripts/autopilot.mjs probe $P/narration.wav
+(cd $P && node art.mjs && node build.mjs)
+node scripts/autopilot.mjs preview $P/project.json --replace
 ```
 
-Lalu isi `timings.json` dari rekaman asli (`split` = awal "Karena", `hit` = "udara",
-`biru` = "biru" terakhir; semua termasuk `lead`), jalankan `node build.mjs`, kemudian
-`validate`/`preview --seconds 6`, tonton dan dengar hasilnya sebelum dikirim.
+Menunggu: review pengguna atas `output/preview.mp4` (gambar + suara). Jangan jalankan `approve` sebelum pengguna setuju.
