@@ -21,8 +21,8 @@ function figure({x, y = GROUND, scale = 1, armKeys, headKeys, armAngle = 0}) {
     limb([[0, -250], [30, -120], [42, -10]]),                                     // front leg
     limb([[0, -470], [0, -250]]),                                                 // torso
     limb([[0, -455], [-34, -350], [-44, -270]]),                                  // relaxed left arm
-    {type: 'group', pivotX: 0, pivotY: -455, angle: armAngle, keys: armKeys, children: [
-      limb([[0, -455], [22, -350], [26, -265]])                                   // right arm (points when rotated)
+    {type: 'group', pivotX: 0, pivotY: -440, angle: armAngle, keys: armKeys, children: [
+      limb([[0, -440], [22, -340], [26, -255]])                                   // right arm (points when rotated)
     ]},
     {type: 'group', pivotX: 0, pivotY: -480, keys: headKeys, children: [
       limb([[0, -490], [0, -470]]),
@@ -32,8 +32,8 @@ function figure({x, y = GROUND, scale = 1, armKeys, headKeys, armAngle = 0}) {
 }
 
 const frame = (extra) => [
-  {type: 'text', text: 'STICKOLOGY / SAINS', x: 90, y: 110, size: 34, bold: true, color: DIM},
-  {type: 'text', text: '01', x: 1140, y: 110, w: 100, size: 34, bold: true, color: DIM},
+  {type: 'text', text: 'STICKOLOGY / SAINS', x: 90, y: 110, w: 800, size: 46, bold: true, color: DIM},
+  {type: 'text', text: '01', x: 1125, y: 110, w: 120, size: 46, bold: true, color: DIM},
   {type: 'rect', x: 70, y: 230, w: 1140, h: 1620, radius: 26, fill: PANEL},
   ...extra,
   {type: 'line', points: [[70, GROUND + 18], [1210, GROUND + 18]], color: '#2b3037', lineWidth: 4}
@@ -46,8 +46,8 @@ const shotA = {start: 0, end: aEnd, layers: frame([
     {type: 'ellipse', x: 860, y: 430, w: 150, h: 150, fill: '#2a2f36'}            // unlit sky hint (sun not yet the subject)
   ]},
   figure({x: 470, scale: 1.75,
-    headKeys: [{t: 0.15, angle: 0}, {t: 0.6, angle: -0.28}],
-    armKeys: [{t: 0.3, angle: 0}, {t: 0.85, angle: -2.45}]}),
+    headKeys: [{t: 0.15, angle: 0}, {t: 0.6, angle: -0.32}],
+    armKeys: [{t: 0.3, angle: 0}, {t: 0.85, angle: -2.1}]}),
   {type: 'text', text: '?', x: 900, y: 640, w: 300, size: 300, bold: true, color: INK, from: 0.7,
     keys: [{t: 0.7, alpha: 0, y: 680}, {t: 0.95, alpha: 1, y: 640}]}
 ])};
@@ -68,7 +68,7 @@ const shotB = {start: aEnd, end: total, layers: frame([
     keys: [{t: hitT + 0.3, alpha: 0}, {t: biruT + 0.2, alpha: 0.42}]},                              // sky fills with blue
   {type: 'ellipse', x: sun[0] - 170, y: sun[1] - 170, w: 340, h: 340, fill: '#f4f5f5', alpha: 0.12},
   {type: 'ellipse', x: sun[0] - 100, y: sun[1] - 100, w: 200, h: 200, fill: '#f4f5f5'},
-  {type: 'text', text: 'MATAHARI', x: 1000, y: 600, w: 200, size: 32, bold: true, color: GRAY},
+  {type: 'text', text: 'MATAHARI', x: 890, y: 610, w: 320, size: 48, bold: true, color: GRAY},
   {type: 'line', points: [[sun[0] - 70, sun[1] + 80], hit], color: '#f4f5f5', lineWidth: 16,
     keys: [{t: 0.05, progress: 0}, {t: hitT, progress: 1}]},                                        // white sunlight travels
   ...scatter(hit[0], hit[1], hitT, 230, 10, 0.2, 13),
@@ -76,10 +76,13 @@ const shotB = {start: aEnd, end: total, layers: frame([
   ...scatter(790, 760, hitT + 0.55, 110, 6, 0.1, 8),
   ...scatter(720, 1420, hitT + 0.75, 100, 6, 0.4, 8),
   ...scatter(930, 1230, hitT + 0.9, 100, 6, 0.0, 8),
+  ...[[560, 1010, 1.2], [330, 700, 1.35], [930, 1230, 1.5], [790, 760, 1.6]].map(([x, y, d]) => ({
+    type: 'line', points: [[x, y], [262, 1215]], color: BLUE, lineWidth: 7, from: hitT + d,
+    keys: [{t: hitT + d, progress: 0}, {t: hitT + d + 0.4, progress: 1}]})),                      // blue reaches our eyes
   ...molecules.map(([x, y], i) => ({type: 'ellipse', x: x - 24, y: y - 24, w: 48, h: 48, fill: i < 5 ? '#b8bcc1' : GRAY})),
-  {type: 'text', text: 'UDARA', x: 495, y: 1150, w: 300, size: 36, bold: true, color: GRAY},
-  figure({x: 230, scale: 0.95, armAngle: -2.45,
-    headKeys: [{t: 0, angle: -0.28}, {t: biruT, angle: -0.28}, {t: biruT + 0.25, angle: -0.12}, {t: biruT + 0.5, angle: -0.24}]}),
+  {type: 'text', text: 'UDARA', x: 480, y: 1150, w: 300, size: 48, bold: true, color: GRAY},
+  figure({x: 230, scale: 0.95, armAngle: -2.1,
+    headKeys: [{t: 0, angle: -0.32}, {t: biruT, angle: -0.32}, {t: biruT + 0.25, angle: -0.14}, {t: biruT + 0.5, angle: -0.28}]}),
   {type: 'text', text: 'BIRU', x: 600, y: 1330, w: 600, size: 170, bold: true, color: '#cfe6ff', from: biruT,
     keys: [{t: biruT, alpha: 0, y: 1370}, {t: biruT + 0.25, alpha: 1, y: 1330}]}
 ])};
