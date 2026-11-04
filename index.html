@@ -2043,6 +2043,7 @@ var Snd=(function(){
     db.collection('pengumuman').orderBy('at','desc').limit(30).onSnapshot(function(snap){pengumuman=snap.docs.filter(function(d){return d.exists}).map(normInfo).filter(function(p){return p.title});infoBtnDot();if(panelOpen==='info')renderInfoList()},function(){});
     db.collection('kebun').onSnapshot(function(snap){var m={};snap.docs.forEach(function(d){if(!d.exists)return;var x=d.data()||{};m[d.id]={plantedAt:+x.plantedAt||0,by:String(x.by||''),name:clean(x.name,18)}});kebun=m},function(){});
     watchTours();setInterval(watchTours,60000);
+    db.doc('meta/upacara').onSnapshot(function(d){var x=d.exists?+(d.data()||{}).at||0:0;onBcast(x)},function(){});
     if(uid)db.collection('pesanan').where('uid','==',uid).onSnapshot(function(snap){
       var prev={};myOrders.forEach(function(o){prev[o.id]=o.status});
       myOrders=snap.docs.filter(function(d){return d.exists}).map(normOrder);
@@ -2721,13 +2722,17 @@ var Snd=(function(){
   }
 
   /* ================= UPACARA 07.00 ================= */
-  function ceremonyK(){var w=wib();if(w.h!==7||w.m>=15)return -1;return(w.m*60+w.s)/180}
+  var bcastAt=0,bcastDone=0,ANTHEM_MS=119000;
+  function bcastK(){if(!bcastAt)return -1;var el=Date.now()-bcastAt;return el>=-5000&&el<ANTHEM_MS+6000?Math.max(0,el)/ANTHEM_MS:-1}
+  function ceremonyK(){var b=bcastK();if(b>=0)return b;var w=wib();if(w.h!==7||w.m>=15)return -1;return(w.m*60+w.s)/180}
+  function bcastOff(){return Math.max(0,(Date.now()-bcastAt)/1000)}
+  function onBcast(at){bcastAt=at||0;if(bcastK()<0||bcastDone===bcastAt)return;bcastDone=bcastAt;if(musicOff()||concertOn){setPill(true);return}playAnthem(false,bcastOff())}
   var anthem=null,anthemDay='',anthemPill=null,anthemBusy=false;
   function musicOff(){try{return localStorage.getItem('stk-music')==='off'}catch(e){return false}}
-  function playAnthem(fromUser){
+  function playAnthem(fromUser,offSec){
     if(anthemBusy)return;anthemBusy=true;
     var a=anthem||new Audio('indonesia-raya.mp3');anthem=a;a.preload='auto';
-    var k=ceremonyK(),off=(!fromUser&&k>=0&&k<=0.66)?k*180:0;
+    var k=ceremonyK(),off=offSec!=null?offSec:(!fromUser&&k>=0&&k<=0.66)?k*180:0;
     function go(){try{a.currentTime=off<(a.duration||999)-3?off:0}catch(e){}
       var wasOn=window.Snd&&Snd.isOn();if(wasOn)Snd.stop();
       a.play().then(function(){anthemBusy=false;anthemDay=dayKey(Date.now());try{localStorage.setItem('stk-anthem',anthemDay)}catch(e){}setPill(false);toast('Indonesia Raya berkumandang di kampung.')},function(){anthemBusy=false;if(wasOn&&!concertOn)Snd.start();setPill(true)})}
@@ -2735,9 +2740,9 @@ var Snd=(function(){
     a.onerror=function(){anthemBusy=false;setPill(false);if(fromUser)toast('File lagu belum ada. Upload indonesia-raya.mp3 ke repo stickology-web.')};
     if(a.readyState>=1)go();else{a.addEventListener('loadedmetadata',go,{once:true});a.load()}
   }
-  function setPill(show){if(show){if(!anthemPill){anthemPill=document.createElement('button');anthemPill.type='button';anthemPill.className='kp-cpill kp-apill';anthemPill.innerHTML='▶ Putar <b>Indonesia Raya</b>';anthemPill.onclick=function(){playAnthem(true)};mapEl.appendChild(anthemPill)}anthemPill.hidden=false}else if(anthemPill)anthemPill.hidden=true}
-  setInterval(function(){var k=ceremonyK();if(k<0){setPill(false);return}var day=dayKey(Date.now());var done=anthemDay===day;try{done=done||localStorage.getItem('stk-anthem')===day}catch(e){}if(done||anthemBusy||(anthem&&!anthem.paused))return;if(musicOff()||concertOn){setPill(true);return}playAnthem(false)},1500);
-  function drawCeremony(){var k=ceremonyK();if(k<0)return;ctx.setTransform(dpr,0,0,dpr,0,0);var tx='07.00 WIB · Upacara bendera · Indonesia Raya';ctx.font='800 13px Figtree, system-ui, sans-serif';var w=ctx.measureText(tx).width+24;var by=Math.min(H-150,118);rr(W/2-w/2,by,w,28,14);ctx.fillStyle='rgba(229,32,46,.92)';ctx.fill();ctx.fillStyle='#FFFFFF';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,W/2,by+14.5)}
+  function setPill(show){if(show){if(!anthemPill){anthemPill=document.createElement('button');anthemPill.type='button';anthemPill.className='kp-cpill kp-apill';anthemPill.innerHTML='▶ Putar <b>Indonesia Raya</b>';anthemPill.onclick=function(){playAnthem(true,bcastK()>=0?bcastOff():null)};mapEl.appendChild(anthemPill)}anthemPill.hidden=false}else if(anthemPill)anthemPill.hidden=true}
+  setInterval(function(){if(bcastAt&&bcastK()<0&&anthemPill&&!anthemPill.hidden&&ceremonyK()<0)setPill(false);var w=wib();if(w.h!==7||w.m>=15){if(bcastK()<0)setPill(false);return}var k=(w.m*60+w.s)/180;var day=dayKey(Date.now());var done=anthemDay===day;try{done=done||localStorage.getItem('stk-anthem')===day}catch(e){}if(done||anthemBusy||(anthem&&!anthem.paused))return;if(musicOff()||concertOn){setPill(true);return}playAnthem(false)},1500);
+  function drawCeremony(){var k=ceremonyK();if(k<0)return;ctx.setTransform(dpr,0,0,dpr,0,0);var tx=bcastK()>=0?'Upacara bendera · Indonesia Raya':'07.00 WIB · Upacara bendera · Indonesia Raya';ctx.font='800 13px Figtree, system-ui, sans-serif';var w=ctx.measureText(tx).width+24;var by=Math.min(H-150,118);rr(W/2-w/2,by,w,28,14);ctx.fillStyle='rgba(229,32,46,.92)';ctx.fill();ctx.fillStyle='#FFFFFF';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,W/2,by+14.5)}
 
   /* ================= PANGGUNG KONSER ================= */
   var concertOn=false,concertPill=null;
@@ -2973,13 +2978,14 @@ var Snd=(function(){
   function renderInfo(){
     var cap=0,occ=0;HOUSES.forEach(function(h){if(houseOpen(h)){cap++;if(lotOwner[h.n])occ++}});
     var h='<h3>Info kampung</h3><div class="kp-stats"><div><b>'+wargaCount().toLocaleString('id-ID')+'</b><small>Warga</small></div><div><b>'+occ+'/'+cap+'</b><small>Rumah terisi</small></div><div><b>'+openRW+'</b><small>RW dibuka</small></div><div><b>'+rupiah(donTotal.sum)+'</b><small>Total donasi</small></div></div>';
-    if(isOwner)h+='<div class="kp-row"><button type="button" class="btn btn-ghost btn-sm" id="kp-anthemtest">Tes lagu Indonesia Raya</button></div>';
+    if(isOwner&&db)h+='<div class="kp-row"><button type="button" class="btn btn-donate btn-sm" id="kp-anthemall">Putar Indonesia Raya untuk semua</button><button type="button" class="btn btn-ghost btn-sm" id="kp-anthemtest">Tes (cuma aku)</button></div><p class="kp-note" id="kp-anthemmsg" role="status" style="margin:0"></p>';
     h+='<h3 style="font-size:20px">Pengumuman</h3>';
     if(isOwner&&db)h+='<details class="kp-newpoll"><summary>+ Tulis pengumuman</summary><form class="kp-form" id="kp-infoform"><label class="ctl-label" for="kp-ititle">Judul</label><input class="sm-input" id="kp-ititle" maxlength="60" autocomplete="off" placeholder="misal: Kerja bakti Minggu pagi"><label class="ctl-label" for="kp-itext">Isi</label><textarea class="sm-input" id="kp-itext" maxlength="300" rows="3" placeholder="Tulis pengumuman untuk semua warga"></textarea><label class="kp-check"><input type="checkbox" id="kp-ipin"> Sematkan di atas</label><div class="kp-row"><button class="btn btn-main" type="submit">Umumkan</button></div><p class="kp-note" id="kp-imsg" role="status"></p></form></details>';
     h+='<div class="kp-list" id="kp-infolist"></div>';
     panel.innerHTML=h;renderInfoList();
     try{if(pengumuman.length)localStorage.setItem('stk-info-seen',String(Math.max.apply(null,pengumuman.map(function(p){return p.at}))))}catch(e){}infoBtnDot();
     var at=$('kp-anthemtest');if(at)at.onclick=function(){playAnthem(true)};
+    var aa=$('kp-anthemall');if(aa)aa.onclick=function(){var m=$('kp-anthemmsg');if(bcastK()>=0&&bcastK()<1){m.textContent='Lagu masih diputar.';return}aa.disabled=true;m.textContent='Menyiarkan…';db.doc('meta/upacara').set({at:Date.now()}).then(function(){m.textContent='Lagu diputar untuk semua yang lagi buka kampung. Bendera dinaikkan!';setTimeout(function(){aa.disabled=false},ANTHEM_MS)},function(e){aa.disabled=false;m.textContent=errText(e)})};
     var f=$('kp-infoform');if(f)f.onsubmit=function(e){e.preventDefault();var t=clean($('kp-ititle').value,60),x=clean($('kp-itext').value,300),m=$('kp-imsg');if(!t||!x){m.textContent='Isi judul dan isinya dulu.';return}m.textContent='Mengumumkan…';db.collection('pengumuman').add({title:t,text:x,pin:$('kp-ipin').checked,at:Date.now()}).then(function(){m.textContent='Pengumuman terbit!';$('kp-ititle').value='';$('kp-itext').value='';f.closest('details').open=false},function(err){m.textContent=errText(err)})};
   }
   function renderInfoList(){
