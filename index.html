@@ -477,15 +477,19 @@ div.kp-actions{display:grid;gap:12px;width:100%;align-self:stretch}
 @media (orientation:landscape) and (max-height:520px){.kp-pemo{grid-template-columns:repeat(7,58px);bottom:calc(110px + env(safe-area-inset-bottom,0px))}}
 .kp-yt.big{bottom:auto;border:0;border-radius:0;box-shadow:none;transform:matrix(1,0.5,0,1,0,0);transform-origin:0 0;z-index:1;background:#000}
 .kp-yt.big .kp-ythd{display:none}.kp-yt.big iframe,.kp-yt.big #kp-ytp{width:100%!important;height:100%!important}
-.kp-kchat{position:absolute;right:calc(72px + env(safe-area-inset-right,0px));top:calc(12px + env(safe-area-inset-top,0px));z-index:4;width:min(300px,calc(100% - 96px));background:rgba(20,27,43,.86);color:#FFFFFF;border-radius:16px;display:grid;grid-template-rows:auto 1fr auto;max-height:46%;font-family:var(--f-body);backdrop-filter:blur(4px)}
-.kp-map.playing .kp-kchat{top:calc(12px + env(safe-area-inset-top,0px))}
+.kp-kchat{position:absolute;right:calc(72px + env(safe-area-inset-right,0px));top:calc(180px + env(safe-area-inset-top,0px));z-index:4;width:min(300px,calc(100% - 96px));background:rgba(20,27,43,.86);color:#FFFFFF;border-radius:16px;display:grid;grid-template-rows:auto 1fr auto;max-height:46%;font-family:var(--f-body);backdrop-filter:blur(4px)}
+.kp-map.playing .kp-kchat{top:calc(60px + env(safe-area-inset-top,0px));right:auto;left:calc(12px + env(safe-area-inset-left,0px))}
+@media (max-width:560px){.kp-cpill{left:12px!important;right:auto!important;transform:none!important;top:calc(96px + env(safe-area-inset-top,0px))!important;animation:none!important;white-space:nowrap}.kp-kcbtn{left:12px!important;transform:none!important;top:calc(146px + env(safe-area-inset-top,0px))!important}}
+.kp-kcbtn{position:absolute;left:50%;transform:translateX(-50%);top:calc(132px + env(safe-area-inset-top,0px));z-index:4;background:#2F6FEB;color:#FFFFFF;border:2.5px solid #1B2433;border-radius:999px;padding:7px 14px;font:800 14px var(--f-body);box-shadow:3px 3px 0 #1B2433;cursor:pointer}
+.kp-kcbtn[aria-pressed=true]{background:#1B2433}
+.kp-map.playing .kp-kcbtn{top:calc(12px + env(safe-area-inset-top,0px));transform:none;left:calc(12px + env(safe-area-inset-left,0px))}
 .kp-kchd{display:flex;gap:6px;align-items:center;padding:8px 10px;flex-wrap:wrap}.kp-kchd b{flex:1;font-size:14px}
 .kp-kreq{background:#FFD95E;color:#1B2433;border:2px solid #1B2433;border-radius:999px;font:800 12px var(--f-body);padding:4px 10px;cursor:pointer}
 .kp-kmin{background:none;border:0;color:#FFFFFF;font:900 18px var(--f-body);cursor:pointer;width:26px}
 .kp-kclist{overflow-y:auto;padding:0 10px;min-height:60px}.kp-kclist p{margin:0 0 4px;font-size:13px;line-height:1.35;overflow-wrap:anywhere}.kp-kce{opacity:.7}.kp-kcinfo{color:#FFD95E;font-weight:700;font-size:12px!important;margin-top:6px!important}
 .kp-kcform{display:flex;gap:6px;padding:8px}.kp-kcform input{flex:1;min-width:0;border:0;border-radius:999px;padding:7px 12px;font:600 14px var(--f-body)}.kp-kcform button{background:#2F6FEB;color:#FFFFFF;border:0;border-radius:999px;padding:7px 12px;font:800 13px var(--f-body);cursor:pointer}
 .kp-kchat.min .kp-kclist,.kp-kchat.min .kp-kcform{display:none}
-@media (max-width:560px){.kp-kchat{max-height:38%;top:auto;bottom:calc(64px + env(safe-area-inset-bottom,0px));right:12px;width:min(250px,calc(100% - 24px))}.kp-map.playing .kp-kchat{top:calc(12px + env(safe-area-inset-top,0px));bottom:auto}}
+@media (max-width:560px){.kp-kchat{max-height:42%;top:auto;bottom:calc(150px + env(safe-area-inset-bottom,0px));right:12px;left:12px;width:auto}.kp-map.playing .kp-kchat{top:calc(60px + env(safe-area-inset-top,0px));bottom:auto}}
 .kp-rot{position:absolute;inset:0;z-index:8;background:rgba(20,27,43,.94);color:#FFFFFF;display:grid;place-content:center;justify-items:center;gap:10px;text-align:center;padding:24px;font-family:var(--f-body)}
 .kp-rot b{font-size:20px;font-weight:900}.kp-rot span{max-width:30ch;opacity:.85;font-size:14px}
 .kp-rotph{width:46px;height:76px;border:4px solid #FFFFFF;border-radius:10px;animation:kprot 1.8s ease-in-out infinite}
@@ -2042,7 +2046,7 @@ var Snd=(function(){
     if(acts)h+='<div class="kp-row" style="margin-top:6px">'+acts+'</div>';
     var ic=o&&o.t==='amal'?'#2F7F5C':o&&o.t==='papan'?'#3E4867':'#FFD95E';
     cardShell('<span class="kp-ico" style="background:'+ic+'">'+infoIcon(o)+'</span>',h);
-    cardEl.querySelectorAll('[data-act]').forEach(function(b){b.onclick=function(){var a=b.dataset.act;if(a.indexOf('rt:')===0){rtView=+a.slice(3);openPanel('rt')}else if(a.indexOf('lapak:')===0){lapakPick=+a.slice(6);openPanel('lapak')}else if(a.indexOf('rent:')===0){rentHouse(+a.slice(5))}else if(a.indexOf('panen:')===0){harvest(+a.slice(6))}else if(a.indexOf('bus:')===0){var bp=a.split(':');startBus(+bp[1],+bp[2])}else if(a.indexOf('tanam:')===0){var tp=a.split(':');plant(+tp[1],tp[2])}else if(a==='konser'){hideCard();toggleConcert()}else openPanel(a)}});
+    cardEl.querySelectorAll('[data-act]').forEach(function(b){b.onclick=function(){var a=b.dataset.act;if(a.indexOf('rt:')===0){rtView=+a.slice(3);openPanel('rt')}else if(a.indexOf('lapak:')===0){lapakPick=+a.slice(6);openPanel('lapak')}else if(a.indexOf('rent:')===0){rentHouse(+a.slice(5))}else if(a.indexOf('panen:')===0){harvest(+a.slice(6))}else if(a==='reqlagu'){hideCard();openPanel('konser')}else if(a.indexOf('bus:')===0){var bp=a.split(':');startBus(+bp[1],+bp[2])}else if(a.indexOf('tanam:')===0){var tp=a.split(':');plant(+tp[1],tp[2])}else if(a==='konser'){hideCard();toggleConcert()}else openPanel(a)}});
   }
   function infoIcon(o){var t=o&&o.t;return t==='amal'?'♥':t==='papan'?'!':t==='tree'?'✿':t==='lapak'?'¤':'i'}
   function openPanel(p){panelOpen=p;renderPanel();if(!mapEl.classList.contains('expanded'))panel.scrollIntoView({block:'nearest',behavior:'smooth'})}
@@ -3632,10 +3636,10 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
     if(night){var g=P((SCR.x0+SCR.x1)/2,SCR.y,(SCR.z0+SCR.z1)/2);glow(g.x,g.y,160,1)}}
   /* tempel iframe YouTube persis di layar besar */
   var ytLast='';
-  function ytPlace(){if(!ytBox||ytBox.hidden)return;var big=false,st='';
-    if(!(play.on&&play.room)){var a=P(SCR.x0,SCR.y,SCR.z1),s0=toScreen(a.x,a.y),wpx=(SCR.x1-SCR.x0)*32*cam.z,hpx=(SCR.z1-SCR.z0)*cam.z;
-      if(wpx>=200&&s0.x>-wpx&&s0.x<W&&s0.y>-hpx*1.5&&s0.y<H){big=true;st='left:'+s0.x.toFixed(1)+'px;top:'+s0.y.toFixed(1)+'px;width:'+wpx.toFixed(1)+'px;height:'+hpx.toFixed(1)+'px'}}
-    var key=(big?'b':'m')+st;if(key===ytLast)return;ytLast=key;ytBox.classList.toggle('big',big);ytBox.style.cssText=big?st:''}
+  function ytPlace(){if(!ytBox||ytBox.hidden)return;var st;
+    if(play.on&&play.room)st='left:-10000px;top:0;width:320px;height:180px';
+    else{var a=P(SCR.x0,SCR.y,SCR.z1),s0=toScreen(a.x,a.y),wpx=(SCR.x1-SCR.x0)*32*cam.z,hpx=(SCR.z1-SCR.z0)*cam.z;st='left:'+s0.x.toFixed(1)+'px;top:'+s0.y.toFixed(1)+'px;width:'+wpx.toFixed(1)+'px;height:'+hpx.toFixed(1)+'px'}
+    if(st===ytLast)return;ytLast=st;ytBox.classList.add('big');ytBox.style.cssText=st}
   /* antrean */
   function antriWatch(){if(antriSub||!db)return;antriSub=true;db.collection('antrian').onSnapshot(function(snap){var a=[];snap.docs.forEach(function(d){if(!d.exists)return;var x=d.data()||{},v=ytId(x.vid);if(!v)return;a.push({id:d.id,vid:v,title:clean(x.title,60)||'Lagu request',name:clean(x.name,24)||'Warga',paidAt:+x.paidAt||0})});a.sort(function(p,q){return p.paidAt-q.paidAt});antrian=a;queueTick();if(panelOpen==='konser')renderPanel()},function(){})}
   function nextReq(){var r=konserYT.reqAt||0;for(var i=0;i<antrian.length;i++)if(antrian[i].paidAt>r)return antrian[i];return null}
@@ -3649,15 +3653,18 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
   /* chat konser */
   function kchatWatch(){if(kchatSub||!db)return;kchatSub=true;db.collection('konserChat').orderBy('at','desc').limit(30).onSnapshot(function(snap){var a=[];snap.docs.forEach(function(d){var x=d.data()||{};a.push({id:d.id,name:clean(x.name,24)||'Warga',text:clean(x.text,100),cap:CAPOK.test(x.cap)?x.cap:'#2F6FEB',at:+x.at||0})});a.sort(function(p,q){return p.at-q.at});kchat=a;renderKchat()},function(){})}
   var kchatEl=null,lastKc=0;
-  function showKchat(on){if(on&&!kchatEl){kchatEl=document.createElement('div');kchatEl.className='kp-kchat';kchatEl.innerHTML='<div class="kp-kchd"><b>Chat konser</b><button type="button" class="kp-kreq">Request lagu · Rp5.000</button><button type="button" class="kp-kmin" aria-label="Kecilkan chat" aria-expanded="true">–</button></div><div class="kp-kclist" role="log" aria-live="polite"></div><form class="kp-kcform"><input maxlength="100" placeholder="Ketik di chat konser…" aria-label="Pesan chat konser" autocomplete="off"><button type="submit">Kirim</button></form>';mapEl.appendChild(kchatEl);
+  var kcBtn=null;
+  function showKchat(on){if(on&&!kcBtn){kcBtn=document.createElement('button');kcBtn.type='button';kcBtn.className='kp-kcbtn';kcBtn.innerHTML='<span aria-hidden="true">💬</span> Chat konser';kcBtn.onclick=function(){openKchat(kchatEl&&!kchatEl.hidden?false:true)};mapEl.appendChild(kcBtn)}
+    if(kcBtn)kcBtn.hidden=!on;if(!on)openKchat(false)}
+  function openKchat(on){if(on&&!kchatEl){kchatEl=document.createElement('div');kchatEl.className='kp-kchat';kchatEl.innerHTML='<div class="kp-kchd"><b>Chat konser</b><button type="button" class="kp-kreq">Request lagu · Rp5.000</button><button type="button" class="kp-kmin" aria-label="Tutup chat">×</button></div><div class="kp-kclist" role="log" aria-live="polite"></div><form class="kp-kcform"><input maxlength="100" placeholder="Ketik di chat konser…" aria-label="Pesan chat konser" autocomplete="off"><button type="submit">Kirim</button></form>';mapEl.appendChild(kchatEl);
       kchatEl.querySelector('.kp-kreq').onclick=function(){openPanel('konser')};
-      kchatEl.querySelector('.kp-kmin').onclick=function(){var c=kchatEl.classList.toggle('min');this.textContent=c?'+':'–';this.setAttribute('aria-expanded',c?'false':'true')};
+      kchatEl.querySelector('.kp-kmin').onclick=function(){openKchat(false)};
       var inp=kchatEl.querySelector('input');inp.addEventListener('keydown',function(e){e.stopPropagation()});
       kchatEl.querySelector('form').onsubmit=function(e){e.preventDefault();var t=clean(inp.value,100);if(!t)return;if(!db||!(myDoc||isOwner)){toast('Jadi warga dulu untuk ikut chat konser.');return}if(Date.now()-lastKc<2500){toast('Pelan-pelan ya.');return}lastKc=Date.now();inp.value='';
         db.collection('konserChat').add({uid:uid,name:isOwner?'Si Topi Biru':myDoc.name,cap:isOwner?'#2F6FEB':(myDoc.look.cap!=='none'?myDoc.look.cap:myDoc.look.shirt),text:t,at:Date.now()}).catch(function(err){toast(errText(err))});
         if(play.on){var s=sprites[play.id];if(s)s.say={text:t,until:Date.now()+7000};play.say={text:t,at:Date.now()};sendPos(true)}};
       kchatWatch()}
-    if(kchatEl)kchatEl.hidden=!on;if(on)renderKchat()}
+    if(kchatEl)kchatEl.hidden=!on;if(kcBtn)kcBtn.setAttribute('aria-pressed',on?'true':'false');if(on){renderKchat();setTimeout(function(){var i=kchatEl.querySelector('input');if(i&&!matchMedia('(pointer:coarse)').matches)i.focus()},30)}}
   function renderKchat(){if(!kchatEl||kchatEl.hidden)return;var L=kchatEl.querySelector('.kp-kclist');var nb=L.scrollHeight-L.scrollTop-L.clientHeight<40;
     L.innerHTML=(kchat.length?kchat.map(function(m){return'<p><b style="color:'+m.cap+'">'+esc(m.name)+'</b> '+esc(m.text)+'</p>'}).join(''):'<p class="kp-kce">Belum ada chat. Sapa penonton lain!</p>')+'<p class="kp-kcinfo">♪ Mau lagumu diputar di layar besar? Request lagu Rp5.000/lagu lewat Saweria.</p>';if(nb)L.scrollTop=L.scrollHeight}
   /* panel request */
@@ -3703,7 +3710,12 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
   fac({t:'sign',name:'Proyek Bandara',gx:5,gy:66,w:.4,d:.4,h:26,draw:function(o){var p=P(o.gx,o.gy);sign(p.x,p.y,'PROYEK BANDARA GARIS · '+Math.round(RWY.prog*100)+'%','#F5891F','#1B2433',7,14)},info:function(){return{title:'Proyek Bandara Garis',sub:'Dalam pembangunan · '+Math.round(RWY.prog*100)+'% selesai',desc:'Landasan pacu sepanjang hutan barat, terminal, dan menara kontrol sedang dibangun.'}}});
   REGIONS.push(['Proyek Bandara',-2,60],['Bulu Tangkis',21,39]);
 
-  (function(){var od=STAGE.draw;STAGE.draw=function(o){od(o);drawBigScreen(o)};var oi=STAGE.info;STAGE.info=function(o){var r=oi(o);r.actions=(r.actions||[]).concat([['Request lagu','konser']]);return r}})();
+  (function(){var od=STAGE.draw;STAGE.draw=function(o){od(o);drawBigScreen(o)};var oi=STAGE.info;STAGE.info=function(o){var r=oi(o);r.actions=(r.actions||[]).concat([['Request lagu','reqlagu']]);return r}})();
+
+  function drawReqBox(o){var z=o.z||0,p=P(o.gx+.4,o.gy+.4,z);boxS(o.gx,o.gy,.8,.8,14,'#7C4DFF','#9B7BFF','#5E35D6',6+z);var tp=P(o.gx+.4,o.gy+.4,20+z);ctx.fillStyle='#FFD95E';ctx.font='900 9px Figtree, system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('♪',tp.x,tp.y-2);
+    if(cam.z>0.22){var bob=Math.sin(performance.now()/400+1)*2,sc=Math.min(2.6,Math.max(1,0.9/cam.z));ctx.save();ctx.translate(p.x,p.y-34+bob);ctx.scale(sc,sc);ctx.font='900 9px Figtree, system-ui, sans-serif';var t1='♪ REQUEST LAGU',t2='Rp5.000 per lagu',bw=Math.max(ctx.measureText(t1).width,ctx.measureText(t2).width)+18;rr(-bw/2,-30,bw,28,9);ctx.fillStyle='#C9B8FF';ctx.fill();ctx.lineWidth=1.8;ctx.strokeStyle='#1B2433';ctx.stroke();ctx.beginPath();ctx.moveTo(-5,-2.5);ctx.lineTo(0,5);ctx.lineTo(5,-2.5);ctx.closePath();ctx.fillStyle='#C9B8FF';ctx.fill();ctx.stroke();ctx.fillRect(-4.4,-4,8.8,2.5);txt(t1,0,-20,9,'#3E1F9C',900);txt(t2,0,-9.5,7.5,'#1B2433',800);ctx.restore()}
+    if(night)glow(p.x,p.y-14,30,.9)}
+  fac({t:'amal',name:'Request Lagu',gx:STAGE.gx+STAGE.w-1.9,gy:STAGE.gy+STAGE.d-1.3,z:12,w:.8,d:.8,h:100,draw:drawReqBox,info:function(){var q=queueList();return{title:'Request Lagu',sub:'Rp5.000 per lagu lewat Saweria · antrean '+q.length+' lagu',desc:'Tempel link YouTube lagumu, bayar Rp5.000 di Saweria pakai kodenya, lalu lagumu otomatis diputar di layar besar konser sesuai urutan.',actions:[['Request lagu','reqlagu']]}}});
 
   /* ================= EDITOR KARAKTER & DATA WARGA ================= */
   var edLook=null;
