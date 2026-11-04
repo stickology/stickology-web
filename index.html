@@ -427,6 +427,8 @@ div.kp-actions{display:grid;gap:12px;width:100%;align-self:stretch}
 .pk-box canvas{width:100%;height:auto;aspect-ratio:720/900;border-radius:14px;touch-action:none;cursor:pointer}
 .pk-hint{margin:0;text-align:center;font-weight:800}
 .kp-cpill{position:absolute;z-index:3;left:50%;transform:translateX(-50%);top:84px;background:#7C4DFF;color:#FFFFFF;border:2.5px solid #1B2433;border-radius:999px;padding:7px 14px;font:800 14px var(--f-body);box-shadow:3px 3px 0 #1B2433;cursor:pointer;animation:kpdon 1.2s ease-in-out infinite}
+
+.kp-apill{top:48px;background:#E5202E;animation:none}
 .kp-code{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .kp-code span{font:900 28px ui-monospace,Menlo,monospace;letter-spacing:.06em;background:var(--paper);border:2.5px dashed var(--stroke);border-radius:12px;padding:6px 14px;user-select:all}
 .kp-ok{font-weight:800;color:#1B7A4B;background:color-mix(in srgb,#9EE3C6 45%,var(--paper));border-radius:10px;padding:8px 12px;margin:0}
@@ -1323,7 +1325,7 @@ var Snd=(function(){
   var POSRONDA=B({name:'Pos Ronda',sub:'Markas satpam kampung. Jaga malam 19.00–05.00 WIB.',gx:71.5,gy:70.5,w:2,d:2,hw:14,rh:10,wall:'#E7D2B3',roof:'#8C5A2B',roofType:'gable',zone:'Alun-alun',extra:function(g){if(cam.z>0.42){var p=P(g.gx+1,g.gy+2,6);sign(p.x,p.y,'POS RONDA','#8C5A2B','#FFFFFF',5.5)}}});
   var AMAL=fac({t:'amal',name:'Kotak Amal',gx:58,gy:70,w:0.8,d:0.8,h:34,draw:drawAmal,info:amalInfo});
   var PAPAN=fac({t:'papan',name:'Papan Pengumuman',gx:68.6,gy:70.3,w:1.6,d:0.4,h:40,draw:drawPapan,info:papanInfo});
-  var FLAG=fac({t:'flag',name:'Tiang Bendera',gx:69.6,gy:62.2,w:0.4,d:0.4,h:80,draw:drawFlag,info:function(){return{title:'Tiang Bendera',sub:'Merah putih berkibar di alun-alun.'}}});
+  var FLAG=fac({t:'flag',name:'Tiang Bendera',gx:69.6,gy:62.2,w:0.4,d:0.4,h:130,draw:drawFlag,info:function(){return{title:'Tiang Bendera',sub:'Merah putih berkibar di alun-alun.'}}});
   var GAPURA=fac({t:'gapura',name:'Gapura Kampung',gx:75,gy:66.2,w:2,d:0.6,h:70,draw:drawGapura,info:function(){return{title:'Gapura Kampung Stickman',sub:'Jumlah warga: '+wargaCount().toLocaleString('id-ID')+' · Total donasi: '+rupiah(donTotal.sum)}}});
   addTree(72.5,64.5,'big',1.2);TREES[TREES.length-1].zone='Pohon beringin alun-alun';
   addTree(56.5,72.5,'round',1);addTree(73.5,61.2,'round',0.9);
@@ -1331,7 +1333,7 @@ var Snd=(function(){
   // Sekolah
   B({name:'SD Kampung Stickman',sub:'Sekolah dasar kampung. Guru mengajar di sini.',gx:35,gy:101,w:9,d:3,hw:20,rh:14,wall:'#F2F0EA',roof:'#B5543F',roofType:'gable',door:true,label:'SD KAMPUNG STICKMAN',zone:'Sekolah'});
   B({name:'Perpustakaan Kampung',sub:'Buku sains gratis untuk semua warga. Ilmuwan riset di sini.',gx:46,gy:101,w:5.5,d:3,hw:18,rh:13,wall:'#E3ECF4',roof:'#5A6E9C',roofType:'gable',door:true,label:'PERPUSTAKAAN',zone:'Sekolah'});
-  fac({t:'flag',name:'Tiang bendera sekolah',gx:44.5,gy:107,w:.4,d:.4,h:70,draw:drawFlag,small:true,info:function(){return{title:'Tiang bendera SD',sub:'Upacara tiap Senin pagi.'}}});
+  fac({t:'flag',name:'Tiang bendera sekolah',gx:44.5,gy:107,w:.4,d:.4,h:95,draw:drawFlag,small:true,info:function(){return{title:'Tiang bendera SD',sub:'Upacara tiap Senin pagi.'}}});
   // Rumah ibadah
   B({name:'Masjid',sub:'Bagian dari Taman Rukun.',gx:79,gy:29.5,w:4.5,d:4,hw:18,wall:'#F3F1EA',roof:'#E9E6DC',roofType:'flat',door:true,zone:'Taman Rukun',extra:function(g){var c=P(g.gx+g.w/2,g.gy+g.d/2,g.hw);ctx.fillStyle='#3E9B6A';ctx.beginPath();ctx.ellipse(c.x,c.y,26,14,0,Math.PI,0);ctx.fill();ctx.beginPath();ctx.ellipse(c.x,c.y,26,6,0,0,Math.PI);ctx.fill();ctx.fillStyle='#57B37F';ctx.beginPath();ctx.ellipse(c.x-6,c.y-8,8,4,0,0,7);ctx.fill();boxS(g.gx+g.w+.2,g.gy+.2,.8,.8,48,'#E9E6DC','#F3F1EA','#D9D5CA');var m=P(g.gx+g.w+.6,g.gy+.6,48);ctx.fillStyle='#3E9B6A';ctx.beginPath();ctx.moveTo(m.x-6,m.y);ctx.lineTo(m.x,m.y-12);ctx.lineTo(m.x+6,m.y);ctx.fill()}});
   B({name:'Gereja',sub:'Bagian dari Taman Rukun.',gx:85.5,gy:29.5,w:3.4,d:4.2,hw:18,rh:16,wall:'#EEF0F6',roof:'#5A6E9C',roofType:'gable',door:true,zone:'Taman Rukun',extra:function(g){boxS(g.gx+g.w-1.2,g.gy+g.d-1.2,1.2,1.2,36,null,'#EEF0F6','#D7DBE6');roofHip(g.gx+g.w-1.2,g.gy+g.d-1.2,1.2,1.2,36,10,'#5A6E9C',.05);var p=P(g.gx+g.w-.6,g.gy+g.d-.6,48);ctx.strokeStyle='#F5F1E6';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x,p.y-10);ctx.moveTo(p.x-3.5,p.y-7);ctx.lineTo(p.x+3.5,p.y-7);ctx.stroke()}});
@@ -1386,7 +1388,11 @@ var Snd=(function(){
     var c=P(o.gx+.8,o.gy+.4,24);if(cam.z>0.5){ctx.fillStyle='#3E4867';for(var i=0;i<3;i++)ctx.fillRect(c.x-12+i*1,c.y-5+i*4+(-i*0),18-i*4,1.4)}
     if(infoUnread()){var bp=P(o.gx+1.5,o.gy+.4,38);ctx.fillStyle='#E5484D';ctx.beginPath();ctx.arc(bp.x,bp.y,5+Math.sin(performance.now()/250),0,7);ctx.fill();txt('!',bp.x,bp.y+.5,7,'#FFFFFF',900)}
     if(cam.z>0.42){var lp=P(o.gx+.8,o.gy+.4,40);sign(lp.x,lp.y,'PENGUMUMAN','#3E4867','#FFFFFF',5.5)}}
-  function drawFlag(o){var p=P(o.gx+.2,o.gy+.2),h=o.small?50:64,top=h;if(!o.small){var ck=ceremonyK();if(ck>=0)top=8+(h-8)*Math.min(1,ck)}ctx.strokeStyle='#D7DEE8';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x,p.y-h);ctx.stroke();var w=Math.sin(performance.now()/300)*1.5;ctx.fillStyle='#E5202E';ctx.beginPath();ctx.moveTo(p.x,p.y-top);ctx.lineTo(p.x+16,p.y-top+w);ctx.lineTo(p.x+16,p.y-top+5+w);ctx.lineTo(p.x,p.y-top+5);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.moveTo(p.x,p.y-top+5);ctx.lineTo(p.x+16,p.y-top+5+w);ctx.lineTo(p.x+16,p.y-top+10+w);ctx.lineTo(p.x,p.y-top+10);ctx.fill()}
+  function drawFlag(o){var p=P(o.gx+.2,o.gy+.2),h=o.small?70:120,top=h,fw=o.small?24:40,fh=o.small?16:26;if(!o.small){var ck=ceremonyK();if(ck>=0)top=12+(h-12)*Math.min(1,ck)}
+    ctx.fillStyle='#9AA3B2';ctx.beginPath();ctx.ellipse(p.x,p.y,8,4,0,0,7);ctx.fill();ctx.strokeStyle='#D7DEE8';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x,p.y-h);ctx.stroke();ctx.fillStyle='#FFD95E';ctx.beginPath();ctx.arc(p.x,p.y-h-2,2.6,0,7);ctx.fill();
+    var t=performance.now()/300,y0=p.y-top;ctx.save();ctx.lineWidth=1;ctx.strokeStyle='rgba(27,36,51,.35)';
+    for(var s=0;s<2;s++){ctx.fillStyle=s?'#FFFFFF':'#E5202E';ctx.beginPath();var yy=y0+s*fh/2;ctx.moveTo(p.x,yy);for(var k=0;k<=8;k++){var xx=p.x+fw*k/8;ctx.lineTo(xx,yy+Math.sin(t+k*.7)*2*(k/8))}for(var k2=8;k2>=0;k2--){var xx2=p.x+fw*k2/8;ctx.lineTo(xx2,yy+fh/2+Math.sin(t+k2*.7)*2*(k2/8))}ctx.closePath();ctx.fill()}
+    ctx.beginPath();ctx.moveTo(p.x,y0);for(var k3=0;k3<=8;k3++)ctx.lineTo(p.x+fw*k3/8,y0+Math.sin(t+k3*.7)*2*(k3/8));for(var k4=8;k4>=0;k4--)ctx.lineTo(p.x+fw*k4/8,y0+fh+Math.sin(t+k4*.7)*2*(k4/8));ctx.closePath();ctx.stroke();ctx.restore()}
   function drawGapura(o){boxS(o.gx,o.gy,.5,.5,46,'#A86F3A','#C8864B','#A86F3A');boxS(o.gx+1.5,o.gy,.5,.5,46,'#A86F3A','#C8864B','#A86F3A');
     var a=P(o.gx-.2,o.gy+.5,46),b=P(o.gx+2.2,o.gy+.5,46);fillPg([P(o.gx-.3,o.gy+.5,40),P(o.gx+2.3,o.gy+.5,40),P(o.gx+2.3,o.gy+.5,54),P(o.gx-.3,o.gy+.5,54)],'#3E4867',EDGE);
     if(cam.z>0.38){var c=P(o.gx+1,o.gy+.5,47);ctx.save();ctx.translate(c.x,c.y);ctx.transform(1,0.5,0,1,0,0);txt('KAMPUNG STICKMAN',0,0,6.5,'#FFFFFF',900);ctx.restore();
@@ -2715,16 +2721,23 @@ var Snd=(function(){
   }
 
   /* ================= UPACARA 07.00 ================= */
-  function ceremonyK(){var w=wib();if(w.h!==7||w.m>=5)return -1;return(w.m*60+w.s)/180}
-  var anthemDay='';
-  setInterval(function(){var k=ceremonyK();if(k<0||k>1)return;var day=dayKey(Date.now());if(anthemDay===day)return;anthemDay=day;
-    try{if(localStorage.getItem('stk-anthem')===day)return;localStorage.setItem('stk-anthem',day)}catch(e){}
-    if(!window.Snd||!Snd.isOn()||concertOn)return;
-    var a=new Audio('indonesia-raya.mp3'),off=k*180;
-    a.addEventListener('loadedmetadata',function(){if(off<a.duration-2){try{a.currentTime=off}catch(e){}Snd.stop();a.play().then(function(){toast('07.00 WIB · Indonesia Raya berkumandang di kampung.')},function(){Snd.start()})}});
-    a.addEventListener('ended',function(){if(!concertOn)Snd.start()});
-  },1000);
-  function drawCeremony(){var k=ceremonyK();if(k<0)return;ctx.setTransform(dpr,0,0,dpr,0,0);var tx='07.00 WIB · Upacara bendera · Indonesia Raya';ctx.font='800 13px Figtree, system-ui, sans-serif';var w=ctx.measureText(tx).width+24;rr(W/2-w/2,12,w,28,14);ctx.fillStyle='rgba(229,32,46,.92)';ctx.fill();ctx.fillStyle='#FFFFFF';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,W/2,26.5)}
+  function ceremonyK(){var w=wib();if(w.h!==7||w.m>=15)return -1;return(w.m*60+w.s)/180}
+  var anthem=null,anthemDay='',anthemPill=null,anthemBusy=false;
+  function musicOff(){try{return localStorage.getItem('stk-music')==='off'}catch(e){return false}}
+  function playAnthem(fromUser){
+    if(anthemBusy)return;anthemBusy=true;
+    var a=anthem||new Audio('indonesia-raya.mp3');anthem=a;a.preload='auto';
+    var k=ceremonyK(),off=(!fromUser&&k>=0&&k<=0.66)?k*180:0;
+    function go(){try{a.currentTime=off<(a.duration||999)-3?off:0}catch(e){}
+      var wasOn=window.Snd&&Snd.isOn();if(wasOn)Snd.stop();
+      a.play().then(function(){anthemBusy=false;anthemDay=dayKey(Date.now());try{localStorage.setItem('stk-anthem',anthemDay)}catch(e){}setPill(false);toast('Indonesia Raya berkumandang di kampung.')},function(){anthemBusy=false;if(wasOn&&!concertOn)Snd.start();setPill(true)})}
+    a.onended=function(){if(window.Snd&&!musicOff()&&!concertOn)Snd.start()};
+    a.onerror=function(){anthemBusy=false;setPill(false);if(fromUser)toast('File lagu belum ada. Upload indonesia-raya.mp3 ke repo stickology-web.')};
+    if(a.readyState>=1)go();else{a.addEventListener('loadedmetadata',go,{once:true});a.load()}
+  }
+  function setPill(show){if(show){if(!anthemPill){anthemPill=document.createElement('button');anthemPill.type='button';anthemPill.className='kp-cpill kp-apill';anthemPill.innerHTML='▶ Putar <b>Indonesia Raya</b>';anthemPill.onclick=function(){playAnthem(true)};mapEl.appendChild(anthemPill)}anthemPill.hidden=false}else if(anthemPill)anthemPill.hidden=true}
+  setInterval(function(){var k=ceremonyK();if(k<0){setPill(false);return}var day=dayKey(Date.now());var done=anthemDay===day;try{done=done||localStorage.getItem('stk-anthem')===day}catch(e){}if(done||anthemBusy||(anthem&&!anthem.paused))return;if(musicOff()||concertOn){setPill(true);return}playAnthem(false)},1500);
+  function drawCeremony(){var k=ceremonyK();if(k<0)return;ctx.setTransform(dpr,0,0,dpr,0,0);var tx='07.00 WIB · Upacara bendera · Indonesia Raya';ctx.font='800 13px Figtree, system-ui, sans-serif';var w=ctx.measureText(tx).width+24;var by=Math.min(H-150,118);rr(W/2-w/2,by,w,28,14);ctx.fillStyle='rgba(229,32,46,.92)';ctx.fill();ctx.fillStyle='#FFFFFF';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,W/2,by+14.5)}
 
   /* ================= PANGGUNG KONSER ================= */
   var concertOn=false,concertPill=null;
@@ -2960,11 +2973,13 @@ var Snd=(function(){
   function renderInfo(){
     var cap=0,occ=0;HOUSES.forEach(function(h){if(houseOpen(h)){cap++;if(lotOwner[h.n])occ++}});
     var h='<h3>Info kampung</h3><div class="kp-stats"><div><b>'+wargaCount().toLocaleString('id-ID')+'</b><small>Warga</small></div><div><b>'+occ+'/'+cap+'</b><small>Rumah terisi</small></div><div><b>'+openRW+'</b><small>RW dibuka</small></div><div><b>'+rupiah(donTotal.sum)+'</b><small>Total donasi</small></div></div>';
+    if(isOwner)h+='<div class="kp-row"><button type="button" class="btn btn-ghost btn-sm" id="kp-anthemtest">Tes lagu Indonesia Raya</button></div>';
     h+='<h3 style="font-size:20px">Pengumuman</h3>';
     if(isOwner&&db)h+='<details class="kp-newpoll"><summary>+ Tulis pengumuman</summary><form class="kp-form" id="kp-infoform"><label class="ctl-label" for="kp-ititle">Judul</label><input class="sm-input" id="kp-ititle" maxlength="60" autocomplete="off" placeholder="misal: Kerja bakti Minggu pagi"><label class="ctl-label" for="kp-itext">Isi</label><textarea class="sm-input" id="kp-itext" maxlength="300" rows="3" placeholder="Tulis pengumuman untuk semua warga"></textarea><label class="kp-check"><input type="checkbox" id="kp-ipin"> Sematkan di atas</label><div class="kp-row"><button class="btn btn-main" type="submit">Umumkan</button></div><p class="kp-note" id="kp-imsg" role="status"></p></form></details>';
     h+='<div class="kp-list" id="kp-infolist"></div>';
     panel.innerHTML=h;renderInfoList();
     try{if(pengumuman.length)localStorage.setItem('stk-info-seen',String(Math.max.apply(null,pengumuman.map(function(p){return p.at}))))}catch(e){}infoBtnDot();
+    var at=$('kp-anthemtest');if(at)at.onclick=function(){playAnthem(true)};
     var f=$('kp-infoform');if(f)f.onsubmit=function(e){e.preventDefault();var t=clean($('kp-ititle').value,60),x=clean($('kp-itext').value,300),m=$('kp-imsg');if(!t||!x){m.textContent='Isi judul dan isinya dulu.';return}m.textContent='Mengumumkan…';db.collection('pengumuman').add({title:t,text:x,pin:$('kp-ipin').checked,at:Date.now()}).then(function(){m.textContent='Pengumuman terbit!';$('kp-ititle').value='';$('kp-itext').value='';f.closest('details').open=false},function(err){m.textContent=errText(err)})};
   }
   function renderInfoList(){
