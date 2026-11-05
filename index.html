@@ -3209,8 +3209,8 @@ var Snd=(function(){
   function posFresh(p){return p&&Date.now()-p.at<70000}
   function sendPos(force){if(!db||!play.on)return;var s=sprites[play.id];if(!s)return;var now=Date.now(),me=isOwner?uid:uid;if(!me)return;
     var d={on:true,gx:Math.round(s.gx*100)/100,gy:Math.round(s.gy*100)/100,dir:s.dir<0?-1:1,veh:play.bus?'bus':play.ride?myVeh():'',room:play.room?play.room.id:'',mv:!!s.moving,at:now,jp:play.jp||0,emo:play.emo&&now-play.emo.at<4000?play.emo.id:'',emoAt:play.emo?play.emo.at:0,say:play.say&&now-play.say.at<8000?play.say.text:'',sayAt:play.say?play.say.at:0},o=play.sent;
-    var changed=!o||o.jp!==d.jp||o.emoAt!==d.emoAt||o.sayAt!==d.sayAt||o.room!==d.room||o.veh!==d.veh||Math.abs(o.gx-d.gx)+Math.abs(o.gy-d.gy)>.3||o.mv!==d.mv;
-    if(!force&&!(changed&&now-play.lastSend>5000)&&now-play.lastSend<30000)return;
+    var changed=!o||o.jp!==d.jp||o.emoAt!==d.emoAt||o.sayAt!==d.sayAt||o.room!==d.room||o.veh!==d.veh||Math.abs(o.gx-d.gx)+Math.abs(o.gy-d.gy)>.05||o.mv!==d.mv;
+    if(!force&&!(changed&&now-play.lastSend>2500)&&now-play.lastSend<20000)return;
     play.lastSend=now;play.sent=d;db.doc('pos/'+me).set(d).catch(function(){})}
   function posOff(){if(!db||!uid)return;db.doc('pos/'+uid).set({on:false,gx:0,gy:0,dir:1,veh:'',room:'',mv:false,at:Date.now(),jp:0,say:'',sayAt:0,emo:'',emoAt:0}).catch(function(){})}
   /* remote: dipanggil dari update() */
@@ -3218,7 +3218,7 @@ var Snd=(function(){
     if(s.room!==p.room){s.room=p.room;s.gx=p.gx;s.gy=p.gy}
     s.ctl=true;s.veh=p.veh;s.inside=false;if(p.jp&&p.jp!==s.jpSeen){s.jpSeen=p.jp;if(Date.now()-p.jp<4000)s.jumpT=performance.now()}if(p.emo&&p.emoAt!==s.emoSeen){s.emoSeen=p.emoAt;if(Date.now()-p.emoAt<4000)s.emo={id:p.emo,t0:performance.now()}}if(p.say&&p.sayAt!==s.saySeen){s.saySeen=p.sayAt;if(Date.now()-p.sayAt<8000)s.say={text:p.say,until:Date.now()+7000}}var dx=p.gx-s.gx,dy=p.gy-s.gy,dd=Math.hypot(dx,dy);
     if(dd>12){s.gx=p.gx;s.gy=p.gy;dd=0}
-    if(dd>.04){var v=Math.min(dd,Math.max(2.4,dd/2.6)*dt);s.gx+=dx/dd*v;s.gy+=dy/dd*v;s.moving=true;var sx=dx-dy;if(Math.abs(sx)>.01)s.dir=sx<0?-1:1}else{s.moving=p.mv&&false;s.dir=p.dir}
+    if(dd>.04){var v=Math.min(dd,Math.max(2.6,dd/1.4)*dt);s.gx+=dx/dd*v;s.gy+=dy/dd*v;s.moving=true;var sx=dx-dy;if(Math.abs(sx)>.01)s.dir=sx<0?-1:1}else{s.moving=p.mv&&false;s.dir=p.dir}
     return true}
   function spriteHiddenP(s){if(play.room)return s.room!==play.room.id;return s.inside||!!s.room}
 
