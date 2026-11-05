@@ -26,16 +26,17 @@ img{max-width:100%}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="config.js"></script>
 <script>
-/* Penghubung Stickology ↔ Firebase.
+/* Penghubung Stickology ↔ Server Kampung (Cloudflare).
+   Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
    Meniru window.claude.use('db' | 'user' | 'downloads') supaya kode halaman tidak perlu diubah. */
 (function(){
   var C=window.STICKOLOGY_CONFIG||{};
-  var ready=!!(window.firebase&&C.firebase&&C.firebase.apiKey&&C.firebase.apiKey.indexOf('ISI_')!==0);
+  var API=String(C.apiUrl||'').replace(/\/+$/,'');
+  var ready=!!(window.firebase&&C.firebase&&C.firebase.apiKey&&C.firebase.apiKey.indexOf('ISI_')!==0&&/^https?:\/\//.test(API));
   if(ready){try{firebase.initializeApp(C.firebase)}catch(e){ready=false;console.error(e)}}
-  var auth=ready?firebase.auth():null,fs=ready?firebase.firestore():null;
+  var auth=ready?firebase.auth():null;
   var userP=ready?new Promise(function(res){
     var first=true;
     auth.onAuthStateChanged(function(u){
@@ -44,25 +45,60 @@ img{max-width:100%}
       auth.signInAnonymously().catch(function(e){console.error(e);first=false;res(null)});
     });
   }):Promise.resolve(null);
-  function mapErr(e){var c=e&&e.code||'';return{code:c==='permission-denied'?'invalid_argument':c==='resource-exhausted'?'resource_exhausted':c==='invalid-argument'?'invalid_argument':'unavailable',message:String(e&&e.message||e)}}
-  function rej(e){return Promise.reject(mapErr(e))}
-  function flat(o,p,out){Object.keys(o).forEach(function(k){var v=o[k],key=p?p+'.'+k:k;if(v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length)flat(v,key,out);else out[key]=v});return out}
-  function wrapDoc(r){return{id:r.id,path:r.path,
-    get:function(){return r.get().catch(rej)},
-    set:function(d){return r.set(d).catch(rej)},
-    update:function(d){return r.update(flat(d,'',{})).catch(rej)},
-    delete:function(){return r.delete().catch(rej)},
-    onSnapshot:function(n,e){return r.onSnapshot(function(s){n(s)},function(err){e&&e(mapErr(err))})},
-    collection:function(p){return wrapCol(r.collection(p))}}}
-  function wrapQuery(q){return{
-    where:function(f,o,v){return wrapQuery(q.where(f,o,v))},
-    orderBy:function(f,d){return wrapQuery(q.orderBy(f,d||'asc'))},
-    limit:function(n){return wrapQuery(q.limit(n))},
-    get:function(){return q.get().catch(rej)},
-    onSnapshot:function(n,e){return q.onSnapshot(function(s){n(s)},function(err){e&&e(mapErr(err))})}}}
-  function wrapCol(c){var w=wrapQuery(c);w.path=c.path;w.doc=function(id){return wrapDoc(id?c.doc(id):c.doc())};w.add=function(d){return c.add(d).then(wrapDoc).catch(rej)};return w}
-  var DB=ready?{doc:function(p){return wrapDoc(fs.doc(p))},collection:function(p){return wrapCol(fs.collection(p))}}:null;
   function uidNow(){var u=auth&&auth.currentUser;return u?u.uid:null}
+
+  /* ---------- koneksi WebSocket ---------- */
+  var ws=null,open=false,rq=0,pend={},subs={},sq=0,queue=[],retry=0,pingT=null,WSC=window.__KampungWS||window.WebSocket;
+  function mapErr(e){e=e||{};var c=e.code||'unavailable';return{code:c==='denied'?'denied':c,message:String(e.message||'')}}
+  function connect(){
+    var u=auth&&auth.currentUser;
+    (u?u.getIdToken():Promise.resolve('')).then(function(tok){
+      var url=API.replace(/^http/,'ws')+'/ws?t='+encodeURIComponent(tok||'');
+      try{ws=new WSC(url)}catch(e){return later()}
+      ws.onopen=function(){open=true;retry=0;Object.keys(subs).forEach(function(k){sendRaw(subs[k].msg)});var q=queue;queue=[];q.forEach(sendRaw);clearInterval(pingT);pingT=setInterval(function(){if(open)try{ws.send('ping')}catch(e){}},30000)};
+      ws.onmessage=function(ev){if(ev.data==='pong')return;var m;try{m=JSON.parse(ev.data)}catch(e){return}
+        if(m.t==='res'){var p=pend[m.r];if(!p)return;delete pend[m.r];clearTimeout(p.to);if(m.err)p.no(mapErr(m.err));else p.ok(m.data);return}
+        if(m.t==='snap'){var s=subs[m.s];if(s)s.on(m)}};
+      ws.onclose=function(){open=false;clearInterval(pingT);Object.keys(pend).forEach(function(k){var p=pend[k];if(p.sent){delete pend[k];clearTimeout(p.to);p.no({code:'unavailable',message:'Koneksi terputus.'})}});later()};
+      ws.onerror=function(){};
+    },function(){later()});
+  }
+  function later(){var d=Math.min(15000,1000*Math.pow(1.6,retry++));setTimeout(connect,d)}
+  function sendRaw(m){if(open){try{ws.send(JSON.stringify(m));return true}catch(e){}}return false}
+  function send(m){if(!sendRaw(m))queue.push(m)}
+  function call(m){return new Promise(function(ok,no){var r=++rq;m.r=r;pend[r]={ok:ok,no:no,sent:open,to:setTimeout(function(){if(pend[r]){delete pend[r];no({code:'unavailable',message:'Server lama menjawab.'})}},15000)};if(!sendRaw(m)){queue.push(m)}else pend[r].sent=true})}
+  document.addEventListener('visibilitychange',function(){if(!document.hidden&&ready&&ws&&!open&&ws.readyState===3)connect()});
+
+  /* ---------- bentuk snapshot ala Firestore ---------- */
+  function dsnap(id,exists,data){return{id:id,exists:!!exists,data:function(){return exists?JSON.parse(JSON.stringify(data)):undefined}}}
+  function qsnap(list){var docs=list.map(function(x){return dsnap(x[0],true,x[1])});return{docs:docs,size:docs.length,empty:!docs.length,metadata:{fromCache:false},forEach:function(f){docs.forEach(f)},docChanges:function(){return[]}}}
+  function flat(o,p,out){Object.keys(o).forEach(function(k){var v=o[k],key=p?p+'.'+k:k;if(v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length)flat(v,key,out);else out[key]=v});return out}
+  function clone(d){return JSON.parse(JSON.stringify(d==null?null:d))}
+  function cmpBy(spec){if(!spec.order)return null;var f=spec.order[0],m=spec.order[1]==='desc'?-1:1;return function(a,b){var x=a[1][f],y=b[1][f];return x<y?-m:x>y?m:a[0]<b[0]?-1:1}}
+  function subscribe(msg,spec,next,err){var k='s'+(++sq),cur=new Map(),c=spec?cmpBy(spec):null;
+    var s={msg:msg,on:function(m){
+      if(m.doc){next(dsnap(msg.doc.split('/').pop(),m.doc.exists,m.doc.data));return}
+      if(m.full){cur=new Map();(m.docs||[]).forEach(function(x){cur.set(x[0],x[1])})}else{(m.up||[]).forEach(function(x){cur.set(x[0],x[1])});(m.rm||[]).forEach(function(id){cur.delete(id)})}
+      var list=Array.from(cur.entries());if(c)list.sort(c);if(spec&&spec.limit>0)list=list.slice(0,spec.limit);next(qsnap(list))}};
+    msg.t='sub';msg.s=k;subs[k]=s;send(msg);
+    return function(){if(!subs[k])return;delete subs[k];send({t:'unsub',s:k})}}
+  function wrapDoc(path){var id=path.split('/').pop();return{id:id,path:path,
+    get:function(){return call({t:'get',path:path}).then(function(d){return dsnap(id,d.exists,d.data)})},
+    set:function(d){return call({t:'set',path:path,data:clone(d)})},
+    update:function(d){return call({t:'upd',path:path,data:flat(clone(d),'',{})})},
+    delete:function(){return call({t:'del',path:path})},
+    onSnapshot:function(n,e){return subscribe({doc:path},null,n,e)},
+    collection:function(p){return wrapCol(path+'/'+p)}}}
+  function wrapQuery(spec){return{
+    where:function(f,o,v){var s=clone(spec);s.where.push([f,o,v]);return wrapQuery(s)},
+    orderBy:function(f,d){var s=clone(spec);s.order=[f,d||'asc'];return wrapQuery(s)},
+    limit:function(n){var s=clone(spec);s.limit=n;return wrapQuery(s)},
+    get:function(){return call({t:'q',col:spec.col,where:spec.where,order:spec.order,limit:spec.limit}).then(qsnap)},
+    onSnapshot:function(n,e){return subscribe({col:spec.col,where:spec.where,order:spec.order,limit:spec.limit},spec,n,e)}}}
+  function wrapCol(col){var w=wrapQuery({col:col,where:[],order:null,limit:0});w.path=col;w.doc=function(id){return wrapDoc(col+'/'+(id||rid()))};w.add=function(d){return call({t:'add',col:col,data:clone(d)}).then(function(r){return wrapDoc(col+'/'+r.id)})};return w}
+  function rid(){var c='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',s='';for(var i=0;i<20;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
+  var DB=ready?{doc:wrapDoc,collection:wrapCol}:null;
+
   var USER={
     id:function(){return userP.then(function(){return uidNow()})},
     isOwner:function(){return userP.then(function(){var u=uidNow();return !!u&&!!C.presidenUid&&u===C.presidenUid})},
@@ -71,16 +107,30 @@ img{max-width:100%}
     me:function(){return userP.then(function(){return{id:uidNow()}})}
   };
   var DOWNLOADS={save:function(o){return new Promise(function(res){var b=o.data instanceof Blob?o.data:new Blob([o.data]);var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=o.filename||'stickology.png';document.body.appendChild(a);a.click();setTimeout(function(){a.remove();URL.revokeObjectURL(u)},2000);res({status:'saved'})})}};
+  var started=false;
   window.claude={use:function(name){
     if(name==='downloads')return Promise.resolve(DOWNLOADS);
     if(!ready)return Promise.resolve(null);
-    if(name==='db')return userP.then(function(u){return u?DB:null});
+    if(name==='db')return userP.then(function(u){if(!started){started=true;connect()}return DB});
     if(name==='user')return userP.then(function(u){return u?USER:null});
     return Promise.resolve(null);
   }};
 
-  /* --- login Presiden (email & password dari Firebase) --- */
+  /* --- login Presiden + alat migrasi data dari Firebase --- */
   function el(h){var d=document.createElement('div');d.innerHTML=h;return d.firstChild}
+  var MIG_COLS=[['warga',0],['dompet',0],['donatur',0],['roles',0],['pesanan',0],['rolereq',0],['polling',0],['pengumuman',0],['kebun',0],['turnamen',0],['shift',0],['cerdas',0],['antrian',0],['meta',0],['usulan',0],['chat',150],['konserChat',60]];
+  function loadScript(src){return new Promise(function(ok,no){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+  function migrate(box){
+    var m=box.querySelector('#mig-msg'),go=box.querySelector('#mig-go');go.disabled=true;m.textContent='Menyiapkan…';
+    (firebase.firestore?Promise.resolve():loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js')).then(function(){
+      var fs=firebase.firestore(),all=[],i=0;
+      function next(){if(i>=MIG_COLS.length)return upload();var c=MIG_COLS[i++];m.textContent='Membaca '+c[0]+'…';var q=fs.collection(c[0]);if(c[1])q=q.orderBy('at','desc').limit(c[1]);
+        return q.get().then(function(s){s.docs.forEach(function(d){all.push({path:c[0]+'/'+d.id,data:d.data()})});return next()},function(e){m.textContent='Gagal membaca '+c[0]+': '+e.message+'. Kalau kuota Firebase habis, coba lagi setelah jam 15.00 WIB.';go.disabled=false;throw e})}
+      function upload(){m.textContent='Mengunggah '+all.length+' data ke Cloudflare…';return auth.currentUser.getIdToken().then(function(tok){var parts=[];for(var k=0;k<all.length;k+=400)parts.push(all.slice(k,k+400));var done=0;
+        return parts.reduce(function(p,part){return p.then(function(){return fetch(API+'/admin/import',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify({docs:part})}).then(function(r){if(!r.ok)throw new Error('server menolak ('+r.status+')');done+=part.length;m.textContent='Terunggah '+done+'/'+all.length+'…'})})},Promise.resolve()).then(function(){m.textContent='Selesai! '+all.length+' data sudah pindah ke Cloudflare. Muat ulang halaman.';go.textContent='Muat ulang';go.disabled=false;go.onclick=function(){location.reload()}})})}
+      return next();
+    }).catch(function(e){if(!go.disabled)return;m.textContent='Gagal: '+(e&&e.message||e);go.disabled=false});
+  }
   function presidenUI(){
     var foot=document.querySelector('footer');if(!foot||!ready)return;
     var u=auth.currentUser,isPres=u&&!u.isAnonymous;
@@ -96,16 +146,14 @@ img{max-width:100%}
         auth.signInWithEmailAndPassword(box.querySelector('#pres-email').value.trim(),box.querySelector('#pres-pass').value).then(function(){location.reload()},function(e){m.textContent='Gagal masuk: '+(e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'?'email atau password salah.':e.message)});
       };
     };
-    if(isPres&&!C.presidenUid){
-      var bar=el('<div class="pres-uid"><b>Langkah terakhir:</b> salin UID ini ke <code>presidenUid</code> di config.js dan ke aturan Firestore.<code id="pres-uidtxt">'+u.uid+'</code><button type="button" id="pres-copy">Salin UID</button></div>');
-      document.body.appendChild(bar);
-      bar.querySelector('#pres-copy').onclick=function(){var t=u.uid;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){bar.querySelector('#pres-copy').textContent='Tersalin!'},function(){var r=document.createRange();r.selectNodeContents(bar.querySelector('#pres-uidtxt'));var s=getSelection();s.removeAllRanges();s.addRange(r)})};
+    if(isPres&&u.uid===C.presidenUid){
+      var mb=el('<button type="button" class="pres-link">Pindahkan data dari Firebase</button>');foot.appendChild(mb);
+      mb.onclick=function(){var box=el('<div class="pres-box" role="dialog" aria-label="Pindahkan data"><div class="pres-card"><b>Pindahkan data dari Firebase</b><p>Semua data kampung (warga, dompet, donatur, dan lainnya) dibaca dari Firebase lalu disalin ke server Cloudflare. Cukup sekali. Data di Cloudflare dengan nama yang sama akan ditimpa.</p><p id="mig-msg" role="status"></p><div class="pres-row"><button type="button" id="mig-go">Mulai pindahkan</button><button type="button" id="mig-x">Tutup</button></div></div></div>');document.body.appendChild(box);box.querySelector('#mig-x').onclick=function(){box.remove()};box.querySelector('#mig-go').onclick=function(){migrate(box)}};
     }
   }
-  if(!ready){document.addEventListener('DOMContentLoaded',function(){var b=el('<div class="pres-uid"><b>config.js belum diisi.</b> Web jalan dalam mode pratinjau. Isi konfigurasi Firebase dulu sesuai panduan.</div>');document.body.appendChild(b)})}
+  if(!ready){document.addEventListener('DOMContentLoaded',function(){var b=el('<div class="pres-uid"><b>config.js belum lengkap.</b> Isi <code>apiUrl</code> (alamat server Cloudflare) sesuai panduan.</div>');document.body.appendChild(b)})}
   else userP.then(function(){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',presidenUI);else presidenUI()});
 })();
-
 </script>
 </head>
 <body>
@@ -2107,7 +2155,7 @@ var Snd=(function(){
   function setMode(m){if(mode===m)return;mode=m;statusEl.textContent=MODES[m];if(panelOpen)renderPanel()}
   function writable(){return !!db&&!!uid&&canWrite!==false}
   function lockedNote(){if(!db)return'Kampung belum tersambung di tampilan ini, jadi kamu baru bisa lihat-lihat. Fitur warga, chat, dan usulan aktif saat kampung tersambung.';return'Kamu bisa lihat kampung dan baca obrolan, tapi akun ini belum bisa ikut menulis.'}
-  function errText(e){var c=e&&e.code;if(c==='quota_exceeded')return'Kampung lagi penuh. Coba lagi nanti.';if(c==='resource_exhausted')return'Pelan-pelan dulu, coba lagi sebentar.';if(c==='invalid_argument'){canWrite=false;return'Akun ini belum bisa menulis di kampung.'}return'Gagal tersambung. Coba lagi.'}
+  function errText(e){var c=e&&e.code;if(c==='quota_exceeded')return'Kampung lagi penuh. Coba lagi nanti.';if(c==='resource_exhausted')return'Pelan-pelan dulu, coba lagi sebentar.';if(c==='denied')return'Belum bisa sekarang (ditolak aturan kampung).';if(c==='not_found')return'Datanya belum ada. Coba muat ulang.';if(c==='invalid_argument'){canWrite=false;return'Akun ini belum bisa menulis di kampung.'}return'Gagal tersambung. Coba lagi.'}
   function norm(doc){var d=doc.data()||{};return{id:doc.id,name:clean(d.name,18)||'Warga',status:clean(d.status,60),look:okLook(d.look),lot:typeof d.lot==='number'?Math.floor(d.lot):-1,role:ROLEOK[d.role]?d.role:'warga',dkey:typeof d.donorKey==='string'?d.donorKey.slice(0,40):'',pakai:okPakai(d.pakai),lotAt:+d.lotAt||0,ktp:d.ktp&&typeof d.ktp==='object'?{hobi:clean(d.ktp.hobi,24),at:+d.ktp.at||0}:null,lapak:normLapak(d.lapak),roleFree:d.roleFree!==false,at:+d.at||0}}
   function normLapak(L){if(!L||typeof L!=='object'||typeof L.n!=='number'||L.n<0||L.n>=8)return null;return{n:Math.floor(L.n),nama:clean(L.nama,24),jual:clean(L.jual,60),buka:Math.max(0,Math.min(23,Math.floor(+L.buka||0))),tutup:Math.max(0,Math.min(23,Math.floor(+L.tutup||0))),col:CAPOK.test(L.col)?L.col:'#E5484D',at:+L.at||0}}
   function normDonor(doc){var d=doc.data()||{},name=clean(d.name,24)||'Anonim',u=typeof d.uid==='string'?d.uid.slice(0,64):'';return{id:'don_'+doc.id,did:doc.id,donor:true,src:d.src==='saweria'?'saweria':'manual',uid:u,code:clean(d.code,10),role:ROLEOK[d.role]?d.role:'warga',name:name,amount:Math.max(0,Math.round(+d.amount||0)),status:clean(d.msg,100),look:d.look&&typeof d.look==='object'?okLook(d.look):donorLook(name),at:+d.at||0}}
@@ -2135,15 +2183,15 @@ var Snd=(function(){
       if(panelOpen==='poll')renderPollList();
       if(panelOpen==='donatur')renderDonorList();
     },function(){clearTimeout(timer);setMode('off')});
-    db.collection('chat').orderBy('at','desc').limit(60).onSnapshot(function(snap){
+    db.collection('chat').orderBy('at','desc').limit(40).onSnapshot(function(snap){
       chats=snap.docs.map(function(doc){var d=doc.data()||{};return{id:doc.id,uid:String(d.uid||''),name:clean(d.name,18)||'Warga',cap:CAPOK.test(d.cap)?d.cap:'#2F6FEB',text:clean(d.text,140),at:+d.at||0,reply:d.reply&&typeof d.reply==='object'?{id:String(d.reply.id||''),name:clean(d.reply.name,18)||'Warga',text:clean(d.reply.text,60)}:null}}).filter(function(m){return m.text}).reverse();
       if(panelOpen==='chat')renderChatList();
     },function(){});
-    db.collection('usulan').orderBy('at','desc').limit(100).onSnapshot(function(snap){
+    db.collection('usulan').orderBy('at','desc').limit(40).onSnapshot(function(snap){
       usuls=snap.docs.map(function(doc){var d=doc.data()||{},v=d.votes&&typeof d.votes==='object'?d.votes:{},n=0;for(var k in v)if(v[k]===true)n++;return{id:doc.id,uid:String(d.uid||''),name:clean(d.name,18)||'Warga',text:clean(d.text,90),at:+d.at||0,votes:v,n:n}}).filter(function(u){return u.text});
       if(panelOpen==='usulan')renderUsulList();
     },function(){});
-    db.collection('donatur').orderBy('at','desc').limit(1000).onSnapshot(function(snap){
+    db.collection('donatur').orderBy('at','desc').limit(300).onSnapshot(function(snap){
       donors=snap.docs.filter(function(d){return d.exists}).map(normDonor);
       donTotal={sum:donors.reduce(function(a,d){return a+d.amount},0),n:donors.length};
       var fresh=[];
@@ -3140,12 +3188,16 @@ var Snd=(function(){
   function vehKind(v){return!v?'':v==='bus'?'bus':v.indexOf('mobil')===0?'mobil':'motor'}
   function myVeh(){var p=myPakai();return p&&p.veh||''}
   function posSprite(id){return presUid&&id===presUid?'__npc':id}
-  function posWatch(){if(posSub||!db)return;posSub=true;db.collection('pos').onSnapshot(function(snap){var m={};snap.docs.forEach(function(d){if(!d.exists)return;var x=d.data()||{};if(!x.on)return;var room=typeof x.room==='string'?x.room.slice(0,12):'';m[posSprite(d.id)]={gx:+x.gx||0,gy:+x.gy||0,dir:x.dir<0?-1:1,veh:VEHC[x.veh]?x.veh:'',room:room,at:+x.at||0,mv:!!x.mv,jp:+x.jp||0,say:typeof x.say==='string'?clean(x.say,60):'',sayAt:+x.sayAt||0,emo:EMO[x.emo]?x.emo:'',emoAt:+x.emoAt||0}});POS=m},function(){})}
-  function posFresh(p){return p&&Date.now()-p.at<45000}
+  var posUnsub=null;
+  function posWatch(){if(!db)return;posSub=true;var want=(inView||play.on)&&!document.hidden;
+    if(want&&!posUnsub){var u=db.collection('pos').where('at','>',Date.now()-120000).onSnapshot(function(snap){var m={};snap.docs.forEach(function(d){if(!d.exists)return;var x=d.data()||{};if(!x.on)return;var room=typeof x.room==='string'?x.room.slice(0,12):'';m[posSprite(d.id)]={gx:+x.gx||0,gy:+x.gy||0,dir:x.dir<0?-1:1,veh:VEHC[x.veh]?x.veh:'',room:room,at:+x.at||0,mv:!!x.mv,jp:+x.jp||0,say:typeof x.say==='string'?clean(x.say,60):'',sayAt:+x.sayAt||0,emo:EMO[x.emo]?x.emo:'',emoAt:+x.emoAt||0}});POS=m},function(){});posUnsub=typeof u==='function'?u:function(){}}
+    else if(!want&&posUnsub){try{posUnsub()}catch(e){}posUnsub=null;POS={}}}
+  setInterval(posWatch,4000);document.addEventListener('visibilitychange',posWatch);
+  function posFresh(p){return p&&Date.now()-p.at<70000}
   function sendPos(force){if(!db||!play.on)return;var s=sprites[play.id];if(!s)return;var now=Date.now(),me=isOwner?uid:uid;if(!me)return;
     var d={on:true,gx:Math.round(s.gx*100)/100,gy:Math.round(s.gy*100)/100,dir:s.dir<0?-1:1,veh:play.bus?'bus':play.ride?myVeh():'',room:play.room?play.room.id:'',mv:!!s.moving,at:now,jp:play.jp||0,emo:play.emo&&now-play.emo.at<4000?play.emo.id:'',emoAt:play.emo?play.emo.at:0,say:play.say&&now-play.say.at<8000?play.say.text:'',sayAt:play.say?play.say.at:0},o=play.sent;
-    var changed=!o||o.jp!==d.jp||o.emoAt!==d.emoAt||o.sayAt!==d.sayAt||o.room!==d.room||o.veh!==d.veh||Math.abs(o.gx-d.gx)+Math.abs(o.gy-d.gy)>.05||o.mv!==d.mv;
-    if(!force&&!(changed&&now-play.lastSend>2500)&&now-play.lastSend<20000)return;
+    var changed=!o||o.jp!==d.jp||o.emoAt!==d.emoAt||o.sayAt!==d.sayAt||o.room!==d.room||o.veh!==d.veh||Math.abs(o.gx-d.gx)+Math.abs(o.gy-d.gy)>.3||o.mv!==d.mv;
+    if(!force&&!(changed&&now-play.lastSend>5000)&&now-play.lastSend<30000)return;
     play.lastSend=now;play.sent=d;db.doc('pos/'+me).set(d).catch(function(){})}
   function posOff(){if(!db||!uid)return;db.doc('pos/'+uid).set({on:false,gx:0,gy:0,dir:1,veh:'',room:'',mv:false,at:Date.now(),jp:0,say:'',sayAt:0,emo:'',emoAt:0}).catch(function(){})}
   /* remote: dipanggil dari update() */
@@ -3153,7 +3205,7 @@ var Snd=(function(){
     if(s.room!==p.room){s.room=p.room;s.gx=p.gx;s.gy=p.gy}
     s.ctl=true;s.veh=p.veh;s.inside=false;if(p.jp&&p.jp!==s.jpSeen){s.jpSeen=p.jp;if(Date.now()-p.jp<4000)s.jumpT=performance.now()}if(p.emo&&p.emoAt!==s.emoSeen){s.emoSeen=p.emoAt;if(Date.now()-p.emoAt<4000)s.emo={id:p.emo,t0:performance.now()}}if(p.say&&p.sayAt!==s.saySeen){s.saySeen=p.sayAt;if(Date.now()-p.sayAt<8000)s.say={text:p.say,until:Date.now()+7000}}var dx=p.gx-s.gx,dy=p.gy-s.gy,dd=Math.hypot(dx,dy);
     if(dd>12){s.gx=p.gx;s.gy=p.gy;dd=0}
-    if(dd>.04){var v=Math.min(dd,Math.max(2.6,dd/1.4)*dt);s.gx+=dx/dd*v;s.gy+=dy/dd*v;s.moving=true;var sx=dx-dy;if(Math.abs(sx)>.01)s.dir=sx<0?-1:1}else{s.moving=p.mv&&false;s.dir=p.dir}
+    if(dd>.04){var v=Math.min(dd,Math.max(2.4,dd/2.6)*dt);s.gx+=dx/dd*v;s.gy+=dy/dd*v;s.moving=true;var sx=dx-dy;if(Math.abs(sx)>.01)s.dir=sx<0?-1:1}else{s.moving=p.mv&&false;s.dir=p.dir}
     return true}
   function spriteHiddenP(s){if(play.room)return s.room!==play.room.id;return s.inside||!!s.room}
 
