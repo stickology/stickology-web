@@ -107,11 +107,13 @@ img{max-width:100%}
     me:function(){return userP.then(function(){return{id:uidNow()}})}
   };
   var DOWNLOADS={save:function(o){return new Promise(function(res){var b=o.data instanceof Blob?o.data:new Blob([o.data]);var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=o.filename||'stickology.png';document.body.appendChild(a);a.click();setTimeout(function(){a.remove();URL.revokeObjectURL(u)},2000);res({status:'saved'})})}};
+  var MAINT=!!C.maintenance;
+  function isPresNow(){var u=auth&&auth.currentUser;return !!u&&!u.isAnonymous&&u.uid===C.presidenUid}
   var started=false;
   window.claude={use:function(name){
     if(name==='downloads')return Promise.resolve(DOWNLOADS);
     if(!ready)return Promise.resolve(null);
-    if(name==='db')return userP.then(function(u){if(!started){started=true;connect()}return DB});
+    if(name==='db')return userP.then(function(u){if(MAINT&&!isPresNow())return null;if(!started){started=true;connect()}return DB});
     if(name==='user')return userP.then(function(u){return u?USER:null});
     return Promise.resolve(null);
   }};
@@ -138,6 +140,9 @@ img{max-width:100%}
     foot.appendChild(btn);
     btn.onclick=function(){
       if(isPres){auth.signOut().then(function(){location.reload()});return}
+      openLogin()};
+  }
+  function openLogin(){
       var box=el('<div class="pres-box" role="dialog" aria-label="Masuk sebagai Presiden"><div class="pres-card"><b>Masuk sebagai Presiden</b><p>Pakai email dan password akun Presiden yang kamu buat di Firebase.</p><input id="pres-email" type="email" autocomplete="username" placeholder="Email"><input id="pres-pass" type="password" autocomplete="current-password" placeholder="Password"><p id="pres-msg" role="status"></p><div class="pres-row"><button type="button" id="pres-go">Masuk</button><button type="button" id="pres-x">Batal</button></div></div></div>');
       document.body.appendChild(box);
       box.querySelector('#pres-x').onclick=function(){box.remove()};
@@ -145,14 +150,22 @@ img{max-width:100%}
         var m=box.querySelector('#pres-msg');m.textContent='Masuk…';
         auth.signInWithEmailAndPassword(box.querySelector('#pres-email').value.trim(),box.querySelector('#pres-pass').value).then(function(){location.reload()},function(e){m.textContent='Gagal masuk: '+(e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'?'email atau password salah.':e.message)});
       };
-    };
+  }
+  function presidenExtra(){
+    var foot=document.querySelector('footer');if(!foot||!ready)return;var u=auth.currentUser,isPres=u&&!u.isAnonymous;
     if(isPres&&u.uid===C.presidenUid){
       var mb=el('<button type="button" class="pres-link">Pindahkan data dari Firebase</button>');foot.appendChild(mb);
       mb.onclick=function(){var box=el('<div class="pres-box" role="dialog" aria-label="Pindahkan data"><div class="pres-card"><b>Pindahkan data dari Firebase</b><p>Semua data kampung (warga, dompet, donatur, dan lainnya) dibaca dari Firebase lalu disalin ke server Cloudflare. Cukup sekali. Data di Cloudflare dengan nama yang sama akan ditimpa.</p><p id="mig-msg" role="status"></p><div class="pres-row"><button type="button" id="mig-go">Mulai pindahkan</button><button type="button" id="mig-x">Tutup</button></div></div></div>');document.body.appendChild(box);box.querySelector('#mig-x').onclick=function(){box.remove()};box.querySelector('#mig-go').onclick=function(){migrate(box)}};
     }
   }
   if(!ready){document.addEventListener('DOMContentLoaded',function(){var b=el('<div class="pres-uid"><b>config.js belum lengkap.</b> Isi <code>apiUrl</code> (alamat server Cloudflare) sesuai panduan.</div>');document.body.appendChild(b)})}
-  else userP.then(function(){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',presidenUI);else presidenUI()});
+  else userP.then(function(){var f=function(){presidenUI();presidenExtra();maintUI()};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',f);else f()});
+  /* --- layar maintenance --- */
+  function maintUI(){if(!MAINT)return;
+    if(isPresNow()){var bar=el('<div class="pres-uid" style="background:#F5B400;color:#1B2433"><b>Mode maintenance aktif.</b> Cuma kamu (Presiden) yang bisa melihat kampung. Matikan lewat <code>maintenance: false</code> di config.js setelah data dipindahkan.</div>');document.body.appendChild(bar);return}
+    var ov=el('<div class="mt-ov" role="dialog" aria-label="Sedang maintenance"><div class="mt-card"><div class="mt-ic" aria-hidden="true"><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="40" r="15" fill="#fff" stroke="#1B2433" stroke-width="5"/><path d="M42 33 Q60 14 78 33 Z" fill="#2F6FEB" stroke="#1B2433" stroke-width="5" stroke-linejoin="round"/><path d="M76 31 L92 33" stroke="#1B2433" stroke-width="5" stroke-linecap="round"/><path d="M60 55 L60 85 M60 85 L46 108 M60 85 L74 108 M60 64 L40 76 M60 64 L84 56" stroke="#1B2433" stroke-width="5" stroke-linecap="round" fill="none"/><rect x="82" y="40" width="7" height="26" rx="3" transform="rotate(35 85 53)" fill="#F5B400" stroke="#1B2433" stroke-width="3"/></svg></div><b class="mt-t">Lagi maintenance</b><p>Kampung Stickman sedang pindah rumah ke server baru yang lebih kuat. Semua data warga aman. Balik lagi sebentar lagi ya!</p><p class="mt-s">Stickology · Ide besar. Garis sederhana.</p><div class="mt-row"><a class="mt-btn" href="https://saweria.co/stickologyid" target="_blank" rel="noopener">Dukung di Saweria</a><button type="button" class="mt-link" id="mt-pres">Masuk sebagai Presiden</button></div></div></div>');
+    document.body.appendChild(ov);document.documentElement.style.overflow='hidden';ov.querySelector('#mt-pres').onclick=openLogin}
+  if(MAINT){var st=document.createElement('style');st.textContent='.mt-ov{position:fixed;inset:0;z-index:99999;background:#141B2B;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));overflow:auto}.mt-card{background:#F6F3EA;color:#1B2433;border:3px solid #1B2433;border-radius:24px;box-shadow:6px 6px 0 #F5B400;max-width:420px;width:100%;padding:28px 24px;display:grid;gap:12px;justify-items:center;text-align:center;font:500 16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}.mt-ic svg{animation:mtb 1.6s ease-in-out infinite}@keyframes mtb{50%{transform:translateY(-6px)}}@media (prefers-reduced-motion:reduce){.mt-ic svg{animation:none}}.mt-t{font:900 28px/1.1 system-ui,sans-serif}.mt-card p{margin:0}.mt-s{font-size:13px;opacity:.7}.mt-row{display:grid;gap:10px;justify-items:center;margin-top:6px}.mt-btn{background:#FFD95E;color:#1B2433;border:2.5px solid #1B2433;border-radius:999px;padding:10px 20px;font-weight:800;text-decoration:none;box-shadow:3px 3px 0 #1B2433}.pres-box{z-index:100000!important}.mt-link{background:none;border:0;color:#3E4867;text-decoration:underline;font:600 13px system-ui,sans-serif;cursor:pointer}';document.head.appendChild(st)}
 })();
 </script>
 </head>

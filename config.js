@@ -16,4 +16,7 @@ const presidenUid = "O8LKgjWMX6YR8CngUSjNEro8nHa2";
 // Contoh: "https://stickology-saweria.namakamu.workers.dev"
 const apiUrl = "https://stickology-saweria.togetherco-and-8fc.workers.dev";
 
-window.STICKOLOGY_CONFIG = { firebase: firebaseConfig, presidenUid: presidenUid, apiUrl: apiUrl };
+// Mode maintenance: true = pengunjung lihat layar "Lagi maintenance" (Presiden tetap bisa masuk). Ubah ke false kalau sudah selesai.
+const maintenance = true;
+
+window.STICKOLOGY_CONFIG = { firebase: firebaseConfig, presidenUid: presidenUid, apiUrl: apiUrl, maintenance: maintenance };
