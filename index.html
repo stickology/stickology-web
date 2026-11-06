@@ -26,7 +26,7 @@ img{max-width:100%}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js"></script>
+<script src="config.js?v=1793934189"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -1335,10 +1335,10 @@ var Snd=(function(){
     sekolah:{x:33,y:100,w:20,h:14,name:'SD Kampung Stickman',sub:'Sekolah dan perpustakaan kampung. Guru mengajar di sini.'},
     rukun:{x:77,y:28,w:20,h:14,name:'Taman Rukun',sub:'Kompleks rumah ibadah. Semua warga hidup berdampingan.'},
     pasar:{x:77,y:84,w:20,h:14,name:'Pasar Kampung',sub:'Lapak pedagang warga dan warung.'},
-    mallp:{x:11,y:12,w:20,h:14,name:'Proyek Mall Garis',sub:'Mall besar sedang dibangun.'},
-    bioskop:{x:11,y:28,w:20,h:6,name:'Proyek Bioskop',sub:'Bioskop kampung sedang dibangun.'},
+    mallp:{x:11,y:12,w:20,h:14,name:'Mall Garis',sub:'Mall terbesar di kampung.'},
+    bioskop:{x:11,y:28,w:20,h:6,name:'Bioskop Garis',sub:'Nonton bareng di layar besar.'},
     badminton:{x:11,y:36,w:20,h:6,name:'Lapangan Bulu Tangkis',sub:'Dua lapangan bulu tangkis di sebelah Stadion.'},
-    rsb:{x:11,y:108,w:20,h:14,name:'Proyek RS Besar',sub:'Rumah sakit besar sedang dibangun.'},
+    rsb:{x:11,y:108,w:20,h:14,name:'RS Besar Kampung',sub:'Rumah sakit besar dengan IGD dan helipad.'},
     lapangan:{x:33,y:28,w:20,h:14,name:'Lapangan Kampung',sub:'Tempat main bola dan lomba 17-an.'},
     arena:{x:99,y:124,w:20,h:6,name:'Gelanggang Main',sub:'Arena mini game: pasang Koin Garis, menang dapat 2 kali lipat.',actions:[['Main game','arena']]},
     konser:{x:99,y:108,w:20,h:14,name:'Lapangan Konser',sub:'Panggung musik kampung. Konser tiap malam mulai 19.00 WIB.'},
@@ -1433,7 +1433,7 @@ var Snd=(function(){
   }
   (function(){
     var seed=7;function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647}
-    function scatter(x0,y0,w,h,n,kinds,zone){for(var i=0;i<n;i++){var gx=x0+rnd()*w,gy=y0+rnd()*h;if(onRoad(gx,gy))continue;if(gy>3.2&&gy<8.4&&gx>-14&&gx<122)continue;if(gy<3.4&&gx>56&&gx<86)continue;if(gy<5.3&&gx>23&&gx<49)continue;if(gx<8.6&&gx>-12.6&&gy>14&&gy<106)continue;if(gx>10.5&&gx<31.5&&gy>35.5&&gy<42.5)continue;var k=kinds[Math.floor(rnd()*kinds.length)];addTree(gx,gy,k,0.8+rnd()*0.5);TREES[TREES.length-1].zone=zone}}
+    function scatter(x0,y0,w,h,n,kinds,zone){for(var i=0;i<n;i++){var gx=x0+rnd()*w,gy=y0+rnd()*h;if(onRoad(gx,gy))continue;if(gy>3.2&&gy<8.4&&gx>-14&&gx<122)continue;if(gy<3.4&&gx>56&&gx<86)continue;if(gy<5.3&&gx>23&&gx<49)continue;if(gx<8.6&&gx>-12.6&&gy>14&&gy<106)continue;if(gx>10.5&&gx<31.5&&gy>35.5&&gy<42.5)continue;if(gx>100&&gx<112&&gy<5.3&&gy>-6)continue;var k=kinds[Math.floor(rnd()*kinds.length)];addTree(gx,gy,k,0.8+rnd()*0.5);TREES[TREES.length-1].zone=zone}}
     scatter(-13,-13,21,145,500,['round','pine','pine','fruit','bamboo'],'Hutan di tepi kampung');
     scatter(8,-13,113,22,330,['round','pine','fruit','bamboo','round'],'Hutan di tepi kampung');
     for(var c=0;c<NU_C;c++)for(var k=0;k<NU_K;k++)if(unitType(c,k)==='hutan'){var u=unitRect(c,k);scatter(u.x,u.y,u.w,u.h,26,['round','pine','fruit','bamboo'],'Hutan Kampung')}
@@ -1949,6 +1949,7 @@ var Snd=(function(){
   function draw(t){
     if(!W)return;
     try{ytPlace()}catch(e){}
+    try{if(!(play.on&&play.room&&play.room.def.kind==='bioskop'))filmHide()}catch(e){}
     if(play.on&&play.room){drawRoom(t);return}
     VP={x0:cam.x-W/2/cam.z-80,x1:cam.x+W/2/cam.z+80,y0:cam.y-H/2/cam.z-120,y1:cam.y+H/2/cam.z+120};
     var g0=toG(VP.x0,VP.y0),g1=toG(VP.x1,VP.y1),g2=toG(VP.x1,VP.y0),g3=toG(VP.x0,VP.y1);VG={x0:Math.min(g0.gx,g3.gx)-2,x1:Math.max(g1.gx,g2.gx)+2,y0:Math.min(g0.gy,g2.gy)-2,y1:Math.max(g1.gy,g3.gy)+2};
@@ -2107,7 +2108,7 @@ var Snd=(function(){
     if(acts)h+='<div class="kp-row" style="margin-top:6px">'+acts+'</div>';
     var ic=o&&o.t==='amal'?'#2F7F5C':o&&o.t==='papan'?'#3E4867':'#FFD95E';
     cardShell('<span class="kp-ico" style="background:'+ic+'">'+infoIcon(o)+'</span>',h);
-    cardEl.querySelectorAll('[data-act]').forEach(function(b){b.onclick=function(){var a=b.dataset.act;if(a.indexOf('rt:')===0){rtView=+a.slice(3);openPanel('rt')}else if(a.indexOf('lapak:')===0){lapakPick=+a.slice(6);openPanel('lapak')}else if(a.indexOf('rent:')===0){rentHouse(+a.slice(5))}else if(a.indexOf('panen:')===0){harvest(+a.slice(6))}else if(a==='reqlagu'){hideCard();openPanel('konser')}else if(a.indexOf('bus:')===0){var bp=a.split(':');startBus(+bp[1],+bp[2])}else if(a.indexOf('tanam:')===0){var tp=a.split(':');plant(+tp[1],tp[2])}else if(a==='konser'){hideCard();toggleConcert()}else openPanel(a)}});
+    cardEl.querySelectorAll('[data-act]').forEach(function(b){b.onclick=function(){var a=b.dataset.act;if(a.indexOf('rt:')===0){rtView=+a.slice(3);openPanel('rt')}else if(a.indexOf('lapak:')===0){lapakPick=+a.slice(6);openPanel('lapak')}else if(a.indexOf('rent:')===0){rentHouse(+a.slice(5))}else if(a.indexOf('panen:')===0){harvest(+a.slice(6))}else if(a==='reqlagu'){hideCard();openPanel('konser')}else if(a.indexOf('kereta:')===0){var kp=a.split(':');startTrain(+kp[1],+kp[2])}else if(a.indexOf('bus:')===0){var bp=a.split(':');startBus(+bp[1],+bp[2])}else if(a.indexOf('tanam:')===0){var tp=a.split(':');plant(+tp[1],tp[2])}else if(a==='konser'){hideCard();toggleConcert()}else openPanel(a)}});
   }
   function infoIcon(o){var t=o&&o.t;return t==='amal'?'♥':t==='papan'?'!':t==='tree'?'✿':t==='lapak'?'¤':'i'}
   function openPanel(p){panelOpen=p;renderPanel();if(!mapEl.classList.contains('expanded'))panel.scrollIntoView({block:'nearest',behavior:'smooth'})}
@@ -2224,7 +2225,7 @@ var Snd=(function(){
     db.collection('kebun').onSnapshot(function(snap){var m={};snap.docs.forEach(function(d){if(!d.exists)return;var x=d.data()||{};m[d.id]={plantedAt:+x.plantedAt||0,by:String(x.by||''),name:clean(x.name,18),kosong:x.kosong===true,crop:typeof x.crop==='string'?x.crop.slice(0,12):''}});kebun=m},function(){});
     watchTours();setInterval(watchTours,60000);
     db.doc('meta/upacara').onSnapshot(function(d){var x=d.exists?+(d.data()||{}).at||0:0;onBcast(x)},function(){});
-    shiftWatch();setInterval(shiftWatch,60000);ccWatch();posWatch();konserWatch();antriWatch();
+    shiftWatch();setInterval(shiftWatch,60000);ccWatch();posWatch();konserWatch();antriWatch();bioWatch();
     if(uid)db.collection('pesanan').where('uid','==',uid).onSnapshot(function(snap){
       var prev={};myOrders.forEach(function(o){prev[o.id]=o.status});
       myOrders=snap.docs.filter(function(d){return d.exists}).map(normOrder);
@@ -3183,22 +3184,13 @@ var Snd=(function(){
 
   /* ================= REL KERETA (dalam pembangunan) ================= */
   var RAIL={x0:-12,x1:121,y:5.4};
-  addObj({t:'rail',gx:RAIL.x0,gy:RAIL.y,w:RAIL.x1-RAIL.x0,d:1.6,h:30,key:0,bb:(function(){var a=P(RAIL.x0,RAIL.y+1.6),b=P(RAIL.x1,RAIL.y);return{x0:a.x,x1:b.x,y0:P(RAIL.x0,RAIL.y).y-30,y1:P(RAIL.x1,RAIL.y+1.6).y}})(),draw:drawRail,info:function(){return{title:'Proyek Rel Kereta Kampung',sub:'Hampir jadi · 90%',desc:'Rel tinggal sedikit lagi tersambung. Stasiunnya juga lagi dibangun di sebelah barat. Pantau terus ya!'}}});
-  function drawRail(o){var x0=RAIL.x0,x1=RAIL.x1,y=RAIL.y,done=x0+(x1-x0)*.86,mid=x0+(x1-x0)*.94,t=performance.now()/1000;
-    flat(x0,y,x1-x0,1.6,'#B9AE9A');flat(x0,y+.1,mid-x0,1.4,'#9C9384');
-    if(!lowz){for(var x=x0+.2;x<mid;x+=.55){if(!visG(x,y+.8,2))continue;flat(x,y+.15,.22,1.3,'#7B5A3E')}
-      ctx.strokeStyle='#6B7385';ctx.lineWidth=2;[y+.45,y+1.15].forEach(function(ry){var a=P(x0,ry,1),b=P(done,ry,1);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()});
-      for(var k=0;k<4;k++){var rx=done+1+k*2.4,p=P(rx,y+.8,2);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(-.46);ctx.fillStyle='#6B7385';ctx.fillRect(-14,-2,28,3);ctx.restore()}
-      for(var c=mid;c<x1;c+=6){var cp=P(c,y+.4);ctx.fillStyle='#F5891F';ctx.beginPath();ctx.moveTo(cp.x-3,cp.y);ctx.lineTo(cp.x,cp.y-9);ctx.lineTo(cp.x+3,cp.y);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.fillRect(cp.x-1.8,cp.y-5,3.6,1.4)}
-      var ex=P(done+3,y+2.4),arm=Math.sin(t*1.2)*.25;ctx.save();ctx.translate(ex.x,ex.y);ctx.fillStyle='#1B2433';ctx.fillRect(-14,-4,28,5);ctx.fillStyle='#F5B400';ctx.fillRect(-11,-14,18,10);ctx.fillStyle='#BFDBFE';ctx.fillRect(-2,-12,7,6);ctx.strokeStyle='#F5B400';ctx.lineWidth=3.4;ctx.beginPath();ctx.moveTo(6,-12);ctx.lineTo(16,-24+arm*20);ctx.lineTo(26,-12+arm*10);ctx.stroke();ctx.fillStyle='#6B7385';ctx.fillRect(22,-14+arm*10,8,6);ctx.restore();
-      [[done+8,y+2],[mid+3,y+2.2]].forEach(function(q,i){var p=P(q[0],q[1]);tukang(p.x,p.y,t,i*1.3,i?-1:1)});
-      for(var bi=0;bi<5;bi++){var bp=P(mid+bi*.6,y+2.6);ctx.fillStyle='#7B5A3E';ctx.fillRect(bp.x-6,bp.y-3-bi%2*3,12,3)}}
-    var sp=P(done+5,y+2.8);if(cam.z>0.3)sign(sp.x,sp.y,'PROYEK REL KERETA · HAMPIR JADI 90%','#F5891F','#1B2433',6.5,16)}
+  addObj({t:'rail',gx:RAIL.x0,gy:RAIL.y,w:RAIL.x1-RAIL.x0,d:1.6,h:30,key:0,bb:(function(){var a=P(RAIL.x0,RAIL.y+1.6),b=P(RAIL.x1,RAIL.y);return{x0:a.x,x1:b.x,y0:P(RAIL.x0,RAIL.y).y-30,y1:P(RAIL.x1,RAIL.y+1.6).y}})(),draw:drawRail,info:function(){return railInfo()},_old:function(){return{title:'Proyek Rel Kereta Kampung',sub:'Hampir jadi · 90%',desc:'Rel tinggal sedikit lagi tersambung. Stasiunnya juga lagi dibangun di sebelah barat. Pantau terus ya!'}}});
+  function drawRail(o){drawRailDone(o)}
 
   /* ================= MAIN KARAKTER (jalan, interaksi, kendaraan, ruangan) ================= */
   var play={on:false,id:null,keys:{},joy:null,tgt:null,ride:false,room:null,lastSend:0,sent:null,near:null,nearT:0,beat:0},POS={},posSub=false;
-  var VEHC={bus:'#F5B400',motor_bebek:'#E5484D',motor_sport:'#2F6FEB',mobil_kecil:'#F5B400',mobil_jip:'#2FA36B'};
-  function vehKind(v){return!v?'':v==='bus'?'bus':v.indexOf('mobil')===0?'mobil':'motor'}
+  var VEHC={bus:'#F5B400',kereta:'#2F6FEB',motor_bebek:'#E5484D',motor_sport:'#2F6FEB',mobil_kecil:'#F5B400',mobil_jip:'#2FA36B'};
+  function vehKind(v){return!v?'':v==='bus'?'bus':v==='kereta'?'kereta':v.indexOf('mobil')===0?'mobil':'motor'}
   function myVeh(){var p=myPakai();return p&&p.veh||''}
   function posSprite(id){return presUid&&id===presUid?'__npc':id}
   var posUnsub=null;
@@ -3208,7 +3200,7 @@ var Snd=(function(){
   setInterval(posWatch,4000);document.addEventListener('visibilitychange',posWatch);
   function posFresh(p){return p&&Date.now()-p.at<70000}
   function sendPos(force){if(!db||!play.on)return;var s=sprites[play.id];if(!s)return;var now=Date.now(),me=isOwner?uid:uid;if(!me)return;
-    var d={on:true,gx:Math.round(s.gx*100)/100,gy:Math.round(s.gy*100)/100,dir:s.dir<0?-1:1,veh:play.bus?'bus':play.ride?myVeh():'',room:play.room?play.room.id:'',mv:!!s.moving,at:now,jp:play.jp||0,emo:play.emo&&now-play.emo.at<4000?play.emo.id:'',emoAt:play.emo?play.emo.at:0,say:play.say&&now-play.say.at<8000?play.say.text:'',sayAt:play.say?play.say.at:0},o=play.sent;
+    var d={on:true,gx:Math.round(s.gx*100)/100,gy:Math.round(s.gy*100)/100,dir:s.dir<0?-1:1,veh:play.bus?(play.bus.veh||'bus'):play.ride?myVeh():'',room:play.room?play.room.id:'',mv:!!s.moving,at:now,jp:play.jp||0,emo:play.emo&&now-play.emo.at<4000?play.emo.id:'',emoAt:play.emo?play.emo.at:0,say:play.say&&now-play.say.at<8000?play.say.text:'',sayAt:play.say?play.say.at:0},o=play.sent;
     var changed=!o||o.jp!==d.jp||o.emoAt!==d.emoAt||o.sayAt!==d.sayAt||o.room!==d.room||o.veh!==d.veh||Math.abs(o.gx-d.gx)+Math.abs(o.gy-d.gy)>.05||o.mv!==d.mv;
     if(!force&&!(changed&&now-play.lastSend>2500)&&now-play.lastSend<20000)return;
     play.lastSend=now;play.sent=d;db.doc('pos/'+me).set(d).catch(function(){})}
@@ -3274,7 +3266,7 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
   /* --- gerak pemain --- */
   function playStep(dt){
     var s=sprites[play.id];if(!s){stopPlay();return}
-    s.ctl=true;s.inside=false;s.veh=play.bus?'bus':play.ride?myVeh():'';if(play.ride&&!s.veh){play.ride=false;updRideBtn()}
+    s.ctl=true;s.inside=false;s.veh=play.bus?(play.bus.veh||'bus'):play.ride?myVeh():'';if(play.ride&&!s.veh){play.ride=false;updRideBtn()}
     if(s.job){return false}
     if(play.bus){busStep(s,dt);return true}
     var iv=inputVec(),mx=0,my=0,sp=play.room?2.4:play.ride?(vehKind(s.veh)==='mobil'?7.5:5.5):2.8;
@@ -3321,7 +3313,7 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
     if(n==='Garismart')return'mart';if(/^Warung/.test(n))return'warung';if(n==='Balai Kampung')return'balai';if(/^SD /.test(n))return'kelas';if(/Perpustakaan/.test(n))return'perpus';if(n==='Gelanggang Main')return'arena';
     if(/Masjid|Gereja|Pura|Vihara|Klenteng/.test(n))return'ibadah';if(n==='Pos Ronda')return'pos';if(/disko/i.test(n))return'disko';return'umum'}
   function Fx(gx,gy,w,d,h,col,name,act,lbl,extra){return{gx:gx,gy:gy,w:w,d:d,h:h,col:col,name:name,act:act||'',lbl:lbl,solid:h>0,extra:extra}}
-  function roomDef(kind,o){var mr=mineRooms(kind);if(mr)return mr;var F=[],wall='#F2EBDD',floor='#D9C4A3',tile=0;
+  function roomDef(kind,o){var mr=mineRooms(kind)||jadiRooms(kind,o);if(mr)return mr;var F=[],wall='#F2EBDD',floor='#D9C4A3',tile=0;
     function rak(x,y,c,nm,a,l){F.push(Fx(x,y,2.4,.8,26,c||'#C9A27A',nm||'Rak',a,l))}
     if(kind==='mart'){wall='#EEF3FA';floor='#F3F1EC';tile=1;rak(1.2,1,'#2F6FEB','Rak snack','toko','Belanja');rak(4.2,1,'#E5484D','Rak minuman','toko','Belanja');rak(7,1,'#F5B400','Rak sembako','toko','Belanja');rak(1.2,3.4,'#9EE3C6','Rak roti','toko','Belanja');rak(4.2,3.4,'#C9B8FF','Rak sabun','toko','Belanja');
       F.push(Fx(7,4.2,2.2,1,16,'#2F6FEB','Kasir Garismart','toko','Bayar di kasir'));F.push(Fx(.3,5.6,1.4,1,14,'#F5B400','Meja karyawan','garismart','Absen / ambil shift'));F.push(Fx(9.1,1,.7,2,30,'#CFE5F7','Kulkas','toko','Ambil minuman'))}
@@ -3351,6 +3343,9 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
   var FACTS=['Satu sendok teh bintang neutron beratnya bisa miliaran ton.','Gurita punya tiga jantung.','Cahaya matahari butuh sekitar 8 menit untuk sampai ke Bumi.','Air bisa mendidih dan membeku sekaligus di titik tripel.','Tubuh manusia punya sekitar 37 triliun sel.','Petir lebih panas dari permukaan Matahari.','Lebah bisa mengenali wajah manusia.','Bulan menjauh dari Bumi sekitar 3,8 cm per tahun.'];
   function roomAct(f){var a=f.act;
     if(a.indexOf('mine:')===0){mineNode(+a.slice(5));return}
+    if(a==='kereta'){var st=play.room.o.stIdx;exitRoom(true);startTrain(st,1-st);return}
+    if(a==='jadwal'){toast('Pesawat Garis Air lepas landas tiap 2 menit. Penerbangan penumpang segera dibuka!');return}if(a==='jadwalkereta'){var tq=trainX();toast(tq.stop>=0?'Kereta sedang berhenti di '+STA[tq.stop].name+'. Kereta lewat tiap 2 menit.':'Kereta sedang jalan. Kereta lewat tiap 2 menit.');return}if(a==='jadwal2'){toast('Popcorn karamel siap! Selamat nonton 🍿');return}
+    if(a==='film'){var fl=filmLive();toast(fl?'Sedang tayang: '+(BIO.title||'Film pilihan Presiden'):'Belum ada film yang tayang. Tunggu Presiden memutar film ya.');return}
     if(a==='alat'||a==='jual'||a==='toko'||a==='garismart'||a==='info'||a==='poll'||a==='usulan'||a==='cerdas'||a==='arena'||a==='kerja'||a==='tas'||a==='chat'){openPanel(a);return}
     if(a==='rt:kost'){rtView=KOST_RT.id;openPanel('rt');return}
     if(a==='disko'){var on=Snd.dj(!djOnP);if(on!==false){djOnP=!djOnP;toast(djOnP?'Musik DJ nyala! Goyang.':'Musik DJ dimatikan.')}return}
@@ -3371,9 +3366,10 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#141B2B';ctx.fillRect(0,0,W,H);
     var rv=roomView(),z=rv.z,c=rv.c;
     ctx.setTransform(dpr*z,0,0,dpr*z,dpr*(W/2-c.x*z),dpr*(H/2+10-c.y*z));lowz=false;LIGHTS=[];GLOWS=[];VP={x0:-1e5,x1:1e5,y0:-1e5,y1:1e5};
-    var Hw=74;fillPg([P(0,0,0),P(RWW,0,0),P(RWW,0,Hw),P(0,0,Hw)],def.wall,INK,1.5);fillPg([P(0,0,0),P(0,RD,0),P(0,RD,Hw),P(0,0,Hw)],shade(def.wall,-.1),INK,1.5);
+    var Hw=def.kind==='bioskop'?118:74;fillPg([P(0,0,0),P(RWW,0,0),P(RWW,0,Hw),P(0,0,Hw)],def.wall,INK,1.5);fillPg([P(0,0,0),P(0,RD,0),P(0,RD,Hw),P(0,0,Hw)],shade(def.wall,-.1),INK,1.5);
+    if(def.kind==='bioskop'){var sc=[P(2,0,6),P(8,0,6),P(8,0,114),P(2,0,114)];fillPg(sc,filmLive()?'#000000':'#F7F3EA',INK,2);if(!filmLive()){var tc=P(5,0,60);ctx.save();ctx.translate(tc.x,tc.y);ctx.transform(1,0.5,0,1,0,0);txt('BIOSKOP GARIS',0,-6,12,'#3E2E6B',900);txt('Belum ada film tayang',0,10,8,'#5A6272',700);ctx.restore()}}
     if(def.kind==='tambang'){for(var li=0;li<4;li++){var lp=P(1+li*2.6,0,48);ctx.fillStyle='#FFD95E';ctx.beginPath();ctx.arc(lp.x,lp.y,4,0,7);ctx.fill();var gr=ctx.createRadialGradient(lp.x,lp.y,0,lp.x,lp.y,70);gr.addColorStop(0,'rgba(255,200,90,.35)');gr.addColorStop(1,'rgba(255,200,90,0)');ctx.fillStyle=gr;ctx.fillRect(lp.x-70,lp.y-70,140,140)}for(var bm=0;bm<3;bm++){var b0=P(2+bm*3,0,0),b1=P(2+bm*3,0,74);ctx.strokeStyle='#7B5A3E';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(b0.x,b0.y);ctx.lineTo(b1.x,b1.y);ctx.stroke()}}
-    else for(var wi=0;wi<3;wi++){var a=1.5+wi*3;fillPg([P(a,0,30),P(a+1.6,0,30),P(a+1.6,0,56),P(a,0,56)],def.kind==='disko'||def.kind==='arena'?'#2B2048':'#BFDBFE',INK,1)}
+    else if(def.kind!=='bioskop')for(var wi=0;wi<3;wi++){var a=1.5+wi*3;fillPg([P(a,0,30),P(a+1.6,0,30),P(a+1.6,0,56),P(a,0,56)],def.kind==='disko'||def.kind==='arena'?'#2B2048':'#BFDBFE',INK,1)}
     flat(0,0,RWW,RD,def.floor,INK,1.5);
     for(var x=0;x<RWW;x++)for(var y=0;y<RD;y++){var col=null;if(def.tile===1&&(x+y)%2)col=shade(def.floor,-.05);else if(def.tile===2&&(x+y)%2)col=shade(def.floor,.06);else if(def.tile===3&&x>=3&&x<7&&y>=2&&y<6){col=DISCO[(x*3+y+Math.floor(t*3))%6]}else if(!def.tile&&x%2===0)col=shade(def.floor,-.04);if(col)flat(x,y,1,1,col)}
     flat(RWW/2-.9,RD-.5,1.8,.5,'#E5484D');var dp=P(RWW/2,RD,0);sign(dp.x,dp.y+18,'PINTU KELUAR','#E5484D','#FFFFFF',8);
@@ -3390,6 +3386,7 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
       if(f.act&&z>.45){var lp=P(f.gx+f.w/2,f.gy+f.d/2,f.h+8);sign(lp.x,lp.y,short(f.name.replace(/^Mesin /,''),18).toUpperCase(),'rgba(27,36,51,.85)','#FFFFFF',5.5)}
       if(/^Rak/.test(f.name)){for(var l=0;l<3;l++){var q3=qF(f.gx,f.gy,f.w,f.d,.1,f.w-.1,4+l*8,6+l*8);fillPg(q3,DISCO[(l+f.gx|0)%6])}}});
     if(def.kind==='disko'){ctx.globalCompositeOperation='lighter';for(var b=0;b<4;b++){var bp=P(1.5+b*2.4,.5,70),an=Math.sin(t*1.6+b)*.6;ctx.fillStyle='rgba('+[255,120,200][b%3]+',120,255,.12)';ctx.beginPath();ctx.moveTo(bp.x,bp.y);ctx.lineTo(bp.x+Math.sin(an)*160-40,bp.y+220);ctx.lineTo(bp.x+Math.sin(an)*160+40,bp.y+220);ctx.fill()}ctx.globalCompositeOperation='source-over'}
+    try{filmPlace(def,z,c)}catch(e){}
     ctx.setTransform(dpr,0,0,dpr,0,0);
     function ts(wx,wy){return{x:(wx-c.x)*z+W/2,y:(wy-c.y)*z+H/2+10}}
     for(var k2 in sprites){var s2=sprites[k2];if(!(k2===play.id||s2.room===r.id))continue;var d=s2.d,wp=P(s2.gx,s2.gy),pp2=ts(wp.x,wp.y-52),me=k2===play.id;var ty=pill(short(d.name,16)+(me?' (kamu)':''),pp2.x,pp2.y,me?'#2FA36B':'rgba(27,36,51,.86)','#FFFFFF',null);if(emoActive(s2)){drawEmote(s2,pp2.x,ty-22);ty-=40}if(s2.say&&Date.now()<s2.say.until)speech(s2.say.text,pp2.x,ty-4)}
@@ -3399,7 +3396,7 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
     play.tgt={gx:Math.max(.4,Math.min(RWW-.4,g.gx)),gy:Math.max(.4,Math.min(RD-.35,g.gy))}}
 
   /* --- naik kendaraan: gambar --- */
-  function drawRide(s,t){if(s.veh==='bus'){var bdx=s.bdx,bdy=s.bdy;if(bdx==null){bdx=s.dir>0?1:-1;bdy=0}drawBus(s.gx,s.gy,bdx,bdy);var hp=P(s.gx,s.gy,9);ctx.save();ctx.translate(hp.x,hp.y);ctx.scale(.55,.55);try{drawChar(s.d.look,null,0,false,s.dir,0)}catch(e){}ctx.restore();return}
+  function drawRide(s,t){if(s.veh==='kereta'){drawTrainCar(s.gx,s.gy,s.bdx==null?1:s.bdx,true);return}if(s.veh==='bus'){var bdx=s.bdx,bdy=s.bdy;if(bdx==null){bdx=s.dir>0?1:-1;bdy=0}drawBus(s.gx,s.gy,bdx,bdy);var hp=P(s.gx,s.gy,9);ctx.save();ctx.translate(hp.x,hp.y);ctx.scale(.55,.55);try{drawChar(s.d.look,null,0,false,s.dir,0)}catch(e){}ctx.restore();return}
     var p=P(s.gx,s.gy),v=s.veh,k=vehKind(v),col=VEHC[v]||'#E5484D',d=s.d,dir=s.dir;
     ctx.fillStyle='rgba(27,36,51,.2)';ctx.beginPath();ctx.ellipse(p.x,p.y,k==='mobil'?24:12,k==='mobil'?9:4,0,0,7);ctx.fill();
     if(k==='motor'){ctx.save();ctx.translate(p.x,p.y);ctx.scale(dir*1.6,1.6);ctx.fillStyle='#1B2433';ctx.beginPath();ctx.arc(-7,-3.5,3.6,0,7);ctx.arc(7,-3.5,3.6,0,7);ctx.fill();ctx.fillStyle=col;rr(-8,-10,15,5.5,2.4);ctx.fill();ctx.strokeStyle=INK;ctx.lineWidth=1.2;ctx.stroke();ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(6,-9);ctx.lineTo(9,-15);ctx.stroke();if(v==='motor_sport'){ctx.fillStyle=shade(col,.2);ctx.beginPath();ctx.moveTo(2,-10);ctx.lineTo(9,-14);ctx.lineTo(9,-9);ctx.fill()}ctx.restore();
@@ -3589,9 +3586,9 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
     {name:'Bioskop Garis (proyek)',label:'BIOSKOP',gx:13,gy:28.4,w:14,d:4.8,H:46,prog:.3,desc:'Bioskop kampung untuk nonton film sains bareng. Masih dibangun.'},
     {name:'RS Besar Kampung (proyek)',label:'RUMAH SAKIT BESAR',gx:13,gy:109,w:16,d:11,H:96,prog:.35,desc:'Rumah sakit besar dengan IGD dan ruang rawat. Masih tahap pembangunan.'},
     {name:'Stasiun Kampung (proyek)',label:'STASIUN',gx:28,gy:-3.6,w:16,d:5.4,H:34,prog:.55,desc:'Stasiun kereta untuk rel kampung. Dibangun bareng rel yang hampir jadi.'}];
-  PROYEK.forEach(function(o){o.t='proyek';o.h=o.H+60;o.draw=drawProyek;o.info=proyekInfo;fac(o)});
+  /* proyek sudah selesai: gedung jadi ada di k_jadi.js */
   addObj({t:'ground',key:-1e9,gx:26,gy:2.8,w:20,d:2.4,bb:(function(){var a=P(26,5.2),b=P(46,2.8),c=P(26,2.8),d=P(46,5.2);return{x0:a.x,x1:b.x,y0:c.y,y1:d.y}})(),draw:function(){flat(26,3,20,2.2,'#C9C2B4');flat(26,4.8,20,.3,'#F5B400')}});
-  REGIONS.push(['Proyek Mall',21,19],['Proyek RS Besar',21,115],['Proyek Stasiun',36,-1]);
+  REGIONS.push(['Mall Garis',21,19],['RS Besar',21,115],['Stasiun',36,-1]);
 
   /* ================= HALTE & BUS ================= */
   var HALTE=[['Alun-alun',54,66,55.4,65.5],['Pasar & Garismart',76,90,77.3,89.7],['SD Kampung',32,106,33.3,105.9],['Stadion',32,35,29.6,35.1],['Kota Garis',98,30,96,30.2],['Kost & Pantai',120,62,121.3,62.1],['Panggung Konser',98,116,99.3,116.5],['Sawah & Kebun',10,70,8.2,70.1],['Tambang Gunung',71,11,71,8.7],['Stasiun',36,11,36,8.7],['RS Besar',10,115,8.2,115.1],['Mall Garis',10,19,8.2,19.1]].map(function(h,i){return{n:i,name:h[0],x:h[1],y:h[2],sx:h[3],sy:h[4]}});
@@ -3619,10 +3616,10 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
     var rows=A.x===10||Bh.x===10?[11,123]:[11,75,123],mid=(A.y+Bh.y)/2,Yr=rows.reduce(function(p,c){return Math.abs(c-mid)<Math.abs(p-mid)?c:p},rows[0]);if(A.y===11||Bh.y===11)Yr=11;
     var pts=[[A.x,A.y],[A.x,Yr],[Bh.x,Yr],[Bh.x,Bh.y]].filter(function(p,i,arr){return!i||p[0]!==arr[i-1][0]||p[1]!==arr[i-1][1]});
     play.ride=false;updRideBtn();play.tgt=null;s.gx=A.x;s.gy=A.y;play.bus={pts:pts,i:1,to:Bh};s.veh='bus';sendPos(true);toast('Bus berangkat ke Halte '+Bh.name+'…');if(window.Snd)Snd.sfx('jump')}
-  function busStep(s,dt){var b=play.bus,tg=b.pts[b.i];if(!tg){endBus(s);return}var dx=tg[0]-s.gx,dy=tg[1]-s.gy,dd=Math.hypot(dx,dy),v=12*dt;
+  function busStep(s,dt){var b=play.bus,tg=b.pts[b.i];if(!tg){endBus(s);return}var dx=tg[0]-s.gx,dy=tg[1]-s.gy,dd=Math.hypot(dx,dy),v=(b.speed||12)*dt;
     if(dd<=v){s.gx=tg[0];s.gy=tg[1];b.i++;if(b.i>=b.pts.length){endBus(s);return}}else{s.gx+=dx/dd*v;s.gy+=dy/dd*v;s.bdx=dx/dd;s.bdy=dy/dd;var sx=dx-dy;if(Math.abs(sx)>.01)s.dir=sx<0?-1:1}
-    s.veh='bus';s.moving=true;s.tx=s.gx;s.ty=s.gy;var p=P(s.gx,s.gy),f=Math.min(1,dt*6);camGoal=null;cam.x+=(p.x-cam.x)*f;cam.y+=(p.y-30-cam.y)*f;clampCam();sendPos(false)}
-  function endBus(s){var to=play.bus.to;play.bus=null;s.veh='';s.gx=to.sx+(to.sx<to.x?.9:to.sx>to.x?-.9:0);s.gy=to.sy+(to.sy<to.y?.9:to.sy>to.y?-.9:.8);s.tx=s.gx;s.ty=s.gy;s.moving=false;toast('Sampai di Halte '+to.name+'.');if(window.Snd)Snd.sfx('right');sendPos(true)}
+    s.veh=b.veh||'bus';s.moving=true;s.tx=s.gx;s.ty=s.gy;var p=P(s.gx,s.gy),f=Math.min(1,dt*6);camGoal=null;cam.x+=(p.x-cam.x)*f;cam.y+=(p.y-30-cam.y)*f;clampCam();sendPos(false)}
+  function endBus(s){var to=play.bus.to;play.bus=null;s.veh='';if(to.ex!=null){s.gx=to.ex;s.gy=to.ey;s.tx=s.gx;s.ty=s.gy;s.moving=false;toast('Sampai di '+to.name+'.');if(window.Snd)Snd.sfx('right');sendPos(true);return}s.gx=to.sx+(to.sx<to.x?.9:to.sx>to.x?-.9:0);s.gy=to.sy+(to.sy<to.y?.9:to.sy>to.y?-.9:.8);s.tx=s.gx;s.ty=s.gy;s.moving=false;toast('Sampai di Halte '+to.name+'.');if(window.Snd)Snd.sfx('right');sendPos(true)}
 
   /* ================= EMOT ================= */
   var EMO={emo_lambai:['👋','Lambai'],emo_senyum:['😊','Senyum'],emo_tawa:['😂','Ketawa'],emo_love:['❤️','Love'],emo_kaget:['😮','Kaget'],emo_sedih:['😢','Sedih'],emo_marah:['😡','Marah'],emo_tepuk:['👏','Tepuk tangan'],emo_keren:['😎','Keren'],emo_pesta:['🎉','Pesta'],emo_api:['🔥','Semangat'],emo_joget:['💃','Joget']};
@@ -3761,19 +3758,7 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
   [0,1].forEach(function(i){fac({t:'court',n:i,name:'Lapangan Bulu Tangkis '+(i+1),gx:12.5+i*9.5,gy:37,w:7.6,d:3.6,h:20,key:-4e8,draw:drawCourt,info:function(){return{title:'Lapangan Bulu Tangkis',sub:'Dua lapangan di sebelah Stadion Gelora Garis.',desc:'Warga sering main bulu tangkis di sini kalau sore. Malam lapangannya diterangi lampu.'}}})});
   fac({t:'sign',name:'Bulu Tangkis',gx:21.6,gy:41.4,w:.4,d:.4,h:26,draw:function(o){var p=P(o.gx,o.gy);sign(p.x,p.y,'LAPANGAN BULU TANGKIS','#2FA36B','#FFFFFF',6.5,12)},info:function(){return{title:'Lapangan Bulu Tangkis',sub:'Dua lapangan di sebelah Stadion.'}}});
 
-  /* ================= BANDARA (PROYEK) ================= */
-  var RWY={x:-9.6,y:18,w:3.2,h:84,prog:.38};
-  addObj({t:'ground',key:-1e9,gx:RWY.x-1,gy:RWY.y-1,w:16,d:RWY.h+2,bb:(function(){var a=P(RWY.x-1,RWY.y+RWY.h+1),b=P(RWY.x+15,RWY.y-1),c=P(RWY.x-1,RWY.y-1),d=P(RWY.x+15,RWY.y+RWY.h+1);return{x0:a.x,x1:b.x,y0:c.y-10,y1:d.y}})(),draw:function(){var t=performance.now()/1000;
-    flat(RWY.x-1,RWY.y-1,RWY.w+2,RWY.h+2,'#C9B48F');var pv=RWY.h*RWY.prog;flat(RWY.x,RWY.y,RWY.w,pv,'#3E4867');flat(RWY.x,RWY.y+pv,RWY.w,RWY.h-pv,'#9C9384');
-    if(!lowz){for(var y=RWY.y+1;y<RWY.y+pv-1;y+=3){flat(RWY.x+RWY.w/2-.08,y,.16,1.4,'#FFFFFF')}for(var k=0;k<6;k++)flat(RWY.x+.25+k*.45,RWY.y+.4,.25,1.6,'#FFFFFF');
-      var rp=P(RWY.x+RWY.w/2,RWY.y+pv+.6);ctx.save();ctx.translate(rp.x,rp.y);ctx.fillStyle='#F5B400';ctx.fillRect(-12,-12,24,9);ctx.fillStyle='#1B2433';ctx.beginPath();ctx.arc(-8,-2,5,0,7);ctx.arc(9,-2,3.4,0,7);ctx.fill();ctx.restore();
-      var ex=P(RWY.x+RWY.w/2,RWY.y+pv+5),arm=Math.sin(t*1.1)*.3;ctx.save();ctx.translate(ex.x,ex.y);ctx.fillStyle='#1B2433';ctx.fillRect(-14,-4,28,5);ctx.fillStyle='#F5B400';ctx.fillRect(-11,-14,18,10);ctx.strokeStyle='#F5B400';ctx.lineWidth=3.4;ctx.beginPath();ctx.moveTo(6,-12);ctx.lineTo(16,-24+arm*20);ctx.lineTo(26,-12+arm*10);ctx.stroke();ctx.restore();
-      [[RWY.x+.6,RWY.y+pv+2.4],[RWY.x+2.6,RWY.y+pv+8]].forEach(function(q,i){var p=P(q[0],q[1]);tukang(p.x,p.y,t,i*1.3,i?-1:1)})}
-    flat(RWY.x+RWY.w,55,6.6,3.4,'#5A6272')}});
-  fac({t:'proyek',name:'Terminal Bandara Garis (proyek)',label:'BANDARA GARIS',gx:-3.2,gy:50,w:10.6,d:10,H:52,prog:.28,draw:drawProyek,info:proyekInfo,desc:'Bandara kecil Kampung Stickman: landasan pacu, terminal, dan menara kontrol. Masih tahap pembangunan.',h:120});
-  fac({t:'proyek',name:'Menara Kontrol (proyek)',label:'MENARA ATC',gx:-2.6,gy:42,w:2.4,d:2.4,H:110,prog:.45,draw:drawProyek,info:proyekInfo,desc:'Menara kontrol lalu lintas udara bandara. Masih dibangun.',h:180});
-  fac({t:'sign',name:'Proyek Bandara',gx:5,gy:66,w:.4,d:.4,h:26,draw:function(o){var p=P(o.gx,o.gy);sign(p.x,p.y,'PROYEK BANDARA GARIS · '+Math.round(RWY.prog*100)+'%','#F5891F','#1B2433',7,14)},info:function(){return{title:'Proyek Bandara Garis',sub:'Dalam pembangunan · '+Math.round(RWY.prog*100)+'% selesai',desc:'Landasan pacu sepanjang hutan barat, terminal, dan menara kontrol sedang dibangun.'}}});
-  REGIONS.push(['Proyek Bandara',-2,60],['Bulu Tangkis',21,39]);
+  REGIONS.push(['Bulu Tangkis',21,39]);
 
   (function(){var od=STAGE.draw;STAGE.draw=function(o){od(o);drawBigScreen(o)};var oi=STAGE.info;STAGE.info=function(o){var r=oi(o);r.actions=(r.actions||[]).concat([['Request lagu','reqlagu']]);return r}})();
 
@@ -3781,6 +3766,85 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
     if(cam.z>0.22){var bob=Math.sin(performance.now()/400+1)*2,sc=Math.min(2.6,Math.max(1,0.9/cam.z));ctx.save();ctx.translate(p.x,p.y-34+bob);ctx.scale(sc,sc);ctx.font='900 9px Figtree, system-ui, sans-serif';var t1='♪ REQUEST LAGU',t2='Rp5.000 per lagu',bw=Math.max(ctx.measureText(t1).width,ctx.measureText(t2).width)+18;rr(-bw/2,-30,bw,28,9);ctx.fillStyle='#C9B8FF';ctx.fill();ctx.lineWidth=1.8;ctx.strokeStyle='#1B2433';ctx.stroke();ctx.beginPath();ctx.moveTo(-5,-2.5);ctx.lineTo(0,5);ctx.lineTo(5,-2.5);ctx.closePath();ctx.fillStyle='#C9B8FF';ctx.fill();ctx.stroke();ctx.fillRect(-4.4,-4,8.8,2.5);txt(t1,0,-20,9,'#3E1F9C',900);txt(t2,0,-9.5,7.5,'#1B2433',800);ctx.restore()}
     if(night)glow(p.x,p.y-14,30,.9)}
   fac({t:'amal',name:'Request Lagu',gx:STAGE.gx+STAGE.w-1.9,gy:STAGE.gy+STAGE.d-1.3,z:12,w:.8,d:.8,h:100,draw:drawReqBox,info:function(){var q=queueList();return{title:'Request Lagu',sub:'Rp5.000 per lagu lewat Saweria · antrean '+q.length+' lagu',desc:'Tempel link YouTube lagumu, bayar Rp5.000 di Saweria pakai kodenya, lalu lagumu otomatis diputar di layar besar konser sesuai urutan.',actions:[['Request lagu','reqlagu']]}}});
+
+  /* ================= PROYEK SELESAI: rel, stasiun, mall, bioskop, RS besar, bandara ================= */
+  /* ---- rel & kereta ---- */
+  var STA=[{name:'Stasiun Kampung',x:36,px:36,ex:36,ey:3.6},{name:'Stasiun Kota Garis',x:106,px:106,ex:106,ey:3.6}],TRAIN_Y=6.2,TR_CYCLE=120,TR_DWELL=20;
+  function trainX(){var t=(Date.now()/1000)%TR_CYCLE,a=STA[0].x,b=STA[1].x,mv=(TR_CYCLE-2*TR_DWELL)/2;
+    if(t<TR_DWELL)return{x:a,d:1,stop:0};t-=TR_DWELL;if(t<mv){var k=t/mv;k=k*k*(3-2*k);return{x:a+(b-a)*k,d:1,stop:-1}}t-=mv;
+    if(t<TR_DWELL)return{x:b,d:-1,stop:1};t-=TR_DWELL;var k2=t/mv;k2=k2*k2*(3-2*k2);return{x:b+(a-b)*k2,d:-1,stop:-1}}
+  function drawTrainCar(gx,gy,dir,head){var L=2.6,x0=gx-L/2,y0=gy-.42;boxS(x0,y0,L,.84,13,'#E6ECF5','#2F6FEB','#1D4699',2);
+    var w=qF(x0,y0,L,.84,.25,L-.25,7,11);fillPg(w,night?'#FFE29A':'#CFE0F2');if(night)lightQ(w);var st=qF(x0,y0,L,.84,0,L,4,5.5);fillPg(st,'#E5484D');
+    ctx.fillStyle='#1B2433';[[x0+.4,y0+.84],[x0+L-.4,y0+.84]].forEach(function(q){var p=P(q[0],q[1],2);ctx.beginPath();ctx.ellipse(p.x,p.y,3,2.4,0,0,7);ctx.fill()});
+    if(head){var hx=dir>0?x0+L:x0,hp=P(hx,gy,8);ctx.fillStyle='#FFD95E';ctx.beginPath();ctx.arc(hp.x,hp.y,2.4,0,7);ctx.fill();if(night)glow(hp.x,hp.y,30,1.1)}}
+  function drawRailDone(o){var x0=RAIL.x0,x1=RAIL.x1,y=RAIL.y;flat(x0,y,x1-x0,1.6,'#9C9384');
+    if(!lowz){for(var x=x0+.2;x<x1;x+=.55){if(!visG(x,y+.8,2))continue;flat(x,y+.15,.22,1.3,'#7B5A3E')}
+      ctx.strokeStyle='#8E95A3';ctx.lineWidth=2;[y+.45,y+1.15].forEach(function(ry){var a=P(x0,ry,1),b=P(x1,ry,1);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
+    var tr=trainX();for(var c=0;c<3;c++){var cx=tr.x-tr.d*c*2.8;drawTrainCar(cx,TRAIN_Y,tr.d,c===0)}
+    if(cam.z>0.5&&tr.stop<0){var lp=P(tr.x,TRAIN_Y,26);sign(lp.x,lp.y,'KERETA GARIS','#2F6FEB','#FFFFFF',5.5)}}
+  function railInfo(){var tr=trainX();return{title:'Rel Kereta Kampung',sub:'Sudah jadi! Kereta Garis bolak-balik Stasiun Kampung ⇄ Stasiun Kota Garis.',desc:tr.stop>=0?'Kereta sedang berhenti di '+STA[tr.stop].name+'.':'Kereta sedang jalan.',actions:[['Naik dari Stasiun Kampung','kereta:0:1'],['Naik dari Stasiun Kota','kereta:1:0']]}}
+  function startTrain(a,b){var A=STA[a],Bs=STA[b];if(!A||!Bs)return;if(!play.on){startPlay();if(!play.on)return}if(play.room)exitRoom(true);var s=sprites[play.id];if(!s)return;hideCard();
+    play.ride=false;updRideBtn();play.tgt=null;s.gx=A.px;s.gy=A.ey;play.bus={pts:[[A.px,TRAIN_Y],[Bs.px,TRAIN_Y],[Bs.px,Bs.ey]],i:0,to:{name:Bs.name,ex:Bs.ex,ey:Bs.ey},veh:'kereta',speed:14};s.veh='kereta';s.bdx=b>a?1:-1;s.bdy=0;sendPos(true);toast('Kereta berangkat ke '+Bs.name+'…');if(window.Snd)Snd.sfx('jump')}
+  function staInfo(i){return function(){var o=STA[1-i];return{title:STA[i].name,sub:'Kereta Garis ke '+o.name+' · gratis',desc:'Naik kereta lewat mode Main karakter. Kereta reguler juga lewat tiap 2 menit.',actions:[['Naik kereta ke '+o.name,'kereta:'+i+':'+(1-i)]]}}}
+  var STA_B=B({rk:'stasiun',stIdx:0,name:'Stasiun Kampung',sub:'Stasiun kereta kampung.',gx:28,gy:-3.6,w:16,d:5.4,hw:26,rh:14,wall:'#F4EEE2',roof:'#B5543F',roofType:'hip',door:true,doorCol:'#7A4A2E',label:'STASIUN KAMPUNG',labelBg:'#2F6FEB',zone:'Stasiun',info:staInfo(0),extra:function(g){canopy(g.gx+.5,3,g.w-1,'#2F6FEB');clock(g.gx+g.w/2,g.gy+g.d,32)}});
+  var STA_K=B({rk:'stasiun',stIdx:1,name:'Stasiun Kota Garis',sub:'Stasiun kereta di ujung Kota Garis.',gx:102.5,gy:-1.4,w:7,d:3,hw:20,rh:10,wall:'#EEF3FA',roof:'#2F6FEB',roofType:'gable',door:true,label:'STASIUN KOTA',labelBg:'#2F6FEB',zone:'Kota Garis',info:staInfo(1),extra:function(g){canopy(g.gx,3.1,g.w,'#E5484D')}});
+  addObj({t:'ground',key:-1e9,gx:101,gy:2.8,w:10,d:2.4,bb:(function(){var a=P(101,5.2),b=P(111,2.8),c=P(101,2.8),d=P(111,5.2);return{x0:a.x,x1:b.x,y0:c.y,y1:d.y}})(),draw:function(){flat(101,3,10,2.2,'#C9C2B4');flat(101,4.8,10,.3,'#F5B400')}});
+  function canopy(x,y,w,col){if(lowz)return;for(var i=0;i<=4;i++){var px=x+i*w/4,a=P(px,y+1.2,0),b=P(px,y+1.2,16);ctx.strokeStyle='#6B7385';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}boxS(x,y,w,1.8,2,col,shade(col,-.1),shade(col,-.25),16)}
+  function clock(gx,gy,z){var p=P(gx,gy,z);ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.arc(p.x,p.y,6,0,7);ctx.fill();ctx.strokeStyle=INK;ctx.lineWidth=1.4;ctx.stroke();var d=new Date(Date.now()+7*3600e3),h=(d.getUTCHours()%12+d.getUTCMinutes()/60)/12*Math.PI*2,m=d.getUTCMinutes()/60*Math.PI*2;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+Math.sin(h)*3.4,p.y-Math.cos(h)*3.4);ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+Math.sin(m)*4.8,p.y-Math.cos(m)*4.8);ctx.stroke()}
+
+  /* ---- Mall Garis ---- */
+  B({rk:'mall',name:'Mall Garis',sub:'Mall terbesar di kampung: baju, topi, mainan, dan food court.',gx:13,gy:13.4,w:16,d:10.6,hw:64,floor:15,wall:'#EEF1F8',roof:'#C9D2DD',roofType:'flat',winCol:'#9CC3FF',door:true,doorCol:'#BFDBFE',zone:'Mall Garis',
+    info:function(){return{title:'Mall Garis',sub:'Buka setiap hari · 4 lantai',desc:'Masuk lewat mode Main karakter untuk belanja di toko-toko mall.',actions:[['Belanja','toko']]}},
+    extra:function(g){var t=performance.now()/1000,sp=P(g.gx+g.w/2,g.gy+g.d,g.hw-8);ctx.save();ctx.translate(sp.x,sp.y);ctx.transform(1,0.5,0,1,0,0);ctx.font='900 18px Figtree, system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';if(night){ctx.shadowColor='#E5484D';ctx.shadowBlur=14}ctx.fillStyle=night?'#FF7A7E':'#E5484D';ctx.fillText('MALL GARIS',0,0);ctx.restore();if(night)glow(sp.x,sp.y,90,1);
+      boxS(g.gx+g.w/2-2.4,g.gy+g.d,4.8,1.2,2,'#E5484D','#C73C41','#A33236',14);
+      if(!lowz)for(var i=0;i<6;i++){var cp=P(g.gx+1+i*2.4,g.gy+g.d+2.6);ctx.fillStyle=DISCO[i%6];ctx.fillRect(cp.x-7,cp.y-5,14,5)}}});
+  /* ---- Bioskop ---- */
+  var BIO={vid:'',at:0,title:''},bioSub=false,fBox=null,fPlayer=null,fLast='';
+  function filmLive(){return!!BIO.vid&&Date.now()-BIO.at<4*3600e3}
+  function bioWatch(){if(bioSub||!db)return;bioSub=true;db.doc('meta/bioskop').onSnapshot(function(d){var x=d.exists?d.data()||{}:{},v=ytId(x.vid),ch=v!==BIO.vid||(+x.at||0)!==BIO.at;BIO={vid:v,at:+x.at||0,title:clean(x.title,50)};if(ch&&fPlayer){filmHide(true)}if(panelOpen==='info')renderPanel()},function(){})}
+  B({rk:'bioskop',name:'Bioskop Garis',sub:'Nonton bareng di layar besar.',gx:13,gy:28.4,w:14,d:4.8,hw:34,wall:'#2E2350',roof:'#3E2E6B',roofType:'flat',winCol:'#5A47A0',door:true,doorCol:'#FFD95E',zone:'Bioskop Garis',
+    info:function(){return{title:'Bioskop Garis',sub:filmLive()?'Sedang tayang: '+(BIO.title||'Film pilihan Presiden'):'Belum ada film tayang',desc:'Masuk ke bioskop lewat mode Main karakter untuk nonton bareng di layar besar.'+(IS_SITE?'':' (Nobar cuma bisa di stickology.xyz.)')}},
+    extra:function(g){var t=performance.now()/1000,f=Math.floor(t*4),q=qF(g.gx,g.gy,g.w,g.d,1,g.w-1,13,31);fillPg(q,'#FFD95E');var mp=P(g.gx+g.w/2,g.gy+g.d,22);ctx.save();ctx.translate(mp.x,mp.y);ctx.transform(1,0.5,0,1,0,0);txt('BIOSKOP GARIS',0,-3,13,'#2E2350',900);txt(filmLive()?'TAYANG: '+short(BIO.title||'Film pilihan',22).toUpperCase():'SEGERA TAYANG',0,6,7,'#B5303A',900);ctx.restore();
+      for(var i=0;i<16;i++){var u=1+i*(g.w-2)/15,lp=P(g.gx+u,g.gy+g.d,32);ctx.fillStyle=(i+f)%2?'#FFFFFF':'#FFB020';ctx.beginPath();ctx.arc(lp.x,lp.y,1.6,0,7);ctx.fill()}if(night)glow(mp.x,mp.y,70,1)}});
+  function filmPlace(def,z,c){if(def.kind!=='bioskop'||!IS_SITE||!filmLive()){filmHide();return}
+    if(!fBox){fBox=document.createElement('div');fBox.className='kp-yt big kp-film';fBox.innerHTML='<div id="kp-filmp"></div>';mapEl.appendChild(fBox)}fBox.hidden=false;
+    var a=P(2,0,114),sx=(a.x-c.x)*z+W/2,sy=(a.y-c.y)*z+H/2+10,st='left:'+sx.toFixed(1)+'px;top:'+sy.toFixed(1)+'px;width:'+(6*32*z).toFixed(1)+'px;height:'+(108*z).toFixed(1)+'px';if(st!==fLast){fLast=st;fBox.style.cssText=st}
+    if(!fPlayer){var off=Math.max(0,Math.floor((Date.now()-BIO.at)/1000));fPlayer='loading';ytLoadApi(function(){if(!fBox||fBox.hidden){fPlayer=null;return}fPlayer=new YT.Player('kp-filmp',{width:320,height:180,videoId:BIO.vid,playerVars:{autoplay:1,start:off,playsinline:1,rel:0,modestbranding:1},events:{onReady:function(e){try{e.target.playVideo()}catch(_){}}}})})}}
+  function filmHide(force){if(!fBox||(fBox.hidden&&!force))return;fBox.hidden=true;fLast='';if(fPlayer&&fPlayer.destroy){try{fPlayer.destroy()}catch(e){}}fPlayer=null;var p=document.getElementById('kp-filmp');if(!p){var d=document.createElement('div');d.id='kp-filmp';fBox.appendChild(d)}}
+  function bioskopCtl(){if(!isOwner||!db)return'';return'<span class="ctl-label">Film Bioskop Garis (YouTube)</span><input class="sm-input" id="kp-bioin" placeholder="Tempel link YouTube film" value="'+(BIO.vid?'https://youtu.be/'+BIO.vid:'')+'"><input class="sm-input" id="kp-biot" maxlength="50" placeholder="Judul film (tampil di papan bioskop)" value="'+esc(BIO.title||'')+'"><div class="kp-row"><button type="button" class="btn btn-donate btn-sm" id="kp-bioset">Mulai tayang</button><button type="button" class="btn btn-ghost btn-sm" id="kp-biooff">Hentikan</button></div><p class="kp-note" id="kp-biomsg" role="status">'+(filmLive()?'Sedang tayang untuk semua warga di dalam bioskop.':'Belum ada film yang tayang.')+(IS_SITE?'':' Catatan: film YouTube cuma bisa diputar di stickology.xyz.')+'</p>'}
+  function wireBioskopCtl(){var b=$('kp-bioset');if(!b)return;b.onclick=function(){var v=ytId($('kp-bioin').value),m=$('kp-biomsg');if(!v){m.textContent='Link YouTube-nya nggak dikenali.';return}db.doc('meta/bioskop').set({vid:v,at:Date.now(),title:clean($('kp-biot').value,50)||'Film pilihan Presiden'}).then(function(){m.textContent='Film mulai tayang! Warga yang masuk bioskop nonton bareng dari detik yang sama.'},function(e){m.textContent=errText(e)})};
+    $('kp-biooff').onclick=function(){db.doc('meta/bioskop').set({vid:'',at:Date.now(),title:''}).then(function(){$('kp-biomsg').textContent='Film dihentikan.'},function(e){$('kp-biomsg').textContent=errText(e)})}}
+
+  /* ---- RS Besar ---- */
+  B({rk:'rs',name:'RS Besar Kampung',sub:'Rumah sakit besar dengan IGD dan helipad.',gx:13,gy:109,w:16,d:11,hw:82,floor:16,wall:'#F5F8FC',roof:'#D7DEE8',roofType:'flat',winCol:'#9CC3FF',door:true,doorCol:'#9EE3C6',zone:'RS Besar',
+    extra:function(g){var t=performance.now()/1000,cp=P(g.gx+g.w/2,g.gy+g.d,g.hw-12);ctx.fillStyle='#E5484D';ctx.fillRect(cp.x-4,cp.y-12,8,24);ctx.fillRect(cp.x-12,cp.y-4,24,8);if(night)glow(cp.x,cp.y,40,1);
+      var hc=P(g.gx+g.w/2,g.gy+g.d/2,g.hw);ctx.strokeStyle='#F5B400';ctx.lineWidth=2.5;ctx.beginPath();ctx.ellipse(hc.x,hc.y,40,20,0,0,7);ctx.stroke();ctx.save();ctx.translate(hc.x,hc.y);ctx.scale(1,.5);txt('H',0,0,28,'#F5B400',900);ctx.restore();
+      var ig=P(g.gx+g.w-2,g.gy+g.d,18);sign(ig.x,ig.y,'IGD 24 JAM','#E5484D','#FFFFFF',6);
+      if(!lowz){var ap=g.gx+g.w-3.5,ay=g.gy+g.d+1.6;boxS(ap,ay,2.2,.9,10,'#FFFFFF','#F5F8FC','#D7DEE8',1.5);var lb=P(ap+1.1,ay+.45,12);ctx.fillStyle=Math.floor(t*3)%2?'#E5484D':'#2F6FEB';ctx.fillRect(lb.x-3,lb.y-2,6,3)}}});
+
+  /* ---- Bandara ---- */
+  var RW={x:-9.6,y:18,w:3.2,h:84};
+  addObj({t:'ground',key:-1e9,gx:RW.x-1,gy:RW.y-1,w:16,d:RW.h+2,bb:(function(){var a=P(RW.x-1,RW.y+RW.h+1),b=P(RW.x+15,RW.y-1),c=P(RW.x-1,RW.y-1),d=P(RW.x+15,RW.y+RW.h+1);return{x0:a.x,x1:b.x,y0:c.y-10,y1:d.y}})(),draw:function(){
+    flat(RW.x-.8,RW.y-.8,RW.w+1.6,RW.h+1.6,'#8FBF7A');flat(RW.x,RW.y,RW.w,RW.h,'#3E4867');flat(RW.x+RW.w,51,8.6,8,'#5A6272');if(!lowz)for(var k2=0;k2<3;k2++)flat(RW.x+RW.w+.4,52+k2*2.4,7.8,.08,'#F5B400');
+    if(!lowz){for(var y=RW.y+2;y<RW.y+RW.h-2;y+=3)flat(RW.x+RW.w/2-.08,y,.16,1.4,'#FFFFFF');[RW.y+.4,RW.y+RW.h-2].forEach(function(yy){for(var k=0;k<6;k++)flat(RW.x+.25+k*.45,yy,.25,1.6,'#FFFFFF')});
+      if(night)for(var l=RW.y;l<=RW.y+RW.h;l+=4){[RW.x-.2,RW.x+RW.w+.2].forEach(function(xx){var p=P(xx,l);ctx.fillStyle=(l===RW.y||l>=RW.y+RW.h-4)?'#9EE3C6':'#FFE89A';ctx.beginPath();ctx.arc(p.x,p.y,1.8,0,7);ctx.fill()})}}}});
+  B({rk:'bandara',name:'Bandara Garis',sub:'Bandara kampung: terminal, landasan pacu, dan menara ATC.',gx:-1,gy:50,w:9.4,d:10,hw:32,floor:16,wall:'#EEF3FA',roof:'#9CC3FF',roofType:'flat',winCol:'#6E9DFF',door:true,doorCol:'#BFDBFE',label:'BANDARA GARIS',labelBg:'#2F6FEB',zone:'Bandara',
+    info:function(){return{title:'Bandara Garis',sub:'Pesawat Garis Air lepas landas tiap 2 menit.',desc:'Masuk ke terminal lewat mode Main karakter. Penerbangan penumpang segera dibuka!'}},extra:function(g){var rp=P(g.gx+g.w/2,g.gy+g.d/2,g.hw+2);ctx.save();ctx.translate(rp.x,rp.y);ctx.transform(1,0.5,-1,0.5,0,0);txt('BANDARA GARIS',0,0,26,'#2F6FEB',900);ctx.restore();if(night)glow(rp.x,rp.y,80,.8)}});
+  B({name:'Menara ATC',sub:'Menara kontrol lalu lintas udara.',gx:-.6,gy:42,w:2.4,d:2.4,hw:92,floor:30,wall:'#D7DEE8',roof:'#9AA3B2',roofType:'flat',winCol:'#9CC3FF',zone:'Bandara',
+    extra:function(g){var t=performance.now()/1000;boxS(g.gx-.4,g.gy-.4,g.w+.8,g.d+.8,10,'#3E4867','#6E9DFF','#4F7FD9',g.hw);var bp=P(g.gx+g.w/2,g.gy+g.d/2,g.hw+16);if(Math.floor(t*1.2)%2){ctx.fillStyle='#E5484D';ctx.beginPath();ctx.arc(bp.x,bp.y,3,0,7);ctx.fill();glow(bp.x,bp.y,20,1.2)}}});
+  function drawPlane(gx,gy,z,sc,dir){var p=P(gx,gy,z);ctx.save();ctx.translate(p.x,p.y);ctx.scale(sc,sc);ctx.rotate(dir<0?-Math.PI*.15:-Math.PI*.85);ctx.fillStyle='rgba(27,36,51,.18)';if(z<4){ctx.beginPath();ctx.ellipse(0,4,30,6,0,0,7);ctx.fill()}
+    ctx.fillStyle='#FFFFFF';ctx.strokeStyle=INK;ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(0,0,30,5,0,0,7);ctx.fill();ctx.stroke();ctx.fillStyle='#2F6FEB';ctx.beginPath();ctx.moveTo(-4,0);ctx.lineTo(4,-20);ctx.lineTo(10,-20);ctx.lineTo(8,0);ctx.lineTo(10,20);ctx.lineTo(4,20);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-24,0);ctx.lineTo(-30,-9);ctx.lineTo(-26,-9);ctx.lineTo(-20,0);ctx.closePath();ctx.fill();ctx.fillStyle='#9CC3FF';ctx.fillRect(22,-2,5,4);ctx.restore()}
+  addObj({t:'plane',key:60,gx:RW.x,gy:RW.y,w:16,d:RW.h,bb:(function(){var a=P(RW.x-2,RW.y+RW.h+2),b=P(RW.x+14,RW.y-2),c=P(RW.x,RW.y-2,400),d=P(RW.x+14,RW.y+RW.h+2);return{x0:a.x,x1:b.x,y0:c.y,y1:d.y}})(),draw:function(){
+    var t=(Date.now()/1000)%120;drawPlane(RW.x+RW.w+3.6,55,1.5,2.2,1);
+    if(t<40){var k=t/40,gy=RW.y+RW.h-4-k*k*(RW.h-10),z=k>.55?Math.pow((k-.55)/.45,1.6)*260:2;drawPlane(RW.x+RW.w/2,gy,z,2.3,-1)}}});
+  REGIONS.push(['Bandara',-2,60]);
+
+  /* ---- ruangan baru ---- */
+  function jadiRooms(kind,o){var F=[];
+    if(kind==='bioskop'){for(var r=0;r<3;r++)[[1,3.2],[5.6,3.4]].forEach(function(s){F.push(Fx(s[0],3+r*1.5,s[1],.7,8,'#B5303A','Kursi bioskop','film','Lihat film yang tayang'))});F.push(Fx(8.6,6.4,1.1,1,14,'#FFD95E','Loket popcorn','jadwal2','Beli popcorn'));return{kind:'bioskop',F:F,wall:'#241B3F',floor:'#5A1F2A',tile:0}}
+    if(kind==='stasiun'){F.push(Fx(1,1,3,1,16,'#2F6FEB','Loket tiket','kereta','Naik kereta'));F.push(Fx(6,.4,3,.4,30,'#1B2433','Papan jadwal kereta','jadwalkereta','Lihat jadwal'));for(var i=0;i<3;i++)F.push(Fx(1+i*3,4.6,2,.6,6,'#B07A48','Bangku tunggu','',''));return{kind:'stasiun',F:F,wall:'#F4EEE2',floor:'#C9C2B4',tile:1}}
+    if(kind==='bandara'){for(var j=0;j<3;j++)F.push(Fx(1+j*3,1,2.2,.9,14,'#2F6FEB','Konter check-in','jadwal','Check-in'));F.push(Fx(3,4.4,4,.6,6,'#9CC3FF','Ruang tunggu','',''));return{kind:'bandara',F:F,wall:'#EEF3FA',floor:'#E6ECF5',tile:1}}
+    return null}
 
   /* ================= EDITOR KARAKTER & DATA WARGA ================= */
   var edLook=null;
@@ -3977,14 +4041,14 @@ $('kp-pride').onclick=toggleRide;$('kp-ptas').onclick=function(){openPanel('tas'
   function renderInfo(){
     var cap=0,occ=0;HOUSES.forEach(function(h){if(houseOpen(h)){cap++;if(lotOwner[h.n])occ++}});
     var h='<h3>Info kampung</h3><div class="kp-stats"><div><b>'+wargaCount().toLocaleString('id-ID')+'</b><small>Warga</small></div><div><b>'+occ+'/'+cap+'</b><small>Rumah terisi</small></div><div><b>'+openRW+'</b><small>RW dibuka</small></div><div><b>'+rupiah(donTotal.sum)+'</b><small>Total donasi</small></div></div>';
-    if(isOwner&&db)h+='<div class="kp-row"><button type="button" class="btn btn-donate btn-sm" id="kp-anthemall">Putar Indonesia Raya untuk semua</button><button type="button" class="btn btn-ghost btn-sm" id="kp-anthemtest">Tes (cuma aku)</button></div><p class="kp-note" id="kp-anthemmsg" role="status" style="margin:0"></p>'+konserCtl();
+    if(isOwner&&db)h+='<div class="kp-row"><button type="button" class="btn btn-donate btn-sm" id="kp-anthemall">Putar Indonesia Raya untuk semua</button><button type="button" class="btn btn-ghost btn-sm" id="kp-anthemtest">Tes (cuma aku)</button></div><p class="kp-note" id="kp-anthemmsg" role="status" style="margin:0"></p>'+konserCtl()+bioskopCtl();
     h+='<h3 style="font-size:20px">Pengumuman</h3>';
     if(isOwner&&db)h+='<details class="kp-newpoll"><summary>+ Tulis pengumuman</summary><form class="kp-form" id="kp-infoform"><label class="ctl-label" for="kp-ititle">Judul</label><input class="sm-input" id="kp-ititle" maxlength="60" autocomplete="off" placeholder="misal: Kerja bakti Minggu pagi"><label class="ctl-label" for="kp-itext">Isi</label><textarea class="sm-input" id="kp-itext" maxlength="300" rows="3" placeholder="Tulis pengumuman untuk semua warga"></textarea><label class="kp-check"><input type="checkbox" id="kp-ipin"> Sematkan di atas</label><div class="kp-row"><button class="btn btn-main" type="submit">Umumkan</button></div><p class="kp-note" id="kp-imsg" role="status"></p></form></details>';
     h+='<div class="kp-list" id="kp-infolist"></div>';
     panel.innerHTML=h;renderInfoList();
     try{if(pengumuman.length)localStorage.setItem('stk-info-seen',String(Math.max.apply(null,pengumuman.map(function(p){return p.at}))))}catch(e){}infoBtnDot();
     var at=$('kp-anthemtest');if(at)at.onclick=function(){playAnthem(true)};
-    wireKonserCtl();
+    wireKonserCtl();wireBioskopCtl();
     var aa=$('kp-anthemall');if(aa)aa.onclick=function(){var m=$('kp-anthemmsg');if(bcastK()>=0&&bcastK()<1){m.textContent='Lagu masih diputar.';return}aa.disabled=true;m.textContent='Menyiarkan…';db.doc('meta/upacara').set({at:Date.now()}).then(function(){m.textContent='Lagu diputar untuk semua yang lagi buka kampung. Bendera dinaikkan!';setTimeout(function(){aa.disabled=false},ANTHEM_MS)},function(e){aa.disabled=false;m.textContent=errText(e)})};
     var f=$('kp-infoform');if(f)f.onsubmit=function(e){e.preventDefault();var t=clean($('kp-ititle').value,60),x=clean($('kp-itext').value,300),m=$('kp-imsg');if(!t||!x){m.textContent='Isi judul dan isinya dulu.';return}m.textContent='Mengumumkan…';db.collection('pengumuman').add({title:t,text:x,pin:$('kp-ipin').checked,at:Date.now()}).then(function(){m.textContent='Pengumuman terbit!';$('kp-ititle').value='';$('kp-itext').value='';f.closest('details').open=false},function(err){m.textContent=errText(err)})};
   }
