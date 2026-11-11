@@ -1,0 +1,78 @@
+{
+  "fingerprint": "edcc74127becdb1df97257a0f825fb800fb3290fee1e303498b3d139a037f0ab",
+  "preview_seconds": null,
+  "output": "/home/user/stickology-web/video-projects/langit-biru-b2/output/film.mp4",
+  "output_sha256": "3cc99a7c8379e3b64a52350415b7bd783e7a2ddcd308c8b34e0d78da31734fa5",
+  "original_voice_sha256": "0bce2cf8e27e8bd1f66898fb5ced1e12b0bae17df143fccabaab5b5e1c81bc99",
+  "original_voice_duration": 4.783311,
+  "voice_rate": "unchanged; leading/trailing padding only",
+  "frames": 162,
+  "duration": 5.4,
+  "cache_hits": 3,
+  "shot_count": 3,
+  "full_decode": "pass",
+  "caption_count": 3,
+  "human_review": "required; technical checks are not acceptance",
+  "inputs": [
+    {
+      "path": "/home/user/stickology-web/.claude/skills/directing-stickman-videos/assets/fonts/Caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988"
+    },
+    {
+      "path": "/home/user/stickology-web/.claude/skills/directing-stickman-videos/assets/fonts/NotoSans.ttf",
+      "sha256": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/arm.png",
+      "sha256": "36c35d38a9e1dd6136a9b3c67eba506ca51fead66a83d35bc257d2f954a0273e"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/body-sit.png",
+      "sha256": "cd7e2b391bfed9e7f87caf823ee2c004661d5fc1727fc3ccb0fa2692725dc5e1"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/card.png",
+      "sha256": "27c0554ceb0058ca328ec9f919a81b201026ce3d43b3b9725706891ba4956268"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/eye.png",
+      "sha256": "56981c81fe92d2e84c9b85e8649e264f7f1d4773af95bab498b72cb6038d1cd2"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/head-forward.png",
+      "sha256": "4cab15b67b52c9bd297aae6678bca3903441935dfa057898dec655d0f534e06c"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/head-smile.png",
+      "sha256": "4286b42a05df8295b8a9c4f7307e8f8426adb6f5049961895ba515767eb92152"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/head-up.png",
+      "sha256": "3fc09b62ce0d8b52794c3ca76ef02a58aebedb47f53129f703e2cb2c0fe2497d"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/hill.png",
+      "sha256": "a02ab0502852fa75923c74deed87a54437481a4b545b2509669b7f7f88b6e3b9"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/molecule.png",
+      "sha256": "aeabcb71b1046535848c2fd453e208071161a8bd7bcef90164f522f2a3cf73f3"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/sky-blue.png",
+      "sha256": "7adb3820dbf560b674f9a9830b7a3dd94cd42acddc79bcfc576fef931bfc37d6"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/sky-paper.png",
+      "sha256": "8fae9e15f39a3f2f30c9940a94fb1a031d667d5dad013d9065c4b00605fdf43d"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/art/sun.png",
+      "sha256": "948d0fbced0715c811de58c438fa7986babb0f1259ab8dae6e651a1e0508a818"
+    },
+    {
+      "path": "/home/user/stickology-web/video-projects/langit-biru-b2/narration.wav",
+      "sha256": "0bce2cf8e27e8bd1f66898fb5ced1e12b0bae17df143fccabaab5b5e1c81bc99"
+    }
+  ]
+}
