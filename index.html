@@ -154,7 +154,7 @@ html.jw-on,html.jw-on body{overflow:hidden!important}
 #jw .mc p{margin:0;text-align:center;color:#8A7A66}</style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js?v=1795693061"></script>
+<script src="config.js?v=1795693891"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -1685,6 +1685,7 @@ var activeTab='fm';
 </div><script>
 (function(){
 var JW_SITE=true;
+document.addEventListener('click',function(e){e.__jw=!!(e.target.closest&&e.target.closest('#jw'))},true);
 /* ===== mesin 3D low-poly mini ===== */
 var F=[],ST=[],LAY=2,CAST=true;
 function hex(c){var n=parseInt(c.slice(1),16);return[n>>16,n>>8&255,n&255]}
@@ -2221,7 +2222,7 @@ function hiasHtml(){var Bd=G.bld,h='<p>Warnet cakep bikin pelanggan lebih rame. 
 function repHtml(R){return'<div class="kv"><span>Sewa PC</span><b>'+rpF(R.sewa)+'</b><span>Kantin</span><b>'+rpF(R.kantin)+'</b><span>Listrik</span><b>-'+rpF(R.listrik)+'</b><span>Internet</span><b>-'+rpF(R.inet)+'</b>'+(R.usaha?'<span>Usaha sampingan</span><b class="pos">+'+rpF(R.usaha)+'</b>':'')+(R.gaji?'<span>Gaji pegawai</span><b>-'+rpF(R.gaji)+'</b>':'')+(R.ruko?'<span>Sewa ruko</span><b>-'+rpF(R.ruko)+'</b>':'')+(R.dicuri?'<span>Dicuri maling</span><b class="neg">-'+rpF(R.dicuri)+'</b>':'')+'<span>Lain-lain</span><b>-'+rpF(R.lain)+'</b><span><b>Laba bersih</b></span><b class="'+(R.laba>=0?'pos':'neg')+'">'+(R.laba>=0?'+':'')+rpF(R.laba)+'</b>'+(R.inv!=null&&R.invv>0?'<span>Investasi hari ini</span><b class="'+(R.inv>=0?'pos':'neg')+'">'+(R.inv>=0?'+':'')+rpF(R.inv)+'</b>':'')+'<span>Pelanggan</span><b>'+R.tamu+' (kecewa '+R.kabur+')</b><span>Rating</span><b>⭐ '+R.rating.toFixed(1).replace('.',',')+'</b></div>'}
 function showReport(R){$('jw-rep-b').innerHTML='<h3>🌙 Warnet tutup</h3><p>Laporan hari ke-'+R.day+'</p>'+repHtml(R)+(R.berita?'<div class="news" style="margin-top:8px">📰 '+R.berita+'</div>':'');$('jw-rep').hidden=false;sfx('up')}
 $('jw-rep-ok').onclick=function(){$('jw-rep').hidden=true;nextDay()};
-document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('#jw'))return;var b=e.target.closest('[data-act],[data-tab],[data-open]');if(!b)return;audioInit();if(NET.visiting&&NET.visiting()){toast('Lagi mampir ke warnet teman. Pencet Pulang dulu ya.');return}
+document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest('[data-act],[data-tab],[data-open]');if(!b)return;audioInit();if(NET.visiting&&NET.visiting()){toast('Lagi mampir ke warnet teman. Pencet Pulang dulu ya.');return}
   if(b.dataset.open){openSheet(b.dataset.open);return}if(b.dataset.tab){stab=b.dataset.tab;renderSheet(true);return}
   var a=b.dataset.act,g=b.dataset.arg;
   if(a==='beli'){var sl=SLOTS[+g],pp=pcPrice(sl);if(G.uang<pp)return;G.uang-=pp;G.pcs[+g]=pcStart(sl);toast('PC baru terpasang!');sfx('up');logm('Beli PC '+(+g+1))}
@@ -2377,8 +2378,8 @@ function offline(){if(!G.mulai||!G.saveAt)return;var el=Date.now()-G.saveAt;if(e
   logm('Selama pergi: '+(inc+usa-cost>=0?'+':'')+rp(inc+usa-cost));save()}
 var _endDay=endDay;endDay=function(){var before=G.hari.sewa+G.hari.kantin;_endDay();var R=G.kemarin;if(R){var gross=R.sewa+R.kantin;G.avgDay=G.avgDay?Math.round(G.avgDay*.6+gross*.4):gross}};
 /* ---- klik tambahan ---- */
-document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('#jw'))return;var b=e.target.closest('[data-act]');if(!b)return;var a=b.dataset.act;if(a==='ci')doCheckin();else if(a==='tour'){startTour();renderSheet(true)}else if(a==='tutskip'){tutEnd(true)}});
-document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('#jw'))return;if(e.target.closest('[data-open="man"]')&&G.tut===5)tutEnd(false);var z=e.target.closest('[data-zoom]');if(z){setZoom(ZI+(+z.dataset.zoom));sfx('pop')}});
+document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest('[data-act]');if(!b)return;var a=b.dataset.act;if(a==='ci')doCheckin();else if(a==='tour'){startTour();renderSheet(true)}else if(a==='tutskip'){tutEnd(true)}});
+document.addEventListener('click',function(e){if(!e.__jw)return;if(e.target.closest('[data-open="man"]')&&G.tut===5)tutEnd(false);var z=e.target.closest('[data-zoom]');if(z){setZoom(ZI+(+z.dataset.zoom));sfx('pop')}});
 
 /* ---- mulai ---- */
 var JW_ON=true,JW_STARTED=false;
@@ -2483,7 +2484,7 @@ var JWNET=(function(){
   setInterval(function(){if(TQ.length||!TL.length)return;TQ.push(TL[Math.floor(Math.random()*Math.min(6,TL.length))])},45000);
   function tickerSub(){if(!db)return;var first=true;db.collection('donatur').orderBy('at','desc').limit(12).onSnapshot(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;if(x.src==='saweria'&&x.name)L.push(x)});
       L.forEach(function(x){if(!tSeen[x.id]){tSeen[x.id]=1;if(!first)TQ.push(x)}});TL=L.filter(function(x){return Date.now()-(x.at||0)<14*864e5});if(first&&TL.length)TQ.push(TL[0]);first=false},function(){})}
-  document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('#jw'))return;var b=e.target.closest&&e.target.closest('[data-net]');if(!b)return;var a=b.dataset.net;
+  document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest&&e.target.closest('[data-net]');if(!b)return;var a=b.dataset.net;
     if(a==='copy'||a==='saweria'){var k=(NET.dom||{}).kode||'';try{navigator.clipboard.writeText(k).then(function(){toast('ID '+k+' disalin')},function(){toast('Salin manual: '+k)})}catch(x){toast('Salin manual: '+k)}if(a==='saweria')window.open(SAWERIA,'_blank','noopener')}
     else if(a==='copyfc'){var f=uid?fcode(uid):'';try{navigator.clipboard.writeText(f).then(function(){toast('ID teman '+f+' disalin')},function(){toast('ID kamu: '+f)})}catch(x){toast('ID kamu: '+f)}}
     else if(a==='retry'){b.textContent='Menyambung…';initDom()}
