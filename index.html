@@ -263,15 +263,28 @@ html.jw-on,html.jw-on body{overflow:hidden!important;touch-action:pan-x pan-y}
 #jw .ivq{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 #jw .ivq .btn{padding:8px 4px;font-size:13px}
 #jw .ivc{display:flex;gap:6px;align-items:center;margin-top:6px}
-#jw .ivc input{flex:1 1 0;width:0;min-width:0;border:2px solid #E2D3B5;border-radius:12px;padding:9px 10px;font:800 15px "Baloo 2",system-ui;background:#fff;color:#4A3B2A}
+#jw .ivc input{flex:1 1 0;width:0;min-width:0;border:2px solid #E2D3B5;border-radius:12px;padding:9px 10px;font:800 16px "Baloo 2",system-ui;background:#fff;color:#4A3B2A}
 #jw .ivc .btn{width:auto;flex:none;padding:9px 12px;font-size:14px}
 #jw .ivc{max-width:100%}
 #jw .ivs{display:flex;gap:6px;margin-top:6px}
 #jw .ivs .btn{padding:8px 4px;font-size:13px}
-#jw .ivh{font-size:12px;color:#8A7A66;font-weight:700;margin-top:4px;min-height:16px}</style>
+#jw .ivh{font-size:12px;color:#8A7A66;font-weight:700;margin-top:4px;min-height:16px}
+#jw .lvn.onl{grid-column:auto;background:#DDF5E5;color:#1F7A47;cursor:pointer}
+#jw .lvn.onl.new{background:#2FA36B;color:#fff}
+#jw .chl{height:min(52vh,420px);overflow-y:auto;display:grid;align-content:start;gap:6px;padding:4px 2px;-webkit-overflow-scrolling:touch}
+#jw .cm{background:#fff;border-radius:14px;padding:6px 10px;max-width:88%;justify-self:start;box-shadow:0 1px 0 #E9DCC4}
+#jw .cm.me{justify-self:end;background:#DDF5E5}
+#jw .cmh{display:flex;gap:6px;align-items:baseline}
+#jw .cmh b{font-size:13px}
+#jw .cmh small{font-size:11px;color:#8A7A66;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#jw .cm p{margin:2px 0 0;font-size:14px;overflow-wrap:anywhere}
+#jw .cmx{border:0;background:none;font-size:13px;padding:0 2px;opacity:.55}
+#jw .chc{display:flex;gap:6px;margin-top:8px}
+#jw .chc input{flex:1 1 0;width:0;min-width:0;border:2px solid #E2D3B5;border-radius:12px;padding:9px 10px;font:700 16px "Baloo 2",system-ui;background:#fff;color:#4A3B2A}
+#jw .chc .btn{width:auto;flex:none}</style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js?v=1795718264"></script>
+<script src="config.js?v=1795718957"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -1823,7 +1836,7 @@ var activeTab='fm';
 
 <canvas id="jw-cv"></canvas>
 <div class="hud"><button class="xq" data-net="keluar" aria-label="Keluar dari game">✕</button><div class="c"><span class="coin">Rp</span><span id="jw-uang">0</span></div><div class="c rt" style="display:flex"><span class="coin star">★</span><b id="jw-rat">3,0</b><span class="ber">💎 <span id="jw-ber">0</span></span></div>
-<div class="c"><span class="coin bolt">⚡</span><div class="ebar"><i id="jw-en"></i><span class="ent" id="jw-ent"></span></div></div><div class="rt"><small id="jw-tgl">Kam, 2 Jan</small><b id="jw-jam">08.00</b></div><div class="lvn" id="jw-lvn"></div><div class="lvn ev" id="jw-evp" hidden></div><div class="lvn stp" id="jw-stp" data-open="misi" hidden></div></div>
+<div class="c"><span class="coin bolt">⚡</span><div class="ebar"><i id="jw-en"></i><span class="ent" id="jw-ent"></span></div></div><div class="rt"><small id="jw-tgl">Kam, 2 Jan</small><b id="jw-jam">08.00</b></div><div class="lvn" id="jw-lvn"></div><div class="lvn ev" id="jw-evp" hidden></div><div class="lvn stp" id="jw-stp" data-open="misi" hidden></div><div class="lvn onl" id="jw-onl" data-v3="chat" role="button" tabindex="0" hidden>🟢 0 online · 💬</div></div>
 <div class="side"><button class="rb" data-open="misi">🎯<small>Misi</small><i class="dot" id="jw-b-mis" hidden>!</i></button><button class="rb pass" data-open="pass">🎫<small>Pass</small><i class="dot" id="jw-b-pass" hidden>!</i></button><button class="rb" data-open="liga">⚔️<small>Liga</small><i class="dot" id="jw-b-liga" hidden>!</i></button><button class="rb" data-open="kota">🏙️<small>Kota</small><i class="dot" id="jw-b-kota" hidden>!</i></button><button class="rb gold" data-open="paket">🎁<small>Paket</small><i class="dot" id="jw-b-pkt" hidden>!</i></button></div>
 <div class="side side2"><button class="rb sm2" data-open="kampung">🏆<small>Peringkat</small></button><button class="rb sm2" data-open="share">📸<small>Pamer</small></button><button class="rb sm2 invb" data-open="inv">📈<small>Investasi</small></button><button class="rb sm2 kwb" data-v3="kw">🏪<small>Kawasan</small><i class="dot" id="jw-b-kw" hidden>💵</i><i class="lk" id="jw-kw-lock">🔒</i></button><button class="rb sm2" data-v3="mg">🕹️<small>Main</small></button><button class="rb sm2 evb" data-v3="ev" hidden>🎆<small>Event</small><i class="dot" id="jw-b-ev" hidden>!</i></button></div>
 <button id="jw-money" hidden></button><button id="jw-flr" hidden></button>
@@ -3268,6 +3281,46 @@ document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.c
   else{var box=b.closest('[data-iv]'),inp=box&&box.querySelector('.ivn'),v=invParse(inp&&inp.value);if(!(v>0)){toast('Ketik nominalnya dulu, contoh 250000 atau 2,5jt');sfx('no');if(inp)inp.focus();return}if(a==='ivb')invBuy(k,v);else invSell(k,v);if(inp)inp.value=''}
   if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();save();ui();renderSheet(true)});
 
+/* ===== ONLINE & CHAT SEMUA PEMAIN ===== */
+var CH={on:0,db:null,uid:'',online:[],msgs:[],mine:[],last:0,seen:0,tab:'chat',own:false,mute:{},err:''};
+try{CH.seen=+localStorage.getItem('jw_chseen')||0;CH.mute=JSON.parse(localStorage.getItem('jw_chmute')||'{}')||{}}catch(e){}
+var KASAR=['anjing','anjg','anjir','bangsat','bngst','babi','kontol','kntl','memek','mmk','ngentot','ngentod','entot','goblok','goblog','tolol','kampret','jancok','jancuk','bajingan','pepek','peler','titit','sange','coli','bokep','lonte','pelacur','asu','tai','taik','fuck','shit','bitch'];
+var KRX=new RegExp('\\b('+KASAR.join('|')+')\\b','gi');
+function chClean(t){t=String(t||'').replace(/[\u0000-\u001f]/g,' ').replace(/\s+/g,' ').trim().slice(0,120);t=t.replace(/(https?:\/\/|www\.)\S+/gi,'[link]').replace(/\b[\w-]+\.(com|net|org|id|xyz|io|gg|me|ly|co|site|link)\b\S*/gi,'[link]').replace(/(\+?\d[\d\s-]{8,}\d)/g,'[nomor]').replace(KRX,function(w){return w[0]+'*'.repeat(w.length-1)});return t}
+function chEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function chMe(){return{nm:String(G.nama||'Juragan').slice(0,16),nw:String(G.namaW||'Warnet').slice(0,20),fc:(JWNET.fcode&&CH.uid?JWNET.fcode(CH.uid):'').slice(0,12)}}
+function chBeat(){if(!CH.on||!G.mulai||vis()||(typeof JW_ON!=='undefined'&&!JW_ON)||document.visibilityState==='hidden')return;CH.bt=Date.now();var m=chMe();CH.db.doc('onlinewn/'+CH.uid).set({nm:m.nm,nw:m.nw,fc:m.fc,lv:G.lv|0,at:Date.now(),w:VIEW===3?'kawasan':'warnet'}).catch(function(){})}
+function chStart(){if(CH.on)return;var db=JWNET.db&&JWNET.db(),u=JWNET.uid&&JWNET.uid();if(!db||!u)return;CH.on=1;CH.db=db;CH.uid=u;if(JWNET.owner)JWNET.owner().then(function(v){CH.own=v});
+  db.collection('onlinewn').orderBy('at','desc').limit(80).onSnapshot(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;L.push(x)});CH.online=L;chPaint();ui()},function(){});
+  db.collection('chatwn').orderBy('at','desc').limit(40).onSnapshot(function(r){var M=[];r.forEach(function(d){var x=d.data()||{};if(d.id===CH.uid&&Array.isArray(x.m))CH.mine=x.m.slice(-5);(Array.isArray(x.m)?x.m:[]).forEach(function(m){if(m&&typeof m.t==='string'&&+m.at)M.push({id:d.id,nm:String(x.nm||'Juragan').slice(0,16),nw:String(x.nw||'').slice(0,20),t:chClean(m.t),at:+m.at})})});
+    var cut=Date.now()-36*3600e3;M=M.filter(function(m){return m.at>cut}).sort(function(a,b){return a.at-b.at}).slice(-80);CH.msgs=M;chPaint();ui()},function(e){CH.err='Chat lagi nggak bisa dimuat'});
+  chBeat();setInterval(function(){if(Date.now()-(CH.bt||0)>=60000)chBeat()},2000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')chBeat()})}
+setInterval(function(){if(!CH.on)chStart()},2000);
+function chOnline(){var t=Date.now()-150000;return CH.online.filter(function(x){return +x.at>t})}
+function chUnread(){var me=CH.uid;return CH.msgs.filter(function(m){return m.at>CH.seen&&m.id!==me&&!CH.mute[m.id]}).length}
+function chTime(t){var d=new Date(t+7*3600e3);return('0'+d.getUTCHours()).slice(-2)+'.'+('0'+d.getUTCMinutes()).slice(-2)}
+function chPaint(){if(sheet!=='chat')return;var b=$('jw-sh-b');if(!b)return;
+  if(CH.tab==='chat'){var L=b.querySelector('.chl');if(!L)return;var near=L.scrollHeight-L.scrollTop-L.clientHeight<60,ms=CH.msgs.filter(function(m){return !CH.mute[m.id]});
+    L.innerHTML=ms.length?ms.map(function(m){var me=m.id===CH.uid;return'<div class="cm'+(me?' me':'')+'"><div class="cmh"><b>'+chEsc(m.nm)+'</b><small>'+chEsc(m.nw)+' · '+chTime(m.at)+'</small>'+(!me?'<button class="cmx" data-v3="chmute" data-k="'+chEsc(m.id)+'" aria-label="Bisukan '+chEsc(m.nm)+'">🔇</button>':'')+(CH.own&&!me?'<button class="cmx" data-v3="chdel" data-k="'+chEsc(m.id)+'" aria-label="Hapus pesan">🗑️</button>':'')+'</div><p>'+chEsc(m.t)+'</p></div>'}).join(''):'<p class="note" style="text-align:center">Belum ada obrolan. Sapa juragan lain! 👋</p>';
+    if(near||!L._init){L.scrollTop=L.scrollHeight;L._init=1}if(CH.msgs.length){CH.seen=Math.max(CH.seen,CH.msgs[CH.msgs.length-1].at);try{localStorage.setItem('jw_chseen',String(CH.seen))}catch(e){}}}
+  else{var O=b.querySelector('.onl');if(!O)return;var on=chOnline();O.innerHTML=on.map(function(x){var me=x.id===CH.uid;return'<div class="row"><span style="font-size:20px">'+(x.w==='kawasan'?'🏪':'🖥️')+'</span><b>'+chEsc(x.nm||'Juragan')+(me?' (kamu)':'')+'<br><small style="font-weight:600;color:#8A7A66">'+chEsc(x.nw||'Warnet')+' · Lv '+(x.lv|0)+'</small></b>'+(me?'<i>🟢</i>':'<button class="btn sm go" data-v3="chvisit" data-k="'+chEsc(x.id)+'">Mampir</button>')+'</div>'}).join('')||'<p class="note">Belum ada yang online.</p>'}}
+function chHtml(){if(!CH.on)return'<p class="note">Chat & daftar online butuh koneksi ke server. '+(JWNET.db&&JWNET.db()?'Lagi nyambung…':'Buka game lewat juraganwarnet.stickology.xyz buat ngobrol bareng pemain lain.')+'</p>';
+  var h='<div class="tabs"><button class="tab'+(CH.tab==='chat'?' on':'')+'" data-v3="chtab" data-k="chat">💬 Chat</button><button class="tab'+(CH.tab==='online'?' on':'')+'" data-v3="chtab" data-k="online">🟢 Online ('+chOnline().length+')</button></div>';
+  if(CH.tab==='online')return h+'<div class="onl"></div>';
+  return h+'<div class="chl" role="log" aria-live="polite"></div><div class="chc"><input class="chi" type="text" maxlength="120" autocomplete="off" enterkeyhint="send" placeholder="Tulis pesan buat semua juragan…" aria-label="Pesan chat"><button class="btn sm go" data-v3="chsend">Kirim</button></div><p class="note">Sopan ya. Kata kasar, link, & nomor HP otomatis disensor. Jangan bagi data pribadi.</p>'}
+V2SHEET.chat=function(){return['💬 Ngobrol bareng juragan',chHtml()]};
+var _renderSheet3c=renderSheet;renderSheet=function(force){_renderSheet3c(force);if(sheet==='chat')chPaint()};
+function chSend(){var b=$('jw-sh-b'),inp=b&&b.querySelector('.chi');if(!inp||!CH.on)return;var t=chClean(inp.value);if(!t){return}var now=Date.now();if(now-CH.last<3000){toast('Pelan-pelan, tunggu bentar ya');return}CH.last=now;var m=chMe(),arr=(CH.mine||[]).concat([{t:t,at:now}]).slice(-5);
+  CH.db.doc('chatwn/'+CH.uid).set({nm:m.nm,nw:m.nw,fc:m.fc,at:now,m:arr}).then(function(){CH.mine=arr},function(){toast('Pesan gagal kekirim, coba lagi')});inp.value='';sfx('pop')}
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.classList&&e.target.classList.contains('chi')){e.preventDefault();chSend()}});
+document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest&&e.target.closest('[data-v3]');if(!b)return;var a=b.dataset.v3,k=b.dataset.k;if(a.indexOf('ch')!==0&&a!=='chat')return;
+  if(a==='chat'){if(vis())return;openSheet('chat');return}
+  if(a==='chtab'){CH.tab=k;renderSheet(true);return}if(a==='chsend'){chSend();return}
+  if(a==='chmute'){CH.mute[k]=1;try{localStorage.setItem('jw_chmute',JSON.stringify(CH.mute))}catch(e2){}toast('🔇 Pesan dari pemain itu disembunyikan');chPaint();return}
+  if(a==='chdel'&&CH.own){CH.db.doc('chatwn/'+k).delete().then(function(){toast('🗑️ Pesan dihapus')},function(){toast('Gagal hapus')});return}
+  if(a==='chvisit'){if(k===CH.uid)return;closeSheet();if(JWNET.visit)JWNET.visit(k)}});
+var _ui3c=ui;ui=function(){_ui3c();var el=$('jw-onl');if(!el)return;el.hidden=!CH.on;if(!CH.on)return;var n=chOnline().length,u=sheet==='chat'?0:chUnread(),tx='🟢 '+n+' online · 💬'+(u?' '+(u>9?'9+':u):'');if(el._t!==tx){el._t=tx;el.textContent=tx;el.classList.toggle('new',u>0)}};
+
 /* ===== online: simpan, berlian, top up, peringkat, teman, kunjungi ===== */
 var JWNET=(function(){
   var db=null,user=null,uid=null,akun=null,server=false,lastSave=0,lastBoard=0,saving=false,dirty=false,SAWERIA='https://saweria.co/stickologyid',rows=null,rowsTab='total',friends=null,VISIT=null;
@@ -3387,7 +3440,7 @@ var JWNET=(function(){
       tickerSub();if(!db||!uid)return;
       if(server){serverHooks();initDom();db.doc('jwdompet/'+uid).onSnapshot(function(s){if(s.exists)onDom(s.data())},function(){})}
       return db.doc('warnet/'+uid).get().then(function(sn){var d=sn.exists?sn.data():null;if(d&&d.mulai&&(!G.mulai||(d.saveAt||0)>(G.saveAt||0))){var f=fresh(),o=Object.assign(f,d);o.bld=Object.assign(fresh().bld,d.bld||{});o.bld.fas=o.bld.fas||{};o.bld.hias=o.bld.hias||{};o.staff=o.staff||{};o.usaha=o.usaha||{};o.jobs=o.jobs||[];o.inv=o.inv||{};o.mouse=o.mouse||{};if(server&&NET.dom)o.ber=G.ber;G=o;try{localStorage.setItem(LSK,JSON.stringify(G))}catch(e){}}},function(){})})}
-  return{boot:boot,fcode:fcode,pulang:pulang,uid:function(){return uid},db:function(){return db}}})();
+  return{boot:boot,fcode:fcode,pulang:pulang,visit:visit,uid:function(){return uid},db:function(){return db},owner:function(){try{return Promise.resolve(user&&user.isOwner?user.isOwner():false).then(function(v){return !!v},function(){return false})}catch(e){return Promise.resolve(false)}}}})();
 
 function jwOpen(){var r=document.getElementById('jw');r.hidden=false;document.documentElement.classList.add('jw-on');JW_ON=true;lockVP(true);if(!jwOpen.b){jwOpen.b=1;var L=window.__jwLoad;if(L)L.show();var go=function(){try{jwStart()}finally{requestAnimationFrame(function(){requestAnimationFrame(function(){if(L)L.done()})})}};JWNET.boot().then(go,go)}else{resize();ui()}}
 function jwClose(){var r=document.getElementById('jw');if(!r||r.hidden)return;save();JW_ON=false;lockVP(false);r.hidden=true;document.documentElement.classList.remove('jw-on');try{if(location.hash==='#juragan-warnet')history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
