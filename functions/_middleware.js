@@ -24,6 +24,9 @@ export async function onRequest(ctx) {
     .on('meta[name="twitter:title"]', set(JW.title))
     .on('meta[name="twitter:image"]', set(JW.img))
     .on('link[rel="icon"][type="image/png"]', { element(e) { e.setAttribute('href', JW.icon + '.png'); } })
-    .on('link[rel="apple-touch-icon"]', { element(e) { e.setAttribute('href', JW.icon + '.png'); } })
+    .on('link[rel="apple-touch-icon"]', { element(e) { e.setAttribute('href', JW.icon + '-apple.png'); } })
+    .on('link[rel="manifest"]', { element(e) { e.setAttribute('href', '/manifest-warnet.webmanifest'); } })
+    .on('meta[name="theme-color"]', set('#2FA36B'))
+    .on('meta[name="apple-mobile-web-app-title"]', set('Juragan Warnet'))
     .transform(res);
 }
