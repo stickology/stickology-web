@@ -4,7 +4,7 @@ const JW = {
   title: 'Juragan Warnet · Bangun warnet jadi arena e-sport',
   desc: 'Game simulator warnet 3D. Gratis, langsung main di browser tanpa download, bisa bareng teman.',
   url: 'https://juraganwarnet.stickology.xyz/',
-  img: 'https://stickology.xyz/og-warnet.jpg',
+  img: 'https://juraganwarnet.stickology.xyz/og-warnet.jpg',
   icon: '/icon-warnet',
 };
 const set = (v) => ({ element(e) { e.setAttribute('content', v); } });
