@@ -154,7 +154,7 @@ html.jw-on,html.jw-on body{overflow:hidden!important}
 #jw .mc p{margin:0;text-align:center;color:#8A7A66}</style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js?v=1795693891"></script>
+<script src="config.js?v=1795695539"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -2096,6 +2096,7 @@ function endDay(){PEOPLE.forEach(function(p){if(p.thief)return;if(p.slot!=null&&
   save();showReport(R)}
 function nextDay(){G.day++;G.min=8*60;save();ui()}
 
+var SP_C=100,SP_UANG=5000000;
 /* ===== gambar per frame ===== */
 var HITS=[];
 function slotVis(s){return VIEW===2?s.area!=='main':s.area!=='lt2'}
@@ -2189,7 +2190,7 @@ function renderSheet(force){if(!sheet)return;var h='',t='';
   else if(sheet==='tips'){t='💡 Cara main';h='<ol><li>Pelanggan datang, daftar di kasir, lalu duduk di PC kosong.</li><li>Ketuk ikon bulat: 🍜 anter mie, 🥤 anter minum, ⚠️ hapus virus, 🔧 benerin PC, 🧽 bersihin toilet. Tiap aksi makan ⚡ energi.</li><li>Pelanggan bayar di kasir pas pulang. Ketuk tombol hijau buat ambil uangnya.</li><li>Beli PC (tanda +), upgrade PC, install game, atur tarif di Manajemen.</li><li>Di Manajemen → Pegawai: rekrut operator kasir, pelayan, teknisi, OB, dan satpam. Tab Usaha: buka konter pulsa, rental PS, laundry, dan kos-kosan di belakang warnet.</li><li>Awas maling! Kalau muncul 🚨, ketuk cepat buat nangkep. Satpam & CCTV bikin lebih aman.</li><li>Di Manajemen → Bangunan: perluasan ruko, ruang VIP, lantai 2 arena, dan fasilitas (AC, genset, CCTV, dll). Di tab Hias: cat, lantai, lampu RGB, neon.</li><li>Warnet buka 08.00–24.00. Tiap tutup ada laporan dan tagihan listrik & internet.</li><li>Geser layar buat lihat sekeliling.</li></ol>'}
   else if(sheet==='hp'){t='📱 HP';G.logSeen=G.log.length;h=topupHtml()+'<h4>👥 Langganan</h4>'+regHtml()+'<h4>Pakai berlian</h4>'+B('⚡ Isi energi penuh · 3 💎','isi','','',G.ber<3)+B('🔥 Pelanggan rame 2× (2 jam game) · 5 💎','rame','','',G.ber<5)+B('🧹 Beresin semua masalah · 4 💎','beres','','',G.ber<4)+B('💱 Tukar 1 💎 → Rp500rb','tukar','','',G.ber<1)+'<h4>Notifikasi</h4>'+(G.log.length?G.log.map(function(l){return'<div class="lg"><small>Hari '+l[0]+' · '+l[1]+'</small>'+l[2]+'</div>'}).join(''):'<p>Belum ada.</p>')}
   else if(sheet==='misi'){t='🎯 Misi & check-in';h=ciHtml()+'<h4>Misi harian</h4>'+MISI.map(function(m,i){var v=Math.min(m.n,G.mis[m.k]);return'<div class="mis"><b>'+m.t+'</b><div class="bar"><i style="width:'+(v/m.n*100)+'%"></i></div><small>'+v+'/'+m.n+' · hadiah '+(m.rw.ber?m.rw.ber+' 💎':rp(m.rw.uang))+'</small>'+(G.mis.got[i]?'<i>✅ Diambil</i>':v>=m.n?B('Ambil hadiah','klaim',i,'go'):'')+'</div>'}).join('')+'<p class="note">Misi baru tiap hari (game).</p>'}
-  else if(sheet==='paket'){t='🎁 Paket';h='<div class="topup"><b>👑 Starter Pack Juragan</b><p>Rp3 juta uang game + energi maksimal +10 + 1 PC Gaming gratis.</p>'+(G.sp?'<i>✅ Sudah dibeli</i>':B('Beli · 30 💎','sp','','go',G.ber<30))+'</div>'}
+  else if(sheet==='paket'){t='🎁 Paket';h='<div class="topup"><b>👑 Starter Pack Juragan</b><p>• Rp5 juta uang game<br>• Energi maksimal +10<br>• 2 PC langsung jadi PC Gaming<br>• Mahkota 👑 di papan peringkat<br>Cuma bisa dibeli sekali.</p>'+(G.sp?'<i>✅ Sudah dibeli</i>':B(G.ber>=SP_C?'Beli · '+SP_C+' 💎':'💎 Top up dulu (kurang '+(SP_C-G.ber)+' 💎)','sp','','go',false)+'<div style="text-align:center;font-size:13px;color:#8A7A66;margin-top:8px">Berlian kamu: '+G.ber+' 💎 · '+SP_C+' 💎 = Rp'+(SP_C*100).toLocaleString('id-ID')+'</div>')+'</div>'}
   else if(sheet==='inv'){t='📈 Investasi';var iv=invVal(),md=invModal(),pl=iv-md;h='<div class="tiles"><div><b>'+rp(iv)+'</b><small>nilai investasi</small></div><div class="'+(pl>=0?'pos':'neg')+'"><b>'+(pl>=0?'+':'')+rp(pl)+'</b><small>untung/rugi</small></div><div><b>'+rp(G.uang)+'</b><small>uang kas</small></div></div>';
     h+='<p>Harga berubah tiap warnet tutup (sekali sehari). Persen = perubahan dari kemarin.</p>'+(G.berita?'<div class="news">📰 '+G.berita+'</div>':'');
     Object.keys(INV).forEach(function(k){var I=INV[k],hd=G.inv[k],val=hd?hd.u*G.idx[k]:0,p2=hd?val-hd.modal:0,ch=G.idx[k]/(G.pidx[k]||G.idx[k])-1,hs=(G.hist[k]||[1]).concat([]);if(hs.length<2)hs=[1,G.idx[k]];
@@ -2256,7 +2257,7 @@ document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.c
   else if(a==='rame'){if(!spendBer(5))return;G.rame=120;toast('🔥 Pelanggan rame 2× selama 2 jam!')}
   else if(a==='beres'){if(!spendBer(4))return;G.virus={};G.rusak={};G.mouse={};G.wc=0;ICONS=ICONS.filter(function(i){return i.k==='lapar'||i.k==='haus'});toast('🧹 Semua masalah beres!')}
   else if(a==='klaim'){var m=MISI[+g];if(G.mis.got[+g]||G.mis[m.k]<m.n)return;G.mis.got[+g]=1;if(m.rw.ber)addBer(m.rw.ber);if(m.rw.uang)G.uang+=m.rw.uang;toast('Hadiah misi diambil!');sfx('up')}
-  else if(a==='sp'){if(G.sp||(NET.dom&&NET.dom.sp)||!spendBer(30,'sp'))return;G.sp=1;G.uang+=3000000;G.emax+=10;G.energi=G.emax;var k0=Object.keys(G.pcs)[0];G.pcs[k0]=Math.max(3,G.pcs[k0]);toast('👑 Starter Pack aktif!');sfx('up')}
+  else if(a==='sp'){if(G.sp||(NET.dom&&NET.dom.sp))return;if(G.ber<SP_C){openSheet('hp');toast('Berlian kurang '+(SP_C-G.ber)+' 💎. Top up dulu ya');return}if(!spendBer(SP_C,'sp'))return;G.sp=1;G.uang+=SP_UANG;G.emax+=10;G.energi=G.emax;Object.keys(G.pcs).slice(0,2).forEach(function(k){G.pcs[k]=Math.max(3,G.pcs[k])});toast('👑 Starter Pack aktif!');sfx('up')}
   else if(a==='tutup'){closeSheet();return}
   save();ui();renderSheet(true)});
 $('jw-sh-x').onclick=closeSheet;
@@ -2405,7 +2406,7 @@ var JWNET=(function(){
   function act(a,p){return db.act('jw:'+a,p||{})}
   function onDom(d){if(!d)return;NET.dom=d;G.ber=+d.ber||0;if(d.sp)G.sp=1;ui()}
   function serverHooks(){NET.online=true;
-    NET.spend=function(n,why){act(why==='sp'?'sp':'spend',{n:n}).then(function(r){if(r&&r.ber!=null){G.ber=r.ber;ui()}},function(e){G.ber+=n;if(why==='sp'){G.sp=0;G.uang-=3000000}toast((e&&e.message)||'Gagal pakai berlian');ui()})};
+    NET.spend=function(n,why){act(why==='sp'?'sp':'spend',{n:n}).then(function(r){if(r&&r.ber!=null){G.ber=r.ber;ui()}},function(e){G.ber+=n;if(why==='sp'){G.sp=0;G.uang-=SP_UANG}toast((e&&e.message)||'Gagal pakai berlian');ui()})};
     NET.earn=function(n){act('earn',{n:n}).then(function(r){if(r&&r.ber!=null){G.ber=r.ber;ui()}},function(){})};
     NET.ci=function(cb){act('ci',{}).then(function(r){var o=r&&r.out||{};G.ci={d:wibDay(),s:o.s||1};if(o.rw&&o.rw.uang)G.uang+=o.rw.uang;if(r&&r.ber!=null)G.ber=r.ber;toast('Check-in hari ke-'+(o.s||1)+': '+(o.rw&&o.rw.ber?'+'+o.rw.ber+' 💎':'+'+rp(o.rw&&o.rw.uang||0)));sfx('up');save();ui();renderSheet(true)},function(e){toast((e&&e.message)||'Gagal check-in');if(/Udah/.test(e&&e.message||'')){G.ci={d:wibDay(),s:ciStreak()||1};renderSheet(true)}})};
     NET.topupHtml=function(){var d=NET.dom||{},promo=!d.tu1&&d.t0&&Date.now()-d.t0<3*864e5,end=(d.t0||0)+3*864e5;
