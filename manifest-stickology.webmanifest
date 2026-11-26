@@ -1,0 +1,17 @@
+{
+  "name": "Stickology",
+  "short_name": "Stickology",
+  "description": "Konten edukasi sains berbahasa Indonesia bareng stickman bertopi biru. Plus game Juragan Warnet.",
+  "id": "/?app=stickology",
+  "start_url": "/?app=1",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#EEF3FA",
+  "theme_color": "#2F6FEB",
+  "lang": "id",
+  "icons": [
+    {"src": "/icon-stickology.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icon-stickology-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icon-stickology-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

@@ -12,7 +12,9 @@
 <meta property="og:url" content="https://stickology.xyz/">
 <meta property="og:image" content="https://stickology.xyz/og-stickology.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Stickology · Ide besar, garis sederhana"><meta name="twitter:image" content="https://stickology.xyz/og-stickology.jpg">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-stickology.png"><link rel="apple-touch-icon" href="/icon-stickology.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-stickology.png"><link rel="apple-touch-icon" href="/icon-stickology-apple.png">
+<link rel="manifest" href="/manifest-stickology.webmanifest"><meta name="theme-color" content="#2F6FEB">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Stickology">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;600;800&family=Patrick+Hand&display=swap">
 <style>
@@ -85,6 +87,10 @@ html.jw-on,html.jw-on body{overflow:hidden!important;touch-action:pan-x pan-y}
 #jw .dtx{display:grid;gap:4px;align-content:start;flex:1;min-width:0}
 #jw .dtx b{justify-self:start;background:#F28C28;color:#fff;border-radius:999px;padding:1px 10px;font-size:13px}
 #jw .dtx p{margin:0;font-size:16px;font-weight:700;line-height:1.4;color:#4A3B2A;min-height:3.2em}
+#jw .dopts{display:grid;gap:6px}
+#jw .dlg.pick .dhint{display:none}
+#jw .dopt{border:0;border-radius:12px;background:#F28C28;color:#fff;font:800 14px "Baloo 2",system-ui;padding:9px 10px;text-align:left;box-shadow:0 3px 0 #C96A1A}
+#jw .dopt:nth-child(2){background:#2F6FEB;box-shadow:0 3px 0 #1E4FB8}
 #jw .dhint{color:#B39B7A;font-size:11px;font-weight:800;justify-self:end}
 #jw .dskip{position:absolute;top:-14px;right:12px;border:2px solid #fff;background:#4A3B2A;color:#fff;border-radius:999px;font:800 12px system-ui;padding:4px 10px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 #jw .dlg.nar .dbox{padding-left:16px;background:#4A3B2A}
@@ -206,10 +212,56 @@ html.jw-on,html.jw-on body{overflow:hidden!important;touch-action:pan-x pan-y}
 #jw .mod{position:fixed;inset:0;z-index:7;background:rgba(40,30,20,.45);display:grid;place-items:center;padding:16px}
 #jw .mc{background:#FFF8EA;border-radius:24px;padding:18px;width:100%;max-width:360px;display:grid;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 #jw .mc h3{margin:0;font-size:22px;text-align:center}
-#jw .mc p{margin:0;text-align:center;color:#8A7A66}</style>
+#jw .mc p{margin:0;text-align:center;color:#8A7A66}
+#jw .kwbar{background:#2FA36B}
+#jw .rb .lk{position:absolute;bottom:-2px;right:-6px;font-size:14px}
+#jw .rb.evb{background:radial-gradient(circle at 40% 30%,#3B4A8A,#24305E);color:#fff}
+#jw .mg{position:fixed;inset:0;z-index:9;background:rgba(20,16,40,.55);display:grid;place-items:center;padding:16px}
+#jw .mgb{background:#FFF8EA;border-radius:22px;width:min(380px,100%);padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:grid;gap:10px}
+#jw .mgh{display:grid;gap:2px;text-align:center}
+#jw .mgh b{font-size:19px}
+#jw .mgh small{font-size:13px;color:#8A7A66;font-weight:700}
+#jw .mgbar{height:10px;border-radius:6px;background:#E9DCC4;overflow:hidden}
+#jw .mgbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#F28C28,#E5484D)}
+#jw .mga{position:relative;min-height:230px;display:grid;touch-action:manipulation}
+#jw .mgx{width:auto;justify-self:center;padding:6px 18px}
+#jw .mgr{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;font-weight:900;background:rgba(255,248,234,.88);border-radius:14px}
+#jw .mgr.win{color:#2FA36B}
+#jw .mgr.lose{color:#C0392B}
+#jw .mga.kab{grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+#jw .kc{display:grid;gap:12px}
+#jw .kmid{font-size:30px;text-align:center}
+#jw .kb,#jw .kp{height:44px;border-radius:12px;border:4px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.18);padding:0}
+#jw .kp{background:#2B2F36;border-width:5px}
+#jw .kb.sel{transform:scale(1.08);box-shadow:0 0 0 4px #FFD45C}
+#jw .kb.ok,#jw .kp.ok{opacity:.55}
+#jw .kp.bad{animation:shk .3s}
+@keyframes shk{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+#jw .vg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#jw .vc{aspect-ratio:1;border-radius:14px;border:0;background:#2B2F36;font-size:34px;box-shadow:inset 0 0 0 3px #3F8F5A;padding:0;max-width:100%}
+#jw .vs{text-align:center;font-weight:900;font-size:18px}
+#jw .mga.lari{align-content:center;gap:16px}
+#jw .track{position:relative;height:70px;background:repeating-linear-gradient(90deg,#9AA3AD 0 18px,#8A929C 18px 36px);border-radius:12px}
+#jw .track span{position:absolute;top:12px;font-size:38px;transition:left .1s}
+#jw .btn.big{font-size:24px;padding:18px}
+#jw .mga.aim{grid-template-rows:1fr auto}
+#jw .ar{position:relative;background:linear-gradient(#2B2147,#7B3FB8);border-radius:14px;min-height:230px;overflow:hidden}
+#jw .tg{position:absolute;width:52px;height:52px;margin:-26px 0 0 -26px;border:0;background:none;font-size:40px;padding:0;animation:pp .2s}
+@keyframes pp{from{transform:scale(.3)}}
+#jw .mga.live{gap:10px}
+#jw .lv{background:#14121F;color:#fff;border-radius:14px;padding:10px;display:grid;gap:6px;min-height:150px}
+#jw .lvh{display:flex;justify-content:space-between}
+#jw .rec{color:#FF4F6D;font-weight:900}
+#jw .chat{font-size:13px;opacity:.85;min-height:72px}
+#jw .rq{background:#7B3FB8;border-radius:10px;padding:8px;font-weight:800;text-align:center}
+#jw .rq small{opacity:.8}
+#jw .eg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+#jw .em{border:0;border-radius:12px;background:#F0E4CF;font-size:24px;padding:8px 0;box-shadow:0 3px 0 #D8C6A6}
+#jw .topup.evtop{background:linear-gradient(135deg,#24305E,#7B3FB8);border-color:#7B3FB8}
+#jw .evtop b,#jw .evtop p{color:#fff}</style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js?v=1795712293"></script>
+<script src="config.js?v=1795715939"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -1763,7 +1815,7 @@ var activeTab='fm';
 <div class="hud"><button class="xq" data-net="keluar" aria-label="Keluar dari game">✕</button><div class="c"><span class="coin">Rp</span><span id="jw-uang">0</span></div><div class="c rt" style="display:flex"><span class="coin star">★</span><b id="jw-rat">3,0</b><span class="ber">💎 <span id="jw-ber">0</span></span></div>
 <div class="c"><span class="coin bolt">⚡</span><div class="ebar"><i id="jw-en"></i><span class="ent" id="jw-ent"></span></div></div><div class="rt"><small id="jw-tgl">Kam, 2 Jan</small><b id="jw-jam">08.00</b></div><div class="lvn" id="jw-lvn"></div><div class="lvn ev" id="jw-evp" hidden></div><div class="lvn stp" id="jw-stp" data-open="misi" hidden></div></div>
 <div class="side"><button class="rb" data-open="misi">🎯<small>Misi</small><i class="dot" id="jw-b-mis" hidden>!</i></button><button class="rb pass" data-open="pass">🎫<small>Pass</small><i class="dot" id="jw-b-pass" hidden>!</i></button><button class="rb" data-open="liga">⚔️<small>Liga</small><i class="dot" id="jw-b-liga" hidden>!</i></button><button class="rb" data-open="kota">🏙️<small>Kota</small><i class="dot" id="jw-b-kota" hidden>!</i></button><button class="rb gold" data-open="paket">🎁<small>Paket</small><i class="dot" id="jw-b-pkt" hidden>!</i></button></div>
-<div class="side side2"><button class="rb sm2" data-open="kampung">🏆<small>Peringkat</small></button><button class="rb sm2" data-open="share">📸<small>Pamer</small></button></div>
+<div class="side side2"><button class="rb sm2" data-open="kampung">🏆<small>Peringkat</small></button><button class="rb sm2" data-open="share">📸<small>Pamer</small></button><button class="rb sm2 kwb" data-v3="kw">🏪<small>Kawasan</small><i class="dot" id="jw-b-kw" hidden>💵</i><i class="lk" id="jw-kw-lock">🔒</i></button><button class="rb sm2" data-v3="mg">🕹️<small>Main</small></button><button class="rb sm2 evb" data-v3="ev" hidden>🎆<small>Event</small><i class="dot" id="jw-b-ev" hidden>!</i></button></div>
 <button id="jw-money" hidden></button><button id="jw-flr" hidden></button>
 <div class="nav"><button data-open="man"><span>🏢</span>Manajemen</button><button data-open="lap"><span>📋</span>Laporan</button><button data-open="menu"><span>📜</span>Menu</button><button data-open="hp"><span>📱</span>HP<i class="dot" id="jw-b-hp" hidden>!</i></button><button data-open="akun"><span>👤</span>Akun<i class="dot" id="jw-b-akun" hidden>!</i></button></div>
 <div class="sheet" id="jw-sheet" hidden><div class="sc"><div class="sh"><b id="jw-sh-t"></b><button id="jw-sh-x">✕</button></div><div class="sb" id="jw-sh-b"></div></div></div>
@@ -1771,7 +1823,9 @@ var activeTab='fm';
 <div class="zm"><button data-zoom="1" aria-label="Perbesar">＋</button><button data-zoom="-1" aria-label="Perkecil">－</button></div>
 <div class="visitbar" id="jw-visitbar" hidden><b></b><button class="btn sm go" data-net="pulang">🏠 Pulang</button></div>
 <div class="visitbar dkbar" id="jw-dkbar" hidden><b>✏️ Mode dekor · ketuk titik buat pajang</b><button class="btn sm" data-v2="dkside">⇄ Sisi lain</button><button class="btn sm go" data-v2="dkdone">✅ Selesai</button></div>
-<div class="dlg" id="jw-dlg" hidden><div class="dbox"><canvas id="jw-dlg-p" width="240" height="280"></canvas><div class="dtx"><b id="jw-dlg-n"></b><p id="jw-dlg-t"></p><small class="dhint">Ketuk buat lanjut ▸</small></div><button class="dskip" data-dlg="skip">Lewati ⏭</button></div></div>
+<div class="visitbar kwbar" id="jw-kwbar" hidden><b>🏪 Kawasan Usaha · <span id="jw-kw-c">✅ Warnet aman</span></b><button class="btn sm go" data-v3="kwback">🖥️ Balik ke warnet</button></div>
+<div class="mg" id="jw-mg" hidden><div class="mgb"><div class="mgh"><b class="mgt"></b><small class="mgs"></small></div><div class="mgbar"><i></i></div><div class="mga"></div><button class="btn sm mgx" type="button">Batal</button></div></div>
+<div class="dlg" id="jw-dlg" hidden><div class="dbox"><canvas id="jw-dlg-p" width="240" height="280"></canvas><div class="dtx"><b id="jw-dlg-n"></b><p id="jw-dlg-t"></p><div class="dopts" id="jw-dlg-o" hidden></div><small class="dhint">Ketuk buat lanjut ▸</small></div><button class="dskip" data-dlg="skip">Lewati ⏭</button></div></div>
 <div id="jw-toast"></div>
 <div class="tut" id="jw-tut" hidden><span></span><button data-act="tutskip">Lewati</button></div>
 <div class="mod" id="jw-wel" hidden><div class="mc"></div></div>
@@ -2537,14 +2591,17 @@ function portrait(k){var C=CHAR[k],o=C.o||{baju:G.baju||'#2F6FEB',celana:'#1B243
 var DLG=null;
 function dlgOpen(){return !!DLG}
 function dialog(lines,done){if(!lines||!lines.length){if(done)done();return}DLG={l:lines,i:-1,done:done,typ:0,full:''};var el=$('jw-dlg');el.hidden=false;sfx('pop');dlgNext()}
-function dlgNext(){var d=DLG;if(!d)return;if(d.typ){clearInterval(d.typ);d.typ=0;$('jw-dlg-t').textContent=d.full;return}d.i++;if(d.i>=d.l.length){$('jw-dlg').hidden=true;DLG=null;if(d.done)d.done();ui();return}
-  var L=d.l[d.i],who=L[0],C=CHAR[who]||CHAR.kamu,nm=who==='kamu'?('Juragan '+(G.nama||'')):who==='nar'?'':C.n;
+function dlgNext(){var d=DLG;if(!d||d.wc)return;if(d.typ){clearInterval(d.typ);d.typ=0;$('jw-dlg-t').textContent=d.full;return}d.i++;if(d.i>=d.l.length){$('jw-dlg').hidden=true;DLG=null;if(d.done)d.done();ui();return}
+  var L=d.l[d.i];$('jw-dlg-o').innerHTML='';$('jw-dlg-o').hidden=true;$('jw-dlg').classList.toggle('pick',L[0]==='pilih');
+  if(L[0]==='pilih'){d.wc=1;var o=$('jw-dlg-o');o.hidden=false;o.innerHTML=L[2].map(function(x,j){return'<button class="dopt" data-dopt="'+j+'">'+esc2(x.t)+'</button>'}).join('');$('jw-dlg-t').textContent=L[1];$('jw-dlg-n').hidden=false;$('jw-dlg-n').textContent='Juragan '+(G.nama||'');var pc0=$('jw-dlg-p');pc0.getContext('2d').clearRect(0,0,pc0.width,pc0.height);var P0=portrait('kamu'),s0=Math.min(pc0.width/P0.width,pc0.height*1.15/P0.height);pc0.getContext('2d').drawImage(P0,(pc0.width-P0.width*s0)/2,6,P0.width*s0,P0.height*s0);pc0.hidden=false;$('jw-dlg').classList.remove('nar');d.full=L[1];return}
+  var who=L[0],C=CHAR[who]||CHAR.kamu,nm=who==='kamu'?('Juragan '+(G.nama||'')):who==='nar'?'':C.n;
   $('jw-dlg-n').textContent=nm;$('jw-dlg-n').hidden=!nm;var pc=$('jw-dlg-p'),cx=pc.getContext('2d');cx.clearRect(0,0,pc.width,pc.height);
   if(who!=='nar'){var P=portrait(who),sc=Math.min(pc.width/P.width,pc.height*1.15/P.height);cx.drawImage(P,(pc.width-P.width*sc)/2,6,P.width*sc,P.height*sc);pc.hidden=false}else pc.hidden=true;
   $('jw-dlg').classList.toggle('nar',who==='nar');
   d.full=String(L[1]).replace(/\{n\}/g,G.nama||'Juragan').replace(/\{w\}/g,G.namaW||'Warnet');var t=$('jw-dlg-t'),k=0;t.textContent='';
   d.typ=setInterval(function(){k+=2;t.textContent=d.full.slice(0,k);if(k%6===0&&who!=='nar')babble(who==='reza'?190:who==='kiki'?320:who==='darto'?150:240,4);if(k>=d.full.length){clearInterval(d.typ);d.typ=0}},28)}
-document.getElementById('jw-dlg').addEventListener('click',function(e){if(e.target.closest('[data-dlg="skip"]')){if(DLG){var d=DLG;if(d.typ)clearInterval(d.typ);DLG=null;$('jw-dlg').hidden=true;if(d.done)d.done();ui()}return}dlgNext()});
+function dlgPick(j){var d=DLG;if(!d||!d.wc)return;var L=d.l[d.i],o=L[2][j]||L[2][0];if(L[3])L[3](o.k);d.wc=0;if(o.r&&o.r.length)d.l.splice.apply(d.l,[d.i+1,0].concat(o.r));sfx('pop');dlgNext()}
+document.getElementById('jw-dlg').addEventListener('click',function(e){var op=e.target.closest('[data-dopt]');if(op){dlgPick(+op.dataset.dopt);return}if(e.target.closest('[data-dlg="skip"]')){if(DLG&&DLG.wc){for(var q=DLG.i;q<DLG.l.length;q++){var L2=DLG.l[q];if(L2[0]==='pilih'&&L2[3])L2[3](L2[2][0].k)}}if(DLG){var d=DLG;if(d.typ)clearInterval(d.typ);DLG=null;$('jw-dlg').hidden=true;if(d.done)d.done();ui()}return}dlgNext()});
 var _tick2=tick;tick=function(dt){if(DLG)return;_tick2(dt)};
 
 /* ===== CERITA ===== */
@@ -2684,7 +2741,7 @@ function ligaDaftar(){var v=V();if(!timOk()||v.tim.length<3){toast('Butuh minima
 function ligaPub(){var db=JWNET.db&&JWNET.db(),u=JWNET.uid&&JWNET.uid(),L=V().liga;if(!db||!u||!L)return;db.doc('ligawn/'+u).set({nm:String(G.nama||'').slice(0,16),nw:String(G.namaW||'Warnet').slice(0,20),tn:L.tn,pw:L.pw,wk:L.wk,fc:JWNET.fcode(u),at:Date.now(),jr:V().lh.juara||0}).catch(function(){})}
 var LPRIZE=[{u:5000000,b:15,dk:'pialae'},{u:3000000,b:8,dk:'pialap'},{u:2000000,b:5,dk:'pialab'},{u:800000,b:2},{u:500000,b:2},{u:500000,b:1},{u:300000,b:1},{u:300000,b:1}];
 function ligaTick(){var v=V(),L=v.liga;if(!L||vis())return;var news=[];
-  for(var r=L.s0;r<7;r++){if(L.seen[r])continue;var m=ligaRound(L,r)[0],s=ligaGame(L,r,m[0],m[1]);if(!s)continue;L.seen[r]=1;var win=s[0]>s[1];if(win){v.lh.win++;G.uang+=200000;passXp(40)}else passXp(15);news.push((win?'🏆 MENANG ':'😓 Kalah ')+s[0]+'-'+s[1]+' lawan '+m[1].tn+(win?' · +Rp200rb':''))}
+  for(var r=L.s0;r<7;r++){if(L.seen[r])continue;var m=ligaRound(L,r)[0],s=ligaGame(L,r,m[0],m[1]);if(!s)continue;L.seen[r]=1;var win=s[0]>s[1];if(win){v.lh.win++;cnt('win');G.uang+=200000;passXp(40)}else passXp(15);news.push((win?'🏆 MENANG ':'😓 Kalah ')+s[0]+'-'+s[1]+' lawan '+m[1].tn+(win?' · +Rp200rb':''))}
   if(news.length){toast(news[news.length-1]);logm('Liga: '+news.join(' | '));sfx(news[news.length-1].indexOf('MENANG')>=0?'up':'pop');save()}
   if(wkNow()>L.wk&&!L.done){L.done=1;var T=ligaTable(L),rank=T.findIndex(function(x){return x.t.me})+1,pr=LPRIZE[rank-1]||LPRIZE[7];if(rank<=3)v.lh.top3++;if(rank===1)v.lh.juara++;
     var t=giveRw({u:pr.u,dk:pr.dk},'liga');if(pr.b)addBonus('liga',pr.b);v.lastLiga={wk:L.wk,rank:rank,rw:t+(pr.b?' · +'+pr.b+' 💎':''),tn:L.tn};save();
@@ -2700,26 +2757,27 @@ function ligaHtml(){var v=V(),L=v.liga,wk=wkNow(),h='';if(!timOk())return'<div c
 
 /* ===== JURAGAN PASS ===== */
 var PASS_E=Math.floor(Date.UTC(2026,10,23)/864e5),PASS_LEN=28,PASS_XP=120,PASS_C=150,KARTU_C=250,KARTU_D=15;
-var MUSIM=['Era Mabar','Demam Turnamen','Kota Gaming','Liburan Panjang','Juara Kampung','Neon Nights'];
+var MUSIM=['Era Mabar','Kembang Api','Kota Gaming','Liburan Panjang','Juara Kampung','Neon Nights'];
 function season(){return Math.max(1,Math.floor((wibDay()-PASS_E)/PASS_LEN)+1)}
 function seasonLeft(){return PASS_E+season()*PASS_LEN-wibDay()}
 function seasonName(s){return'Musim '+s+': '+MUSIM[(s-1)%MUSIM.length]}
 var PF=[null,{u:200000},{dk:'bangku'},{e:1},{b:1},{u:300000},{dk:'lampu'},{r:1},{u:500000},{b:2},{dk:'bendera'},{e:1},{u:600000},{b:2},{dk:'payung'},{u:800000},{r:1},{b:2},{dk:'kolam'},{u:1000000},{b:3},{e:1},{u:1200000},{dk:'sakura'},{r:1},{b:2},{u:1500000},{e:1},{dk:'arcade'},{u:2000000},{b:3}];
 var PP=[null,{b:5},{u:500000},{dk:'gerobak'},{r:1},{b:5},{u:1000000},{dk:'capit'},{e:1},{b:5},{tm:'cyber'},{u:1500000},{dk:'papan'},{b:5},{r:1},{bj:'emas'},{u:2000000},{b:5},{dk:'beanbag'},{e:1},{tm:'anime'},{b:5},{u:3000000},{dk:'naga'},{r:1},{b:10},{u:4000000},{bj:'neon'},{e:1},{b:10},{dk:'mobil'}];
+var PASS_SET={};function PT(){var s=season();return PASS_SET[s]||{f:PF,p:PP}}
 function passS(){var P=V().pass,s=season();if(P.s!==s){P.s=s;P.xp=0;P.f=[];P.p=[]}return P}
 function passTier(){return Math.min(30,Math.floor(passS().xp/PASS_XP))}
 function passPrem(){var s=season();if(NET.online&&NET.dom)return NET.dom.pass===s;return V().prem===s}
 function passXp(n){if(vis()||!G.mulai)return;var P=passS(),t0=passTier();P.xp=Math.min(30*PASS_XP,P.xp+n);var t1=passTier();if(t1>t0)toast('🎫 Juragan Pass naik ke tingkat '+t1+'! Ambil hadiahnya')}
 function passReady(){var P=passS(),t=passTier(),pr=passPrem();for(var i=1;i<=t;i++){if(P.f.indexOf(i)<0)return true;if(pr&&P.p.indexOf(i)<0)return true}return false}
-function passClaim(i,prem){var P=passS();if(i>passTier())return'';var L=prem?P.p:P.f;if(L.indexOf(i)>=0)return'';if(prem&&!passPrem())return'';L.push(i);return giveRw((prem?PP:PF)[i],'pass')}
+function passClaim(i,prem){var P=passS();if(i>passTier())return'';var L=prem?P.p:P.f;if(L.indexOf(i)>=0)return'';if(prem&&!passPrem())return'';L.push(i);return giveRw((prem?PT().p:PT().f)[i],'pass')}
 function passHtml(){var P=passS(),t=passTier(),pr=passPrem(),s=season(),into=P.xp-t*PASS_XP;
   var h='<div class="passh"><b>🎫 '+seasonName(s)+'</b><small>Berakhir '+seasonLeft()+' hari lagi · tingkat '+t+'/30</small><div class="bar"><i style="width:'+(t>=30?100:into/PASS_XP*100)+'%"></i></div><small>'+(t>=30?'Tingkat maksimal! 🎉':into+'/'+PASS_XP+' XP ke tingkat '+(t+1))+'</small></div>';
   h+='<p class="note">XP dari: layani pelanggan (+1), misi harian (+20), check-in (+30), main liga (+40 menang / +15 kalah), tutup warnet (+20), turnamen (+30), ambil kas cabang (+5), selesai bab cerita (+100).</p>';
-  if(!pr)h+='<div class="topup prem"><b>⭐ Jalur Premium</b><p>Buka semua hadiah premium musim ini: 50 💎, tema Cyber Neon & Anime, seragam emas & neon, patung naga, mobil sport, mesin capit, dan uang game. Hadiah tingkat yang udah lewat langsung bisa diambil.</p>'+B2(G.ber>=PASS_C?'Buka Premium · '+PASS_C+' 💎':'💎 Top up dulu (kurang '+(PASS_C-G.ber)+' 💎)','pbuy','','go')+'</div>';
+  if(!pr)h+='<div class="topup prem"><b>⭐ Jalur Premium</b><p>Buka semua hadiah premium musim ini: '+(PT().desc||'50 💎, tema Cyber Neon & Anime, seragam emas & neon, patung naga, mobil sport, mesin capit, dan uang game')+'. Hadiah tingkat yang udah lewat langsung bisa diambil.</p>'+B2(G.ber>=PASS_C?'Buka Premium · '+PASS_C+' 💎':'💎 Top up dulu (kurang '+(PASS_C-G.ber)+' 💎)','pbuy','','go')+'</div>';
   if(passReady())h+=B2('🎁 Ambil semua hadiah','pall','','go');
   h+='<div class="ptrack"><div class="ph"><span>Gratis</span><span>Tk</span><span>⭐ Premium</span></div>';
   for(var i=1;i<=30;i++){var fo=P.f.indexOf(i)>=0,po=P.p.indexOf(i)>=0,un=i<=t;
-    h+='<div class="pr'+(un?' un':'')+'"><button class="pc'+(fo?' got':'')+'" data-v2="pcl" data-k="'+i+'" '+(!un||fo?'disabled':'')+'>'+(fo?'✅ ':'')+rwTxt(PF[i])+'</button><span class="pt">'+i+'</span><button class="pc prm'+(po?' got':'')+'" data-v2="pcp" data-k="'+i+'" '+(!un||po||!pr?'disabled':'')+'>'+(po?'✅ ':pr?'':'🔒 ')+rwTxt(PP[i])+'</button></div>'}
+    h+='<div class="pr'+(un?' un':'')+'"><button class="pc'+(fo?' got':'')+'" data-v2="pcl" data-k="'+i+'" '+(!un||fo?'disabled':'')+'>'+(fo?'✅ ':'')+rwTxt(PT().f[i])+'</button><span class="pt">'+i+'</span><button class="pc prm'+(po?' got':'')+'" data-v2="pcp" data-k="'+i+'" '+(!un||po||!pr?'disabled':'')+'>'+(po?'✅ ':pr?'':'🔒 ')+rwTxt(PT().p[i])+'</button></div>'}
   return h+'</div>'}
 /* ===== KARTU JURAGAN ===== */
 function kartuUntil(){if(NET.online&&NET.dom)return+NET.dom.kartu||0;return V().kartu||0}
@@ -2843,6 +2901,287 @@ document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.c
   save();ui();renderSheet(true)});
 /* pilih cat/lantai manual = lepas tema */
 document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest&&e.target.closest('[data-act="cat"],[data-act="lantai"]');if(b&&G.v2&&G.v2.tema&&!vis()){var T=TEMA[G.v2.tema],v=G.v2;if(!T||G.bld.cat!==T.cat||G.bld.lantai!==T.lt){if(T&&G.bld.cat===T.cat)G.bld.cat=v.cat0||'krem';if(T&&G.bld.lantai===T.lt)G.bld.lantai=v.lt0||'keramik';v.tema='';rebuildLayers();renderSheet(true)}}});
+
+/* ===== UPDATE 3.0 · Kawasan Usaha, Cerita Musim 2, Event Tahun Baru, Pass Musim 2, Mini-game, Aplikasi ===== */
+function v3Def(){return{lh:{},ev:{k:'',tok:0,d:0,got:0,buy:{}},mg:{aim:{d:0,n:0},live:{d:0,n:0},best:0,views:0,fixw:0,chase:0},mgOff:0}}
+function X3(){if(!G.v3||typeof G.v3!=='object')G.v3=v3Def();var d=v3Def(),v=G.v3;Object.keys(d).forEach(function(k){if(v[k]==null)v[k]=d[k]});['ev','mg'].forEach(function(k){Object.keys(d[k]).forEach(function(j){if(v[k][j]==null)v[k][j]=d[k][j]})});if(!v.mg.aim)v.mg.aim={d:0,n:0};if(!v.mg.live)v.mg.live={d:0,n:0};if(!v.ev.buy)v.ev.buy={};return v}
+var _fresh3=fresh;fresh=function(){var o=_fresh3();o.v3=v3Def();return o};
+
+/* ===== KAWASAN USAHA ===== */
+var U3={
+ warkop:{n:'Warung Kopi',ic:'☕',c:2000000,up:[1500000,3000000],inc:[10000,16000,24000],b:{spawn:1.05},bt:'Pelanggan warnet +5% (ngopi dulu sebelum main)',ev:{n:'Kopi habis',ic:'☕',c:80000},col:['#9C6B43','#5A3A22','#E5484D','#FFFFFF','#FFE08A']},
+ geprek:{n:'Ayam Geprek',ic:'🍗',c:3000000,up:[2500000,4000000],inc:[14000,22000,32000],b:{bocil:1.2,mhs:1.1},bt:'Bocil & mahasiswa makin betah mampir',ev:{n:'Sambel habis',ic:'🌶️',c:100000},col:['#F28C28','#C0392B','#FFD45C','#E5484D','#FFFFFF']},
+ fotokopi:{n:'Fotokopi & ATK',ic:'🖨️',c:2500000,up:[2000000,3500000],inc:[9000,14000,20000],b:{mhs:1.3},bt:'Mahasiswa +30% (sekalian ngeprint tugas)',ev:{n:'Mesin fotokopi macet',ic:'🖨️',c:120000},col:['#EAF2FF','#2F6FEB','#5BC0FF','#FFFFFF','#1B2433']},
+ bengkel:{n:'Bengkel Motor',ic:'🔧',c:4000000,up:[3000000,5000000],inc:[16000,25000,36000],b:{ojol:1.35},bt:'Abang ojol +35% (servis motor sambil mabar)',ev:{n:'Kunci pas hilang',ic:'🔧',c:150000},col:['#C9CED6','#3A3F46','#F2C230','#1B1E24','#1B1E24']},
+ cuci:{n:'Cuci Motor',ic:'🫧',c:3000000,up:[2500000,4000000],inc:[12000,19000,28000],b:{ojol:1.15,spawn:1.03},bt:'Ojol +15% & pelanggan +3%',ev:{n:'Pompa air mati',ic:'💧',c:130000},col:['#DCEBFA','#2F6FEB','#4FC3F7','#FFFFFF','#FFFFFF']},
+ mini:{n:'Minimarket',ic:'🛒',c:6000000,up:[4000000,6000000],inc:[24000,36000,52000],b:{},bt:'Stok mie & minum warnet otomatis terisi tiap tutup',ev:{n:'Kulkas rusak',ic:'🧊',c:200000},col:['#FFFFFF','#2FA36B','#E5484D','#FFD45C','#2FA36B']},
+ barber:{n:'Barbershop',ic:'💈',c:3500000,up:[2500000,4500000],inc:[13000,20000,30000],b:{beauty:1},bt:'Warnet makin kece: +1 keindahan',ev:{n:'Gunting tumpul',ic:'✂️',c:90000},col:['#1B2433','#111111','#E5484D','#FFFFFF','#FFFFFF']},
+ gaming:{n:'Toko Aksesoris Gaming',ic:'🎧',c:7000000,up:[5000000,7000000],inc:[26000,40000,58000],b:{gamer:1.3,sultan:1.2},bt:'Gamer +30% & sultan +20%',ev:{n:'Stok headset habis',ic:'🎧',c:250000},col:['#2B2147','#7B3FB8','#FF4FD8','#4FC3F7','#FF4FD8']}};
+var LAHAN=[{x:-14,z:-7,c:4000000,sw:100000,n:'A1 · Jl. Melati'},{x:-6,z:-7,c:5000000,sw:120000,n:'A2 · Jl. Melati'},{x:2,z:-7,c:6000000,sw:140000,n:'A3 · Jl. Melati'},{x:10,z:-7,c:5500000,sw:130000,n:'A4 · Jl. Melati'},
+ {x:-10,z:3.8,c:7000000,sw:170000,n:'B1 · Jl. Kenanga'},{x:-2,z:3.8,c:8500000,sw:200000,n:'B2 · Jl. Kenanga'},{x:6,z:3.8,c:9000000,sw:220000,n:'B3 · Jl. Kenanga'},{x:14,z:3.8,c:7500000,sw:180000,n:'B4 · Jl. Kenanga'}];
+function kwOpen(){return !!G.bld.lebar}
+function lhN(){var n=0,L=X3().lh;Object.keys(L).forEach(function(i){if(L[i]&&L[i].own)n++});return n}
+function usN(){var n=0,L=X3().lh;Object.keys(L).forEach(function(i){if(L[i]&&L[i].u)n++});return n}
+function lhF(h){return h<11?.8:h<15?1.1:h<18?1:h<22?1.2:.7}
+function usBuff(key){var m=1,L=X3().lh;Object.keys(L).forEach(function(i){var l=L[i];if(!l||!l.u||!U3[l.u])return;var b=U3[l.u].b[key];if(b)m*=1+(b-1)*(1+.5*(l.lv-1))});return m}
+function usBeauty(){var n=0,L=X3().lh;Object.keys(L).forEach(function(i){var l=L[i];if(l&&l.u==='barber')n+=l.lv>=3?2:1});return n}
+function usDay(l){return U3[l.u].inc[l.lv-1]*16}
+function lhMinute(){var h=Math.floor(G.min/60),L=X3().lh;Object.keys(L).forEach(function(i){var l=L[i];if(!l||!l.u||!U3[l.u])return;l.kas=(l.kas||0)+U3[l.u].inc[l.lv-1]/60*lhF(h)*(l.ev?.5:1);if(!l.ev&&Math.random()<.0012){l.ev=1;logm(U3[l.u].n+' ('+LAHAN[i].n.split(' ·')[0]+'): '+U3[l.u].ev.n)}})}
+function lhVal(){var v=0,L=X3().lh;Object.keys(L).forEach(function(i){var l=L[i],P=LAHAN[i];if(!l||!P)return;if(l.own==='beli')v+=P.c;if(l.u&&U3[l.u]){var U=U3[l.u];v+=U.c;for(var k=0;k<l.lv-1;k++)v+=U.up[k]}});return v}
+function lhEndDay(){var L=X3().lh,inn=0,sw=0;Object.keys(L).forEach(function(i){var l=L[i];if(!l)return;if(l.u){inn+=Math.round(l.kas||0);l.kas=0}if(l.own==='sewa'&&l.d0!==G.day)sw+=LAHAN[i].sw;if(l.u==='mini'){var cap=[20,30,40][l.lv-1];G.mie=Math.max(G.mie,cap);G.minum=Math.max(G.minum,cap)}});G.uang+=inn-sw;return{inn:inn,sw:sw}}
+function lhTake(i){var l=X3().lh[i];if(!l||!l.u)return;var v=Math.round(l.kas||0);if(v<1)return;G.uang+=v;l.kas=0;cnt('kasu');sfx('coin2');toast(U3[l.u].ic+' '+U3[l.u].n+': +'+rpF(v));ui()}
+/* ---- model 3D toko ---- */
+function shopModel(k,lv){var U=U3[k],C=U.col,w=C[0],r=C[1],a=C[2],a2=C[3];
+  box(-2.6,0,-2.2,2.6,.06,2.4,'#D8CFBC');box(-2.6,0,-2.2,2.6,2.4,1.5,w);box(-2.75,2.4,-2.35,2.75,2.58,1.75,r);
+  if(k!=='bengkel'){box(-2.1,.15,1.5,2.1,1.75,1.53,'#BFE3F2');box(-.45,0,1.5,.45,1.75,1.54,'#7A5A44')}else{box(-2.2,0,1.49,2.2,1.9,1.5,'#2B2F36');motor(-.6,.6,Math.PI/2,'#E5484D');cyl(1.6,0,1.9,.3,.18,10,'#1B1E24');cyl(1.6,.18,1.9,.3,.18,10,'#1B1E24');cyl(1.6,.36,1.9,.3,.18,10,'#1B1E24')}
+  for(var s=0;s<6;s++){box(-2.6+s*.8667,1.85,1.5,-2.6+(s+1)*.8667,2.0,2.15,s%2?a2:a)}
+  box(-1.8,2.05,1.53,1.8,2.38,1.6,C[4]==='#FFFFFF'?r:'#FFFFFF');
+  if(k==='warkop'){box(-2.3,.35,1.8,-1.0,.42,2.2,'#C9935F');box(1.0,.35,1.8,2.3,.42,2.2,'#C9935F');cyl(1.8,.42,2.0,.08,.2,8,'#3A3F46')}
+  else if(k==='geprek'){[[-1.6,2],[1.6,2]].forEach(function(p){cyl(p[0],0,p[1],.04,.55,6,'#3A3F46');cyl(p[0],.55,p[1],.35,.05,10,'#FFFFFF')});box(-1.95,0,2.15,-1.75,.3,2.35,'#E5484D');box(1.75,0,2.15,1.95,.3,2.35,'#E5484D')}
+  else if(k==='fotokopi'){box(-1.8,0,.4,-1.0,.8,1.2,'#FFFFFF');box(-1.75,.8,.5,-1.05,.85,1.1,'#5BC0FF');box(1.0,0,.4,1.8,.8,1.2,'#FFFFFF')}
+  else if(k==='cuci'){box(-2.6,.02,1.6,2.6,.07,2.4,'#4FC3F7');motor(-1.2,2.0,0,'#2FA36B');cyl(1.9,0,2.0,.12,.9,8,'#2F6FEB')}
+  else if(k==='mini'){[-1.5,-.8,.8,1.5].forEach(function(x){box(x-.25,0,.6,x+.25,1.2,1.2,['#E5484D','#F5C542','#2FA36B','#5BC0FF'][Math.abs(Math.round(x*2))%4])});box(2.15,0,1.6,2.55,1.4,1.95,'#2B2F36');box(2.2,.8,1.95,2.5,1.2,1.96,'#5BC0FF',1)}
+  else if(k==='barber'){cyl(2.3,0,1.9,.12,1.6,10,'#FFFFFF');[.2,.6,1.0,1.4].forEach(function(y,j){cyl(2.3,y,1.9,.13,.15,10,j%2?'#2F6FEB':'#E5484D')});sph(2.3,1.7,1.9,.16,'#E8E8E8');box(-1.2,0,.6,-.6,.9,1.2,'#E5484D')}
+  else if(k==='gaming'){[-1.5,1.5].forEach(function(x){box(x-.4,.9,.9,x+.4,1.4,1.0,'#1B1E24');box(x-.35,.95,1.0,x+.35,1.35,1.01,x<0?'#FF4FD8':'#4FC3F7',1)});box(-2.6,.06,1.5,2.6,.12,1.56,'#FF4FD8',1)}
+  if(lv>=2){box(-2.6,0,2.4,-2.4,1.0,2.5,a);box(2.4,0,2.4,2.6,1.0,2.5,a);pot(-2.3,2.7);pot(2.3,2.7)}
+  if(lv>=3){box(-2.2,2.58,-1.8,2.2,4.1,1.1,w);box(-1.8,3.0,1.1,-.6,3.8,1.13,'#BFE3F2');box(.6,3.0,1.1,1.8,3.8,1.13,'#BFE3F2');box(-2.35,4.1,-1.95,2.35,4.25,1.25,r);box(-1.0,4.25,.4,1.0,4.9,.5,C[4]==='#FFFFFF'?r:C[4])}}
+function lotModel(own){box(-2.9,0,-2.5,2.9,.04,2.5,own?'#D8CFBC':'#C9B27C');if(!own){[[-1.8,-1.2],[1.2,1],[-.6,1.6],[2,-1.6]].forEach(function(p){sph(p[0],.08,p[1],.22,'#8FBF6A',.6)});cyl(-.8,0,1.9,.05,1.3,6,'#7A5A44');cyl(.8,0,1.9,.05,1.3,6,'#7A5A44');box(-1.1,.85,1.86,1.1,1.45,1.94,'#E5484D');box(-1.0,.9,1.94,1.0,1.4,1.95,'#FFFFFF')}}
+function megaModel(){box(-3,0,-2.4,3,4.6,2.2,'#1B1E24');for(var y=.6;y<4.4;y+=1.1)box(-2.8,y,2.2,2.8,y+.7,2.23,'#3A4A6A');box(-3.1,4.6,-2.5,3.1,4.8,2.3,'#0E1014');box(-2.4,3.2,2.24,2.4,4.2,2.3,'#7B3FB8',1);box(-.6,0,2.2,.6,2.0,2.26,'#4FC3F7')}
+function stLamp(x,z){cyl(x,0,z,.05,2.4,6,'#4A5160');box(x,2.32,z-.05,x+.5,2.4,z+.05,'#4A5160');box(x+.35,2.24,z-.12,x+.6,2.32,z+.12,'#FFF3B0',1)}
+function buildStreetA(){LAY=0;CAST=false;for(var gx=-22;gx<22;gx+=2)for(var gz=-14;gz<0.4;gz+=2)face([[gx,0,gz],[gx,0,Math.min(.4,gz+2)],[gx+2,0,Math.min(.4,gz+2)],[gx+2,0,gz]],((gx+gz)/2&1)?'#A8D98A':'#A2D383');
+  face([[-22,.01,-4.4],[-22,.01,-3.6],[22,.01,-3.6],[22,.01,-4.4]],'#D0CCC4');face([[-22,.01,-3.6],[-22,.01,-.4],[22,.01,-.4],[22,.01,-3.6]],'#5E6168');for(var mx=-22;mx<22;mx+=3)face([[mx,.015,-2.1],[mx,.015,-1.9],[mx+1.6,.015,-1.9],[mx+1.6,.015,-2.1]],'#F4F4F0');face([[-22,.01,-.4],[-22,.01,.4],[22,.01,.4],[22,.01,-.4]],'#D0CCC4');
+  LAY=2;CAST=true;tree(-19,-10,1.2);tree(-10,-11.2,1);tree(6,-11.4,1.1);tree(15.5,-10.6,1.2);tree(-2,-11.6,.9);[-18,-6,6,18].forEach(function(x){stLamp(x,-4.1)});
+  LAHAN.forEach(function(P,i){if(P.z>0)return;var l=G.v3&&G.v3.lh[i];grp({x:P.x,z:P.z},function(){lotModel(l&&l.own);if(l&&l.u&&U3[l.u])shopModel(l.u,l.lv)})})}
+function buildStreetB(){LAY=0;CAST=false;for(var gx=-22;gx<22;gx+=2)for(var gz=.4;gz<12.5;gz+=2)face([[gx,0,gz],[gx,0,Math.min(12.5,gz+2)],[gx+2,0,Math.min(12.5,gz+2)],[gx+2,0,gz]],((gx+Math.floor(gz))/2&1)?'#A8D98A':'#A2D383');
+  face([[-22,.01,6.4],[-22,.01,7.2],[22,.01,7.2],[22,.01,6.4]],'#D0CCC4');face([[-22,.01,7.2],[-22,.01,10.4],[22,.01,10.4],[22,.01,7.2]],'#5E6168');for(var mx=-22;mx<22;mx+=3)face([[mx,.015,8.7],[mx,.015,8.9],[mx+1.6,.015,8.9],[mx+1.6,.015,8.7]],'#F4F4F0');face([[-22,.01,10.4],[-22,.01,11.2],[22,.01,11.2],[22,.01,10.4]],'#D0CCC4');
+  LAY=2;CAST=true;grp({x:-18.5,z:3.6},megaModel);[-14,-6,2,10,18].forEach(function(x){stLamp(x,6.7)});tree(19.5,2.2,1.1);motor(-14.2,6.0,0,'#E5484D');motor(9.8,6.0,0,'#2F6FEB');
+  LAHAN.forEach(function(P,i){if(P.z<0)return;var l=G.v3&&G.v3.lh[i];grp({x:P.x,z:P.z},function(){lotModel(l&&l.own);if(l&&l.u&&U3[l.u])shopModel(l.u,l.lv)})})}
+var LS3A=null,LS3B=null,W3=[],BKI=null;
+var _rebuild3=rebuildLayers;rebuildLayers=function(){if(VIEW===3){LBG=LFG=LFG2=LST=LROOF=L2BG=L2FG=null;LS3A=layer(buildStreetA,true);LS3B=layer(buildStreetB,true);return}LS3A=LS3B=null;_rebuild3()};
+function kwEnter(){if(!kwOpen()){toast('🔒 Kawasan Usaha kebuka setelah Perluasan ruko (Manajemen → Bangunan)');return}if(vis())return;closeSheet();if(DKM)dkExit();VIEW=3;rebuildLayers();var c=wc(0,0,-1);PAN.x=c.x-W/2;PAN.y=c.y-H*.5;clampPan();$('jw-kwbar').hidden=false;$('jw-flr').hidden=true;$('jw-money').hidden=true;
+  if(!W3.length){var T=['mhs','ojol','bocil','gamer'];for(var i=0;i<8;i++)W3.push({t:T[i%4],v:i%3,x:-22+i*5.5,z:i%2?-4.0:6.8,d:i%3?1:3,sp:.9+Math.random()*.5})}ui();sfx('pop')}
+function kwExit(){if(VIEW!==3)return;VIEW=1;$('jw-kwbar').hidden=true;closeSheet();rebuildLayers();var c=wc(0,.6,.6);PAN.x=c.x-W/2;PAN.y=c.y-H*.5;clampPan();ui()}
+var _clamp3=clampPan;clampPan=function(){if(VIEW!==3)return _clamp3();var a=wc(-22,0,2).x-20,b=wc(19,0,-8).x-W+20,t=wc(-14,0,-12).y-170,u=wc(16,0,9).y-H+140;PAN.x=Math.max(Math.min(a,b),Math.min(Math.max(a,b),PAN.x));PAN.y=Math.max(Math.min(t,u),Math.min(Math.max(t,u),PAN.y))};
+function pill(x,y,tx,bg,fg,f){ctx.font='800 12px system-ui';var w=ctx.measureText(tx).width+18;ctx.fillStyle=bg;ctx.strokeStyle='#fff';ctx.lineWidth=2;rr(x-w/2,y-13,w,26,13);ctx.fill();ctx.stroke();ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,x,y+1);if(f)HITS.unshift({x:x,y:y,r:Math.max(26,w/2),f:f})}
+function drawStreet(t){ctx.setTransform(D,0,0,D,0,0);ctx.fillStyle='#A8D98A';ctx.fillRect(0,0,W,H);HITS=[];if(!LS3A)rebuildLayers();
+  function L(c){if(c)ctx.drawImage(c,-PAN.x,-PAN.y,BW,BH)}
+  var dt=Math.min(.05,(t-(drawStreet.t||t)));drawStreet.t=t;W3.forEach(function(w){w.x+=(w.d===1?1:-1)*w.sp*dt;if(w.x>22)w.x=-22;if(w.x<-22)w.x=22});
+  function walkers(back){W3.forEach(function(w){if((w.z<0)!==back)return;var q=ws(w.x,0,w.z);ctx.fillStyle='rgba(0,0,0,.15)';ctx.beginPath();ctx.ellipse(q.x,q.y,S*.28,S*.14,0,0,7);ctx.fill();dspr('p_'+w.t+w.v+'_w'+w.d,w.x,Math.abs(Math.sin(t*10+w.x))*.06,w.z)})}
+  var lh=X3().lh,night=G.min>=18*60?Math.min(1,(G.min-18*60)/120):0;
+  function signs(back){LAHAN.forEach(function(P,i){var l=lh[i];if((P.z<0)!==back)return;if(l&&l.u&&U3[l.u]){var U=U3[l.u];wtext(P.x,2.215,P.z+1.62,U.n.toUpperCase(),U.col[4]==='#FFFFFF'?'#FFFFFF':U.col[1],U.n.length>14?4.5:6,'x',1,1.7)}})}
+  L(LS3A);signs(true);walkers(true);L(LS3B);signs(false);wtext(-18.5,3.7,3.6+2.31,(V().cer.bab>=9?'MEGANET':'KILAT.NET'),'#FFFFFF',11,'x',1,2.3);walkers(false);
+  if(night>0){ctx.fillStyle='rgba(25,30,80,'+(.36*night)+')';ctx.fillRect(0,0,W,H);ctx.save();ctx.globalCompositeOperation='lighter';[[-18,-4.1],[-6,-4.1],[6,-4.1],[18,-4.1],[-14,6.7],[-6,6.7],[2,6.7],[10,6.7],[18,6.7]].forEach(function(p){var q=ws(p[0]+.5,2.3,p[1]),R=2.4*S,g=ctx.createRadialGradient(q.x,q.y,1,q.x,q.y,R);g.addColorStop(0,'rgba(255,225,150,'+(.45*night)+')');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(q.x,q.y,R,0,7);ctx.fill()});
+    LAHAN.forEach(function(P,i){var l=lh[i];if(!l||!l.u)return;var q=ws(P.x,1,P.z+1.6),R=2.2*S,g=ctx.createRadialGradient(q.x,q.y,1,q.x,q.y,R);g.addColorStop(0,'rgba(255,230,170,'+(.35*night)+')');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(q.x,q.y,R,0,7);ctx.fill()});ctx.restore()}
+  LAHAN.forEach(function(P,i){var l=lh[i],open=function(){openSheet('lahan',i)};var qc=ws(P.x,1,P.z);HITS.push({x:qc.x,y:qc.y,r:S*1.6,f:open});
+    if(!l||!l.own){var q=ws(P.x,1.7,P.z+1.9);pill(q.x,q.y-14,'🏷️ '+rp(P.c)+' · sewa '+rp(P.sw),'rgba(255,248,234,.95)','#6B5A44',open);return}
+    if(!l.u){var q2=ws(P.x,.4,P.z);pill(q2.x,q2.y,'➕ Pilih usaha','#2FA36B','#FFFFFF',open);return}
+    var top=ws(P.x,l.lv>=3?5.2:3.0,P.z);if(l.ev){var E=U3[l.u].ev;pill(top.x,top.y-6,E.ic+' '+E.n+'!','#FFE2D6','#C0392B',open)}else if((l.kas||0)>=1000)pill(top.x,top.y-6,'💵 '+rp(l.kas),'#36B44A','#FFFFFF',function(){lhTake(i)})})}
+var _draw3=drawFrame;drawFrame=function(t){if(VIEW===3)return drawStreet(t);_draw3(t)};
+/* ---- lembar lahan ---- */
+function usCard(k,i){var U=U3[k];return'<div class="row"><span style="font-size:24px">'+U.ic+'</span><b>'+U.n+'<br><small style="font-weight:600;color:#8A7A66">± '+rp(U.inc[0]*16)+'/hari · '+U.bt+'</small></b>'+B2('Buka '+rp(U.c),'lbuka',i+':'+k,'sm go',G.uang<U.c)+'</div>'}
+function lahanHtml(i){var P=LAHAN[i],l=X3().lh[i],h='';if(!P)return'';
+  if(!l||!l.own){return'<div class="mis"><b>🏷️ Lahan '+P.n+'</b><small>Lahan kosong. Bisa dibeli (jadi aset kamu) atau disewa harian. Setelah itu kamu bebas pilih mau buka usaha apa.</small><div class="kv"><span>Harga beli</span><b>'+rpF(P.c)+'</b><span>Sewa</span><b>'+rpF(P.sw)+'/hari</b></div>'+B2('🏠 Beli lahan · '+rp(P.c),'lbeli',i,'go',G.uang<P.c)+B2('📝 Sewa · bayar '+rp(P.sw)+' hari ini','lsewa',i,'',G.uang<P.sw)+'</div>'}
+  h+='<div class="kv"><span>Lahan</span><b>'+P.n+'</b><span>Status</span><b>'+(l.own==='beli'?'✅ Milik sendiri':'📝 Disewa '+rp(P.sw)+'/hari')+'</b></div>';
+  if(!l.u){h+='<h4>Pilih usaha</h4><p class="note">Tiap usaha ngasih penghasilan + bonus buat warnet. Penghasilan jalan tiap warnet buka; ketuk 💵 di atas tokonya buat ambil (sisanya masuk otomatis pas tutup).</p>';Object.keys(U3).forEach(function(k){h+=usCard(k,i)});
+    if(l.own==='sewa')h+=B2('🏠 Beli lahan ini · '+rp(P.c),'lbeli',i,'',G.uang<P.c)+B2('Berhenti sewa','lstop',i,'bad');return h}
+  var U=U3[l.u];h+='<div class="mis"><b>'+U.ic+' '+U.n+' · Lv '+l.lv+'</b><small>'+U.bt+'</small><div class="kv"><span>Penghasilan</span><b>± '+rp(usDay(l))+'/hari</b><span>Kas</span><b>'+rp(l.kas||0)+'</b></div>';
+  if(l.ev)h+='<div class="cev">'+U.ev.ic+' <b>'+U.ev.n+'</b> · penghasilan turun 50%</div>'+B2('🔧 Beresin · '+rp(U.ev.c)+' · 1 ⚡','lfix',i,'go',G.uang<U.ev.c||G.energi<1);
+  if((l.kas||0)>=1000)h+=B2('💵 Ambil kas · '+rp(l.kas),'lambil',i,'go');
+  if(l.lv<3)h+=B2('⬆ Naik Lv '+(l.lv+1)+' · '+rp(U.up[l.lv-1])+' (± '+rp(U.inc[l.lv]*16)+'/hari)','lup',i,'',G.uang<U.up[l.lv-1]);else h+='<i>Level maks ✨</i>';
+  h+=B2(BKI&&BKI.i===i&&Date.now()-BKI.t<8000?'⚠️ Yakin bongkar? Ketuk lagi':'🔨 Bongkar & ganti usaha (balik 30%)','lbongkar',i,'bad')+'</div>';if(l.own==='sewa')h+=B2('🏠 Beli lahan ini · '+rp(P.c),'lbeli',i,'',G.uang<P.c);return h}
+V2SHEET.lahan=function(){var P=LAHAN[+sarg];return['🏪 '+(P?P.n:'Lahan'),lahanHtml(+sarg)]};
+document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest&&e.target.closest('[data-v3]');if(!b)return;audioInit();if(vis()){toast('Lagi mampir ke warnet teman. Pencet Pulang dulu ya.');return}var a=b.dataset.v3;
+  if(a==='kw'){if(VIEW===3)kwExit();else kwEnter();return}if(a==='kwback'){kwExit();return}
+  if(a==='mg'){openSheet('mgame');return}if(a==='ev'){openSheet('event');return}if(a==='pwa'){pwaInstall();return}if(a==='mgoff'){X3().mgOff=X3().mgOff?0:1;save();renderSheet(true);return}
+  if(a==='aim'){mgAim();return}if(a==='live'){mgLive();return}
+  if(a==='evbuy'){evBuy(b.dataset.k);save();ui();renderSheet(true);return}});
+document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest&&e.target.closest('[data-v2]');if(!b||vis())return;var a=b.dataset.v2,k=String(b.dataset.k||''),L=X3().lh,i,l,P,U;
+  if(['lbeli','lsewa','lstop','lbuka','lambil','lup','lfix','lbongkar'].indexOf(a)<0)return;
+  if(a==='lbuka'){var pa=k.split(':');i=+pa[0];var uk=pa[1];l=L[i];U=U3[uk];if(!l||!l.own||l.u||!U||G.uang<U.c)return;G.uang-=U.c;l.u=uk;l.lv=1;l.kas=0;l.ev=0;rebuildLayers();toast('🎉 '+U.ic+' '+U.n+' buka!');logm('Buka '+U.n+' di '+LAHAN[i].n);sfx('up')}
+  else{i=+k;P=LAHAN[i];l=L[i];if(!P)return;
+    if(a==='lbeli'){if(l&&l.own==='beli')return;if(G.uang<P.c)return;G.uang-=P.c;L[i]=Object.assign(l||{},{own:'beli'});rebuildLayers();toast('🏠 Lahan '+P.n+' jadi milikmu!');logm('Beli lahan '+P.n);sfx('up')}
+    else if(a==='lsewa'){if(l&&l.own)return;if(G.uang<P.sw)return;G.uang-=P.sw;G.hari.keluar+=P.sw;L[i]={own:'sewa',d0:G.day};rebuildLayers();toast('📝 Lahan '+P.n+' disewa');logm('Sewa lahan '+P.n);sfx('up')}
+    else if(a==='lstop'){if(!l||l.own!=='sewa'||l.u)return;delete L[i];rebuildLayers();toast('Sewa lahan dihentikan')}
+    else if(a==='lambil'){lhTake(i)}
+    else if(a==='lup'){if(!l||!l.u||l.lv>=3)return;U=U3[l.u];var c=U.up[l.lv-1];if(G.uang<c)return;G.uang-=c;l.lv++;rebuildLayers();toast(U.n+' naik ke Lv '+l.lv+'!');sfx('up')}
+    else if(a==='lfix'){if(!l||!l.ev)return;U=U3[l.u];if(G.uang<U.ev.c||G.energi<1){toast('Uang atau energi kurang');return}G.uang-=U.ev.c;G.energi-=1;l.ev=0;toast('✅ '+U.ev.n+' beres!');sfx('up')}
+    else if(a==='lbongkar'){if(!l||!l.u)return;if(!(BKI&&BKI.i===i&&Date.now()-BKI.t<8000)){BKI={i:i,t:Date.now()};renderSheet(true);return}BKI=null;U=U3[l.u];var inv=U.c;for(var q=0;q<l.lv-1;q++)inv+=U.up[q];var back=Math.round(inv*.3);G.uang+=back+Math.round(l.kas||0);l.u=null;l.lv=0;l.kas=0;l.ev=0;rebuildLayers();toast('🔨 Dibongkar, balik '+rp(back))}}
+  save();ui();renderSheet(true)});
+/* ---- sambungan ekonomi ---- */
+var _hourW3=hourW;hourW=function(h){var w=_hourW3(h);['bocil','mhs','ojol','gamer','sultan'].forEach(function(t){if(w[t]!=null)w[t]*=usBuff(t)});return w};
+var _evMult3=evMult;evMult=function(){var m=_evMult3();return m*usBuff('spawn')*(evNow()&&G.min>=19*60?1.3:1)};
+var _beauty3=beauty;beauty=function(){return _beauty3()+usBeauty()};
+var _minute3=minute;minute=function(){_minute3();if(!vis()&&G.min<24*60)lhMinute()};
+var LHDAY=null;var _endDay3=endDay;endDay=function(){if(!vis())LHDAY=lhEndDay();_endDay3()};
+var _showReport3=showReport;showReport=function(R){if(LHDAY&&R&&R.lhIn==null){R.lhIn=LHDAY.inn;R.lhSw=LHDAY.sw;R.laba+=LHDAY.inn-LHDAY.sw;LHDAY=null}_showReport3(R)};
+var _repHtml3=repHtml;repHtml=function(R){var h=_repHtml3(R);if(!R||(!R.lhIn&&!R.lhSw))return h;var x=(R.lhIn?'<span>Kawasan Usaha</span><b class="pos">+'+rpF(R.lhIn)+'</b>':'')+(R.lhSw?'<span>Sewa lahan</span><b>-'+rpF(R.lhSw)+'</b>':'');return h.replace('<span><b>Laba bersih</b></span>',x+'<span><b>Laba bersih</b></span>')};
+var _offline3=offline;offline=function(){var ok=G.mulai&&G.saveAt&&Date.now()-G.saveAt>=90e3,el=ok?Date.now()-G.saveAt:0,d0=G.day;_offline3();if(!ok)return;
+  var mins=Math.min(el/1000/2,10*960),days=Math.max(0,G.day-d0),L=X3().lh,inn=0,sw=0;Object.keys(L).forEach(function(i){var l=L[i];if(!l)return;if(l.u&&U3[l.u])inn+=usDay(l)*(mins/960)*.5;if(l.own==='sewa')sw+=LAHAN[i].sw*days;l.ev=0});inn=Math.round(inn);G.uang+=inn-sw;
+  var rb=$('jw-rep-b');if(rb&&(inn||sw)){var x='<div class="kv" style="margin-top:6px">'+(inn?'<span>Kawasan Usaha (½ jalan)</span><b class="pos">+'+rpF(inn)+'</b>':'')+(sw?'<span>Sewa lahan</span><b>-'+rpF(sw)+'</b>':'')+'</div>';var nt=rb.querySelector('.note');if(nt)nt.insertAdjacentHTML('beforebegin',x);else rb.insertAdjacentHTML('beforeend',x)}save()};
+var _v2Val3=v2Val;v2Val=function(){return _v2Val3()+lhVal()};
+var _ui3=ui;ui=function(){_ui3();var k=VIEW===3;$('jw-kwbar').hidden=!k||vis();if(k){$('jw-flr').hidden=true;$('jw-money').hidden=true}var kb=$('jw-b-kw');if(kb)kb.hidden=!(kwOpen()&&lhKasReady());var c=$('jw-kw-c');if(c&&k){var n=ICONS.length,tx=n?'⚠️ '+n+' masalah di warnet':'✅ Warnet aman';if(c._t!==tx){c._t=tx;c.textContent=tx}}
+  var eb=$('jw-b-ev');if(eb){var on=evShow();eb.parentNode.hidden=!on;if(on){var tx2=evNow()?'🎟️ '+X3().ev.tok:evSoon();var sm=eb.parentNode.querySelector('small');if(sm&&sm._t!==tx2){sm._t=tx2;sm.textContent=tx2}}}
+  var lv=$('jw-kw-lock');if(lv)lv.hidden=kwOpen()};
+function lhKasReady(){var L=X3().lh;return Object.keys(L).some(function(i){var l=L[i];return l&&l.u&&((l.kas||0)>=50000||l.ev)})}
+
+/* ===== CERITA MUSIM 2: MEGANET DATANG ===== */
+CHAR.hendra={n:'Pak Hendra',o:{baju:'#3A4256',celana:'#1B1E24',kulit:SKIN[0],rambut:'#2B2B2B',kacamata:1}};
+CHAR.laras={n:'Laras',o:{baju:'#FF4FD8',celana:'#2B2147',kulit:SKIN[1],rambut:'#5A3A22',headset:1}};
+function cc3(k){return function(){return V().cer.c[k]||0}}
+function s2(){var v=X3();if(!v.s2)v.s2={};return v.s2}
+if(BAB[8]&&BAB[8].o){BAB[8].o=BAB[8].o.slice(0,-1).concat([['nar','Seminggu kemudian, ada truk besar parkir di ujung jalan…'],['nar','✨ Musim 2 cerita: "MegaNet Datang" kebuka!']])}
+BAB.push(
+ {t:'Kabar Buruk',
+  i:[['reza','{n}! Gawat. Kamu lihat spanduk di ujung jalan? "SEGERA BUKA: MEGANET, warnet terbesar se-Indonesia".'],['hendra','Selamat siang. Saya Hendra, direktur MegaNet. Kami akan buka 200 PC di kawasan ini.'],['hendra','Warnet kecil seperti punya Anda… ya, nikmati saja selagi masih bisa.'],['reza','Bahkan Kilat.net-ku mau dibeli mereka. Kita harus kompak, Juragan.'],['darto','(telepon) Om denger kabarnya. Jangan panik. Kawasan di depan warnet itu banyak lahan kosong. Ramein kawasannya, biar orang betah di sini, bukan di MegaNet!'],['kamu','Oke Om. Aku buka usaha di Kawasan Usaha!']],
+  g:[{t:'Beli atau sewa 1 lahan',v:lhN,n:1},{t:'Buka 1 usaha',v:usN,n:1}],rw:{u:2000000},
+  o:[['darto','Mantap! Satu usaha bisa ngidupin satu kawasan. Terusin!']],ff:function(){return false}},
+ {t:'Ekonomi Rakyat',
+  i:[['darto','Orang mampir ngopi, servis motor, terus lanjut main di warnetmu. Itu namanya ekonomi rakyat!'],['reza','Aku juga buka lapak di kawasanmu deh. Eh, maksudnya… aku bantu promosi.'],['kamu','Target: tiga usaha jalan, kasnya rutin diambil.']],
+  g:[{t:'Punya 3 usaha',v:usN,n:3},{t:'Ambil kas usaha 5×',v:cc3('kasu'),n:5}],rw:{u:4000000,b:5},
+  o:[['hendra','Hmm. Kawasan Anda ramai juga. Tapi kami punya sesuatu yang tidak Anda punya: influencer.']],ff:function(){return false}},
+ {t:'Viral',
+  i:[['laras','Haiii! Aku Laras, streamer. MegaNet nawarin aku kontrak, tapi aku lebih suka warnet yang ada jiwanya.'],['laras','Kalau kamu punya PC Streamer, kita live bareng! Penontonku bisa jadi pelangganmu.'],['kamu','Siap! PC level 5 udah aku siapin. Ayo live!'],['nar','Tips: buka 🕹️ Main → Live Streaming. Butuh PC level 5 (Streamer) atau lebih.']],
+  g:[{t:'Live streaming 3×',v:cc3('live'),n:3},{t:'Kumpulkan 1.000 penonton',v:cc3('views'),n:1000}],rw:{u:5000000,b:5},
+  o:[['laras','Gila, live kita trending! Banyak yang nanya alamat warnetmu.'],['reza','Pelanggan baru berdatangan! MegaNet pasti panas nih.']],ff:function(){return false}},
+ {t:'Perang Harga',
+  i:[['hendra','Mulai hari ini MegaNet promo: main 1 jam cuma seribu rupiah. Kita lihat berapa lama Anda bertahan.'],['reza','Seribu?! Itu jual rugi. Mereka mau bikin kita bangkrut.'],
+   ['pilih','Gimana kamu ngadepin perang harga?',[{t:'💎 Fokus kualitas & pelayanan',k:'kual',r:[['kamu','Kita nggak ikut banting harga. Kita menang di pelayanan. Rating harus tembus 4,5!'],['darto','Itu baru juragan. Harga bisa ditiru, rasa nyaman nggak.']]},{t:'🔥 Bikin pelanggan setia',k:'setia',r:[['kamu','Pelanggan setia nggak bakal pindah. Layani sebanyak-banyaknya dengan senyum!'],['reza','Aku bantu sebar brosur "member setia". Gas!']]}],function(k){s2().harga=k}]],
+  g:[{t:'Rating ⭐ 4,5',v:function(){return Math.round(G.rating*10)/10},n:4.5,f:1},{t:'Layani 120 pelanggan',v:cc('tamu'),n:120}],rw:{u:6000000,b:5},
+  o:[['nar','Seminggu kemudian, promo seribu rupiah MegaNet dihentikan diam-diam.'],['hendra','…Pelanggan Anda keras kepala juga.']],ff:function(){return false}},
+ {t:'Teknisi Andalan',
+  i:[['kiki','Juragan, aneh. Minggu ini PC kita sering rusak & kena virus. Terus ada maling yang mondar-mandir.'],['reza','Aku curiga ada yang sengaja. Orang berjaket MegaNet keliatan di depan warnet kemarin.'],['kamu','Biar aku yang turun tangan. Benerin PC, basmi virus, kejar malingnya!']],
+  g:[{t:'Benerin PC / basmi virus 8×',v:cc3('fixw'),n:8},{t:'Tangkap maling 3×',v:cc3('chase'),n:3}],rw:{u:7000000,b:5},
+  o:[['nar','Maling yang ketangkap ngaku: "Saya cuma disuruh…" lalu kabur sebelum sempat nyebut nama.'],['kiki','Yang penting warnet kita aman. Juragan teknisi terbaik!']],ff:function(){return false}},
+ {t:'Turnamen Kota',
+  i:[['kiki','MegaNet bikin tim e-sport sendiri: "MegaNet Titans". Mereka nantang kita di liga!'],['laras','Aku bakal nyiarin pertandingan kalian. Jangan malu-maluin ya!'],['kamu','Kita bukan cuma warnet. Kita rumahnya para jagoan.']],
+  g:[{t:'Menang 4 pertandingan liga',v:cc3('win'),n:4},{t:'Adakan 2 turnamen',v:cc('tour'),n:2}],rw:{u:8000000,b:5},
+  o:[['kiki','Titans tumbang! Penonton satu kota teriakin nama tim kita!']],ff:function(){return false}},
+ {t:'Tawaran Pak Hendra',
+  i:[['hendra','Saya akui Anda hebat. Jadi saya tawarkan 200 juta untuk semua warnet & usaha Anda. Tanda tangan saja.'],
+   ['pilih','Jawab tawaran Pak Hendra:',[{t:'✋ Tolak mentah-mentah',k:'tolak',r:[['kamu','Maaf Pak. Warnet ini titipan Om Darto. Nggak dijual.'],['hendra','Sayang sekali. Kalau begitu, kita bersaing sampai akhir.']]},{t:'🤔 Dengerin dulu, terus tolak',k:'dengar',r:[['kamu','Tawaran yang menarik, Pak. Tapi uang segitu nggak bisa beli kenangan & pelanggan setia kami.'],['hendra','Hm. Jawaban yang bijak. Saya hormati… tapi persaingan tetap jalan.']]}],function(k){s2().tawar=k}],
+   ['darto','(telepon) Om bangga sama kamu. Sekarang tunjukin: jaringanmu lebih kuat dari MegaNet!']],
+  g:[{t:'Punya 3 cabang',v:function(){return Object.keys(V().cab).length},n:3},{t:'Uang Rp50jt',v:function(){return G.uang},n:50000000}],rw:{u:10000000,b:5},
+  o:[['reza','Tiga cabang + kas segitu? Juragan beneran!']],ff:function(){return false}},
+ {t:'Juragan Sejati',
+  i:[['hendra','Ini pertandingan terakhir kita. Kalau tim Anda juara liga dan kawasan Anda lebih ramai, MegaNet mundur dari kota ini.'],['kiki','Juara liga, Juragan. Kita bisa!'],['darto','Om pulang minggu depan. Om mau lihat kawasan yang hidup!']],
+  g:[{t:'Juara 1 Liga Mingguan',v:function(){return V().lh.juara>(s2().j0||0)?1:0},n:1},{t:'Punya 6 lahan',v:lhN,n:6}],rw:{u:15000000,b:10,dk:'pialae'},
+  o:[['nar','Malam itu, satu kota tahu: warnet kecil di Rawa Indah menang.'],['hendra','Saya kalah. MegaNet akan menutup cabang di sini. Tapi… sebelum pergi, boleh saya bicara?'],
+   ['pilih','Apa yang kamu lakukan ke Pak Hendra?',[{t:'🤝 Ajak kerja sama',k:'damai',r:[['kamu','Pak, gimana kalau MegaNet jadi sponsor turnamen kota? Kita bangun e-sport di sini bareng.'],['hendra','…Anda serius? Baik. Mulai musim depan, MegaNet sponsor Liga Rawa Indah.'],['nar','🤝 Akhir cerita: "Rival Jadi Kawan".']]},{t:'🚪 Persilakan pergi',k:'usir',r:[['kamu','Terima kasih, Pak. Kawasan ini punya warga sendiri. Silakan cari kota lain.'],['hendra','Hah. Anda keras. Saya suka itu. Selamat, Juragan.'],['nar','👑 Akhir cerita: "Raja Kawasan".']]}],function(k){s2().end=k}],
+   ['darto','Ya ampun… kawasan ini sekarang hidup. Om nggak salah titip warnet ke kamu.'],['laras','Ini konten terbaik tahun ini. Juragan Sejati!'],['kamu','Makasih semuanya. Kita bikin kawasan ini makin rame!'],['nar','🎉 TAMAT Musim 2. Musim berikutnya nyusul!']],ff:function(){return false}});
+var _storyTick3=storyTick;storyTick=function(){var c=V().cer;if(c.bab===16&&c.st===0&&!busy())s2().j0=V().lh.juara||0;_storyTick3()};
+var _storyHtml3=storyHtml;storyHtml=function(){var c=V().cer;if(c.bab<BAB.length)return _storyHtml3();var e=s2().end;return'<div class="mis story"><b>📖 Cerita Musim 2 tamat!</b><small>'+(e==='damai'?'🤝 Akhir: "Rival Jadi Kawan". MegaNet jadi sponsor liga kotamu.':e==='usir'?'👑 Akhir: "Raja Kawasan". MegaNet angkat kaki dari kota.':'Kamu ngalahin MegaNet!')+' Cerita lanjutan nyusul di update berikutnya.</small>'+B2('📖 Ulang cerita terakhir','cerita','','')+'</div>'};
+
+/* ===== EVENT TAHUN BARU ===== */
+function wibDate(){return new Date(Date.now()+7*3600e3)}
+function evYr(){var d=wibDate();return d.getUTCMonth()===0?d.getUTCFullYear()-1:d.getUTCFullYear()}
+function evStart(){return Date.UTC(evYr(),11,20)-7*3600e3}
+function evEnd(){return Date.UTC(evYr()+1,0,6)-7*3600e3}
+function evNow(){var t=Date.now();return t>=evStart()&&t<evEnd()}
+function evShop(){var t=Date.now();return t>=evStart()&&t<evEnd()+3*864e5}
+function evShow(){var t=Date.now();return t>=evStart()-30*864e5&&t<evEnd()+3*864e5}
+function evSoon(){var t=Date.now(),s=evStart();if(t>=s)return evNow()?'Event':'Tukar';var d=Math.ceil((s-t)/864e5);return d+' hari'}
+function evKey(){return'ny'+(evYr()+1)}
+function EV(){var e=X3().ev;if(e.k!==evKey()){e.k=evKey();e.tok=0;e.d=0;e.got=0;e.buy={}}return e}
+DEKOR.kembang={n:'Peluncur kembang api',ic:'🎆',m:function(){box(-.4,0,-.4,.4,.25,.4,'#3A3F46');[[-.2,-.2,'#E5484D'],[.2,-.2,'#F5C542'],[-.2,.2,'#2F6FEB'],[.2,.2,'#2FA36B']].forEach(function(p){cyl(p[0],.25,p[1],.09,.55,8,p[2]);cyl(p[0],.8,p[1],.03,.12,6,'#FFFFFF')})},fw:1};
+DEKOR.cemara={n:'Cemara lampu',ic:'🎄',m:function(){cyl(0,0,0,.25,.3,8,'#C96A4A');cyl(0,.3,0,.07,.3,6,'#7A5A44');cyl(0,.5,0,.6,.7,10,'#2F7D4A','y','#2F7D4A',.25);cyl(0,1.05,0,.45,.6,10,'#3A9A5A','y','#3A9A5A',.15);cyl(0,1.5,0,.3,.5,10,'#4FB36B','y','#4FB36B',.02);sph(0,2.05,0,.1,'#F5C542');[[.42,.7,.1,'#E5484D'],[-.3,.9,.2,'#5BC0FF'],[.2,1.3,-.2,'#F5C542'],[-.15,1.6,.12,'#FF4FD8']].forEach(function(p){sph(p[0],p[1],p[2],.06,p[3])})},glow:1};
+DEKOR.gapura={n:'Gapura 2027',ic:'🎉',m:function(){[-.8,.8].forEach(function(x){box(x-.12,0,-.12,x+.12,1.9,.12,'#E5484D');box(x-.16,1.9,-.16,x+.16,2.0,.16,'#F5C542')});box(-.95,1.75,-.08,.95,2.25,.08,'#F5C542');box(-.85,1.82,.08,.85,2.18,.09,'#E5484D')}};
+DEKOR.balon={n:'Balon warna-warni',ic:'🎈',m:function(){box(-.15,0,-.15,.15,.2,.15,'#9AA3AD');[[-.3,1.5,0,'#E5484D'],[.25,1.65,.1,'#5BC0FF'],[0,1.85,-.15,'#F5C542'],[.05,1.4,.25,'#FF4FD8']].forEach(function(p){cyl(p[0]*.5,.2,p[2]*.5,.01,p[1]-.4,4,'#FFFFFF');sph(p[0],p[1],p[2],.22,p[3],1.2)})}};
+DEKOR.lampion={n:'Lampion gantung',ic:'🏮',m:function(){[-.6,.6].forEach(function(x){cyl(x,0,0,.04,1.7,6,'#7A5A44')});box(-.6,1.66,-.02,.6,1.7,.02,'#3A3F46');[-.35,0,.35].forEach(function(x,j){sph(x,1.38,0,.15,j%2?'#F5C542':'#E5484D',1.3)})},glow:1};
+DEKOR.terompet={n:'Terompet raksasa',ic:'🎺',m:function(){box(-.3,0,-.3,.3,.3,.3,'#3A3F46');cyl(0,.3,0,.05,1.0,8,'#F5C542','y','#F5C542',.32);cyl(0,1.3,0,.32,.12,10,'#E5484D')}};
+DEKOR.panggung={n:'Panggung mini',ic:'🎤',m:function(){box(-.9,0,-.6,.9,.3,.6,'#2B2F36');box(-.9,.3,-.6,.9,.34,.6,'#7B3FB8');cyl(0,.34,0,.03,.9,6,'#C9CED6');sph(0,1.28,0,.07,'#1B1E24');box(-.85,.34,-.55,-.55,.9,-.25,'#1B1E24');box(.55,.34,-.55,.85,.9,-.25,'#1B1E24')}};
+DEKOR.jam={n:'Jam hitung mundur',ic:'⏰',m:function(){cyl(0,0,0,.12,1.6,8,'#3A3F46');box(-.5,1.6,-.08,.5,2.3,.08,'#1B1E24');box(-.42,1.68,.08,.42,2.22,.09,'#FF4FD8',1)},glow:1};
+TEMA.tahunbaru={n:'Malam Tahun Baru',cat:'tahunbaru',lt:'emas',c:4000000,d:'Tembok biru malam + lantai emas. (Gratis di Pass Musim 2 premium)'};
+CAT.tahunbaru={n:'Tahun Baru',w:'#24305E',w2:'#1D2850',c:0,t:1};LANTAI.emas={n:'Emas',a:'#D9B45A',b:'#C9A24A',c:0,t:1};
+SERAGAM.merah={n:'Merah Tahun Baru',c:'#D62F3A'};SERAGAM.pesta={n:'Pesta',c:'#1FB5A8'};
+var EVSHOP=[{k:'kembang',t:25,d:'Kembang api meledak tiap malam di atas warnet'},{k:'cemara',t:20},{k:'gapura',t:35},{k:'balon',t:12},{k:'bj:merah',t:30,n:'👕 Seragam Merah Tahun Baru'},{k:'energi',t:8,n:'⚡ Energi penuh',rep:1},{k:'uang',t:10,n:'💵 Rp500rb',rep:1}];
+function evBuy(k){if(!evShop())return;var e=EV(),it=EVSHOP.filter(function(x){return x.k===k})[0];if(!it)return;if(!it.rep&&e.buy[k])return;if(e.tok<it.t){toast('🎟️ Token kurang');return}
+  if(k==='energi'){if(G.energi>=G.emax){toast('Energi masih penuh');return}G.energi=G.emax}else if(k==='uang'){G.uang+=500000}else if(k.indexOf('bj:')===0){var b=k.slice(3);if(V().bj.indexOf(b)<0)V().bj.push(b)}else{var o=V().dk.own;o[k]=(o[k]||0)+1;rebuildLayers()}
+  e.tok-=it.t;if(!it.rep)e.buy[k]=1;sfx('up');toast('🎉 Dapet '+(it.n||DEKOR[k].ic+' '+DEKOR[k].n)+'!')}
+function evHtml(){var e=EV(),h='',t=Date.now();
+  h+='<div class="topup evtop"><b>🎆 Event Tahun Baru '+(evYr()+1)+'</b><p>20 Desember – 5 Januari. Malam-malam ada kembang api, warnet dihias lampu, pelanggan malam +30%. Tiap pelanggan yang bayar ngasih 1 🎟️ token (maks 40/hari). Tukar token sampai 8 Januari.</p></div>';
+  if(t<evStart())h+='<div class="mis"><b>⏳ Mulai '+Math.ceil((evStart()-t)/864e5)+' hari lagi</b><small>Siapin warnet biar rame pas malam tahun baru! Sambil nunggu, Juragan Pass Musim 2 "Kembang Api" juga mulai 21 Desember.</small></div>';
+  else h+='<div class="kv"><span>Token kamu</span><b>🎟️ '+e.tok+'</b><span>Hari ini</span><b>'+(e.d===G.day?e.got:0)+'/40</b></div>';
+  h+='<h4>🛍️ Toko Event</h4>';EVSHOP.forEach(function(it){var D2=DEKOR[it.k],nm=it.n||(D2.ic+' '+D2.n),own=!it.rep&&e.buy[it.k];h+='<div class="row"><span style="font-size:22px">'+nm.split(' ')[0]+'</span><b>'+nm.split(' ').slice(1).join(' ')+(it.d?'<br><small style="font-weight:600;color:#8A7A66">'+it.d+'</small>':'')+'</b>'+(own?'<i>✅ Punya</i>':'<button class="btn sm go" data-v3="evbuy" data-k="'+it.k+'"'+(!evShop()||e.tok<it.t?' disabled':'')+'>🎟️ '+it.t+'</button>')+'</div>'});
+  return h+'<p class="note">Dekor event bisa dipajang lewat Manajemen → Hias → Atur dekor halaman.</p>'}
+V2SHEET.event=function(){return['🎆 Event Tahun Baru',evHtml()]};
+var _payAt3=payAt;payAt=function(p){_payAt3(p);if(vis()||!evNow())return;var e=EV();if(e.d!==G.day){e.d=G.day;e.got=0}if(e.got<40){e.got++;e.tok++}};
+/* kembang api & lampu */
+var FW=[],FWT=0;
+function fwOn(){if(VIEW!==1||G.min<19*60)return false;if(evNow())return true;var P=V().dk.pos;return Object.keys(P).some(function(i){return P[i]==='kembang'&&DSPOT[i]})}
+function fwDraw(t){var dt=Math.min(.05,t-(fwDraw.t||t));fwDraw.t=t;if(fwOn()){FWT-=dt;if(FWT<=0){FWT=.6+Math.random()*1.0;var q={x:PAN.x+W*(.12+Math.random()*.76),y:PAN.y+H*(.16+Math.random()*.26)},col=pick(['#FF4F6D','#FFD45C','#5BC0FF','#7CFF8A','#FF8CF0','#FFFFFF']),c2=pick(['#FFD45C','#FFFFFF',col]),n=34,sp=70+Math.random()*50;for(var i=0;i<n;i++){var a=i/n*Math.PI*2+Math.random()*.1,v=sp*(.75+Math.random()*.35);FW.push({x:q.x,y:q.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1.1+Math.random()*.5,c:i%3?col:c2})}FW.push({x:q.x,y:q.y,vx:0,vy:0,l:.25,c:'#FFFFFF',fl:1});if(FW.length>500)FW=FW.slice(-500);if(Math.random()<.6)sfx('pop')}}
+  if(!FW.length)return;ctx.save();ctx.globalCompositeOperation='lighter';FW=FW.filter(function(f){f.l-=dt;if(f.l<=0)return false;var x=f.x-PAN.x,y=f.y-PAN.y;if(f.fl){var g=ctx.createRadialGradient(x,y,1,x,y,60);g.addColorStop(0,'rgba(255,255,255,'+(f.l*2.4)+')');g.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,60,0,7);ctx.fill();return true}
+    var ox=x,oy=y;f.x+=f.vx*dt;f.y+=f.vy*dt;f.vy+=38*dt;f.vx*=.97;f.vy*=.985;x=f.x-PAN.x;y=f.y-PAN.y;ctx.globalAlpha=Math.min(1,f.l);ctx.strokeStyle=f.c;ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(ox-(x-ox)*2,oy-(y-oy)*2);ctx.lineTo(x,y);ctx.stroke();ctx.fillStyle=f.c;ctx.beginPath();ctx.arc(x,y,2.2,0,7);ctx.fill();return true});ctx.restore();ctx.globalAlpha=1}
+function evLights(t){if(VIEW!==1||!evNow())return;var x0=-5.6,x1=G.bld.lebar?11:5.6,cols=['#FF4F6D','#FFD45C','#5BC0FF','#7CFF8A'],night=G.min>=18*60?1:.5,seg=2.4;ctx.save();ctx.strokeStyle='rgba(40,40,40,.5)';ctx.lineWidth=1;ctx.beginPath();for(var x=x0;x<=x1+.01;x+=.2){var u=((x-x0)%seg)/seg,q=ws(x,2.75-Math.sin(u*Math.PI)*.35,-3.95);if(x===x0)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y)}ctx.stroke();
+  for(var x2=x0+.3,j=0;x2<=x1;x2+=.6,j++){var u2=((x2-x0)%seg)/seg,q2=ws(x2,2.7-Math.sin(u2*Math.PI)*.35,-3.95),on=.55+.45*Math.sin(t*4+j*1.3);ctx.globalAlpha=night*on;ctx.fillStyle=cols[j%4];ctx.beginPath();ctx.arc(q2.x,q2.y,Math.max(2,S*.08),0,7);ctx.fill();if(night>.9){ctx.globalAlpha=.25*on;ctx.beginPath();ctx.arc(q2.x,q2.y,S*.22,0,7);ctx.fill()}}ctx.restore();ctx.globalAlpha=1}
+var _draw3b=drawFrame;drawFrame=function(t){_draw3b(t);if(VIEW===1&&!DKM){evLights(t);fwDraw(t)}else if(FW.length)FW=[]};
+
+/* ===== MINI-GAME ===== */
+var MG=null;
+var _tick3=tick;tick=function(dt){if(MG)return;_tick3(dt)};
+function mgEl(){return $('jw-mg')}
+function mgOpen(title,sub,dur,build,done){if(MG)return;var el=mgEl();el.hidden=false;el.querySelector('.mgt').textContent=title;el.querySelector('.mgs').textContent=sub;var A=el.querySelector('.mga');A.innerHTML='';A.className='mga';
+  MG={t0:performance.now(),dur:dur*1000,done:done,end:0,A:A,sc:0};build(A,MG);sfx('pop');(function f(){if(!MG||MG.end)return;var k=(performance.now()-MG.t0)/MG.dur;el.querySelector('.mgbar i').style.width=Math.max(0,100-k*100)+'%';if(MG.step)MG.step(k);if(k>=1){mgEnd(MG.timeup?MG.timeup():false);return}requestAnimationFrame(f)})()}
+function mgEnd(win){var m=MG;if(!m||m.end)return;m.end=1;var el=mgEl();el.querySelector('.mga').insertAdjacentHTML('beforeend','<div class="mgr '+(win?'win':'lose')+'">'+(win?'✅ Berhasil!':'❌ Gagal')+'</div>');sfx(win?'up':'no');setTimeout(function(){el.hidden=true;MG=null;try{m.done(win,m)}catch(e){console.error(e)}ui()},win?650:900)}
+function mgCancel(){var m=MG;if(!m||m.end)return;m.end=1;mgEl().hidden=true;MG=null;try{m.done(false,m,1)}catch(e){}ui()}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function mgKabel(done){var C=[['#E5484D','merah'],['#2F6FEB','biru'],['#F5C542','kuning'],['#2FA36B','hijau']],R=shuf([0,1,2,3]);
+  mgOpen('🔧 Sambung kabel PC','Ketuk kabel kiri, lalu colokan warna yang sama',12,function(A,m){A.classList.add('kab');var sel=null,ok=0;
+    A.innerHTML='<div class="kc">'+C.map(function(c,i){return'<button class="kb" data-i="'+i+'" style="background:'+c[0]+'" aria-label="Kabel '+c[1]+'"></button>'}).join('')+'</div><div class="kmid">⚡</div><div class="kc">'+R.map(function(i){return'<button class="kp" data-i="'+i+'" style="border-color:'+C[i][0]+'" aria-label="Colokan '+C[i][1]+'"></button>'}).join('')+'</div>';
+    A.addEventListener('pointerdown',function(e){var b=e.target.closest('button');if(!b||m.end||b.disabled)return;e.preventDefault();
+      if(b.classList.contains('kb')){A.querySelectorAll('.kb').forEach(function(x){x.classList.remove('sel')});b.classList.add('sel');sel=b;sfx('pop');return}
+      if(!sel)return;if(b.dataset.i===sel.dataset.i){b.classList.add('ok');b.style.background=C[+b.dataset.i][0];sel.classList.remove('sel');sel.classList.add('ok');sel.disabled=b.disabled=true;sel=null;ok++;sfx('coin');if(ok>=4)mgEnd(true)}else{b.classList.add('bad');setTimeout(function(){b.classList.remove('bad')},300);m.t0-=1200;sfx('no')}})},done)}
+function mgVirus(done){mgOpen('🦠 Basmi virus','Ketuk 6 virus sebelum waktu habis!',8,function(A,m){A.classList.add('vir');var hit=0,cells='';for(var i=0;i<9;i++)cells+='<button class="vc" data-i="'+i+'" aria-label="Kotak '+(i+1)+'"></button>';A.innerHTML='<div class="vg">'+cells+'</div><div class="vs">0/6</div>';
+    var nx=0,cur=-1;m.step=function(){var now=performance.now();if(now>nx){var bs=A.querySelectorAll('.vc');bs.forEach(function(x){x.textContent=''});var c;do{c=Math.floor(Math.random()*9)}while(c===cur);cur=c;bs[c].textContent=Math.random()<.18?'📁':'🦠';nx=now+720}};
+    A.addEventListener('pointerdown',function(e){var b=e.target.closest('.vc');if(!b||m.end)return;e.preventDefault();if(b.textContent==='🦠'){hit++;b.textContent='💥';cur=-1;sfx('coin');A.querySelector('.vs').textContent=hit+'/6';if(hit>=6)mgEnd(true)}else if(b.textContent==='📁'){b.textContent='';m.t0-=1500;sfx('no')}})},done)}
+function mgMaling(done){mgOpen('🏃 Kejar maling!','Ketuk tombol LARI secepat mungkin!',4.5,function(A,m){A.classList.add('lari');var n=0;A.innerHTML='<div class="track"><span class="ml" style="left:30%">🦹</span><span class="me" style="left:0%">🏃</span></div><button class="btn go big">👟 LARI!</button>';
+    A.querySelector('button').addEventListener('pointerdown',function(e){e.preventDefault();if(m.end)return;n++;var k=Math.min(1,n/18);A.querySelector('.me').style.left=(k*70)+'%';A.querySelector('.ml').style.left=(30+k*40+Math.min(8,(performance.now()-m.t0)/400))+'%';if(n%3===0)sfx('pop');if(n>=18)mgEnd(true)})},done)}
+var MGK={rusak:mgKabel,virus:mgVirus,maling:mgMaling};
+function mgOk(){return !X3().mgOff&&!vis()&&G.mulai&&!G.tut&&!MG}
+var _tapIcon3=tapIcon;tapIcon=function(ic,staff){
+  function run(){var had=ICONS.indexOf(ic)>=0;_tapIcon3(ic,staff);if(had&&ICONS.indexOf(ic)<0&&!vis()){if(ic.k==='maling')cnt('chase');else if(ic.k==='rusak'||ic.k==='virus')cnt('fixw')}}
+  if(staff||!MGK[ic.k]||!mgOk())return run();var cost=ic.k==='maling'?1:2;if(G.energi<cost)return run();
+  MGK[ic.k](function(win,m,cancel){if(!win){if(!cancel)toast(ic.k==='maling'?'Malingnya lolos dari kejaran! Coba lagi':'Belum beres, coba lagi ya');return}if(ICONS.indexOf(ic)<0&&ic.k!=='maling')return;if(ic.k==='maling'&&PEOPLE.indexOf(ic.p)<0)return;run()})};
+/* hub: arcade & live */
+function mgDay(k){var o=X3().mg[k];if(o.d!==G.day){o.d=G.day;o.n=0}return o}
+function bestPc(){var b=0;Object.keys(G.pcs).forEach(function(k){b=Math.max(b,G.pcs[k])});return b}
+function mgAim(){var o=mgDay('aim');if(o.n>=5){toast('Arcade udah 5× hari ini. Besok lagi ya!');return}closeSheet();
+  mgOpen('🎯 Arcade Aim','Tembak target sebanyak-banyaknya! Rp5rb per target',15,function(A,m){A.classList.add('aim');A.innerHTML='<div class="ar"></div><div class="vs">🎯 0</div>';var ar=A.querySelector('.ar'),nx=0;
+    m.step=function(k){var now=performance.now();if(now>nx){nx=now+Math.max(380,820-k*420);var t=document.createElement('button');t.className='tg';t.textContent=Math.random()<.15?'⭐':'🎯';t.style.left=(6+Math.random()*80)+'%';t.style.top=(6+Math.random()*76)+'%';ar.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove()},1100);while(ar.children.length>4)ar.firstChild.remove()}};
+    m.timeup=function(){return true};
+    ar.addEventListener('pointerdown',function(e){var t=e.target.closest('.tg');if(!t||m.end)return;e.preventDefault();m.sc+=t.textContent==='⭐'?3:1;t.remove();sfx('coin');A.querySelector('.vs').textContent='🎯 '+m.sc})},
+    function(win,m,cancel){if(cancel)return;var o2=mgDay('aim');o2.n++;var rw=m.sc*5000;G.uang+=rw;if(m.sc>X3().mg.best)X3().mg.best=m.sc;passXp(Math.min(15,m.sc));toast('🎯 Skor '+m.sc+' · +'+rpF(rw));save()})}
+var LIVEEM=['🔥','😂','😱','👍','💀','🎉'];
+function mgLive(){var o=mgDay('live');if(bestPc()<5){toast('🔒 Butuh PC level 5 (Streamer) buat live');return}if(o.n>=3){toast('Udah live 3× hari ini. Istirahat dulu, besok lagi!');return}if(G.energi<3){toast('Energi kurang (butuh 3 ⚡)');return}closeSheet();G.energi-=3;
+  mgOpen('🎥 Live Streaming','Balas request chat dengan emoji yang sama!',20,function(A,m){A.classList.add('live');var v=0,cb=0,req=null,rt=0;A.innerHTML='<div class="lv"><div class="lvh"><span class="rec">● LIVE</span><b class="vw">👀 0</b></div><div class="chat"></div><div class="rq">…</div></div><div class="eg">'+LIVEEM.map(function(x){return'<button class="em">'+x+'</button>'}).join('')+'</div>';
+    var nm=['bocil_epep','mabar88','sultan_rp','dimas.gg','nayla','ojolpro','kiki_fan','raja_ml'];
+    function next(){req=pick(LIVEEM);rt=performance.now();A.querySelector('.rq').innerHTML='<small>'+pick(nm)+':</small> kirim '+req+' dong!'}
+    function chat(t){var c=A.querySelector('.chat');c.insertAdjacentHTML('beforeend','<div>'+t+'</div>');while(c.children.length>4)c.firstChild.remove()}
+    next();m.timeup=function(){return true};m.v=0;
+    A.querySelector('.eg').addEventListener('pointerdown',function(e){var b=e.target.closest('.em');if(!b||m.end)return;e.preventDefault();if(b.textContent===req){cb++;var g=Math.round(12+Math.random()*14+Math.min(cb,8)*3+(performance.now()-rt<1200?8:0));v+=g;chat('<b>+'+g+'</b> penonton '+req+(cb>=3?' · combo '+cb+'×':''));sfx('coin')}else{cb=0;v=Math.max(0,v-10);chat('😴 penonton bosen…');sfx('no')}m.v=v;A.querySelector('.vw').textContent='👀 '+v;next()})},
+    function(win,m,cancel){var o2=mgDay('live');o2.n++;var v=m.v||0;cnt('live');cnt('views',v);X3().mg.views+=v;var rw=v*120;G.uang+=rw;passXp(20);G.rame=Math.max(G.rame||0,Math.min(90,Math.round(v/8)));toast('🎥 Live selesai: '+v+' penonton · saweran +'+rpF(rw)+(v>=80?' · 🔥 warnet makin rame!':''));save()})}
+function mgHtml(){var a=mgDay('aim'),l=mgDay('live'),bp=bestPc(),h='';
+  h+='<div class="mis"><b>🎯 Arcade Aim</b><small>15 detik, tembak target buat dapet uang (Rp5rb per target, ⭐ = 3). Main '+a.n+'/5 hari ini · rekor '+X3().mg.best+'.</small>'+'<button class="btn go" data-v3="aim"'+(a.n>=5?' disabled':'')+'>▶ Main</button></div>';
+  h+='<div class="mis"><b>🎥 Live Streaming</b><small>Live dari PC Streamer: balas request emoji penonton. Saweran Rp120 per penonton, warnet ikut rame. Butuh PC level 5+, 3 ⚡. Live '+l.n+'/3 hari ini · total '+X3().mg.views+' penonton.</small>'+(bp<5?'<i>🔒 Upgrade satu PC ke level 5 (Streamer) dulu</i>':'<button class="btn go" data-v3="live"'+(l.n>=3||G.energi<3?' disabled':'')+'>🔴 Mulai live</button>')+'</div>';
+  h+='<div class="mis"><b>🔧 Mini-game perbaikan</b><small>Pas kamu sendiri yang benerin PC rusak, basmi virus, atau nangkep maling, ada mini-game singkat.</small><button class="btn" data-v3="mgoff">'+(X3().mgOff?'⏸️ Mini-game perbaikan: mati (ketuk buat nyalain)':'▶️ Mini-game perbaikan: nyala')+'</button></div>';return h}
+V2SHEET.mgame=function(){return['🕹️ Main',mgHtml()]};
+
+/* ===== APLIKASI (PWA) ===== */
+var PWAEV=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();PWAEV=e});
+function pwaStandalone(){return(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true}
+function pwaHost(){return/(^|\.)stickology\.xyz$/.test(location.hostname)}
+if(pwaHost()&&'serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})})}
+function pwaInstall(){if(pwaStandalone()){toast('✅ Kamu udah main dari aplikasi');return}if(PWAEV){PWAEV.prompt();PWAEV.userChoice.then(function(c){if(c&&c.outcome==='accepted')toast('📲 Juragan Warnet dipasang!');PWAEV=null});return}openSheet('pwa')}
+function pwaHtml(){var ios=/iphone|ipad|ipod/i.test(navigator.userAgent),url=pwaHost()?'juraganwarnet.stickology.xyz':'juraganwarnet.stickology.xyz';
+  return'<div class="topup"><b>📲 Main kayak aplikasi</b><p>Pasang Juragan Warnet di layar utama HP. Kebuka full layar tanpa bar browser, sekali ketuk langsung main.</p></div>'+(ios?'<div class="mis"><b>iPhone / iPad (Safari)</b><small>1. Buka <b>'+url+'</b> di Safari<br>2. Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas)<br>3. Pilih <b>Tambah ke Layar Utama</b><br>4. Ketuk <b>Tambah</b></small></div>':'<div class="mis"><b>Android (Chrome)</b><small>1. Buka <b>'+url+'</b> di Chrome<br>2. Ketuk menu <b>⋮</b> di pojok kanan atas<br>3. Pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b></small></div>')+'<p class="note">Progres tetap nyambung ke akun yang sama.</p>'}
+V2SHEET.pwa=function(){return['📲 Pasang aplikasi',pwaHtml()]};
+var _renderSheet3=renderSheet;renderSheet=function(force){_renderSheet3(force);if(sheet!=='menu')return;var b=$('jw-sh-b');if(!b||b.querySelector('[data-v3="pwa"]'))return;b.insertAdjacentHTML('afterbegin',(pwaStandalone()?'':'<button class="btn go" data-v3="pwa">📲 Pasang sebagai aplikasi</button>')+'<button class="btn" data-v3="mgoff">'+(X3().mgOff?'🕹️ Mini-game perbaikan: mati':'🕹️ Mini-game perbaikan: nyala')+'</button>');if(pwaStandalone())b.insertAdjacentHTML('afterbegin','<span data-v3="pwa" hidden></span>')};
+/* ===== PASS MUSIM 2: KEMBANG API ===== */
+PASS_SET[2]={desc:'50 💎, tema Malam Tahun Baru, seragam Pesta, panggung mini, jam hitung mundur, peluncur kembang api, dan uang game',
+ f:[null,{u:250000},{e:1},{dk:'balon'},{b:1},{u:350000},{r:1},{u:500000},{b:2},{e:1},{dk:'lampion'},{u:650000},{b:2},{r:1},{u:800000},{e:1},{b:3},{u:1000000},{r:1},{u:1200000},{b:2},{e:1},{dk:'terompet'},{u:1400000},{r:1},{b:2},{u:1600000},{e:1},{u:1800000},{b:3},{u:2500000}],
+ p:[null,{b:5},{u:600000},{dk:'panggung'},{r:1},{b:5},{u:1000000},{e:1},{dk:'cemara'},{b:5},{tm:'tahunbaru'},{u:1500000},{r:1},{b:5},{e:1},{bj:'pesta'},{u:2000000},{b:5},{dk:'lampion'},{r:1},{u:2500000},{b:5},{e:1},{dk:'jam'},{u:3000000},{b:10},{r:1},{u:4000000},{e:1},{b:10},{dk:'kembang'}]};
+
+mgEl().querySelector('.mgx').addEventListener('click',function(){mgCancel()});
+var _dkEnter3=dkEnter;dkEnter=function(){if(VIEW===3)kwExit();_dkEnter3()};
 
 /* ===== online: simpan, berlian, top up, peringkat, teman, kunjungi ===== */
 var JWNET=(function(){
