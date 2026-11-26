@@ -284,7 +284,7 @@ html.jw-on,html.jw-on body{overflow:hidden!important;touch-action:pan-x pan-y}
 #jw .chc .btn{width:auto;flex:none}</style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js?v=1795718957"></script>
+<script src="config.js?v=1795719405"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -3289,7 +3289,7 @@ var KRX=new RegExp('\\b('+KASAR.join('|')+')\\b','gi');
 function chClean(t){t=String(t||'').replace(/[\u0000-\u001f]/g,' ').replace(/\s+/g,' ').trim().slice(0,120);t=t.replace(/(https?:\/\/|www\.)\S+/gi,'[link]').replace(/\b[\w-]+\.(com|net|org|id|xyz|io|gg|me|ly|co|site|link)\b\S*/gi,'[link]').replace(/(\+?\d[\d\s-]{8,}\d)/g,'[nomor]').replace(KRX,function(w){return w[0]+'*'.repeat(w.length-1)});return t}
 function chEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function chMe(){return{nm:String(G.nama||'Juragan').slice(0,16),nw:String(G.namaW||'Warnet').slice(0,20),fc:(JWNET.fcode&&CH.uid?JWNET.fcode(CH.uid):'').slice(0,12)}}
-function chBeat(){if(!CH.on||!G.mulai||vis()||(typeof JW_ON!=='undefined'&&!JW_ON)||document.visibilityState==='hidden')return;CH.bt=Date.now();var m=chMe();CH.db.doc('onlinewn/'+CH.uid).set({nm:m.nm,nw:m.nw,fc:m.fc,lv:G.lv|0,at:Date.now(),w:VIEW===3?'kawasan':'warnet'}).catch(function(){})}
+function chBeat(){if(!CH.on||!G.mulai||vis()||(typeof JW_ON!=='undefined'&&!JW_ON)||document.visibilityState==='hidden')return;CH.bt=Date.now();var m=chMe();CH.db.doc('onlinewn/'+CH.uid).set({nm:m.nm,nw:m.nw,fc:m.fc,lv:G.lv|0,at:Date.now(),w:VIEW===3?'kawasan':'warnet'}).then(function(){CH.err=''},function(e){CH.err=String(e&&(e.code||e.message)||'gagal');ui()})}
 function chStart(){if(CH.on)return;var db=JWNET.db&&JWNET.db(),u=JWNET.uid&&JWNET.uid();if(!db||!u)return;CH.on=1;CH.db=db;CH.uid=u;if(JWNET.owner)JWNET.owner().then(function(v){CH.own=v});
   db.collection('onlinewn').orderBy('at','desc').limit(80).onSnapshot(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;L.push(x)});CH.online=L;chPaint();ui()},function(){});
   db.collection('chatwn').orderBy('at','desc').limit(40).onSnapshot(function(r){var M=[];r.forEach(function(d){var x=d.data()||{};if(d.id===CH.uid&&Array.isArray(x.m))CH.mine=x.m.slice(-5);(Array.isArray(x.m)?x.m:[]).forEach(function(m){if(m&&typeof m.t==='string'&&+m.at)M.push({id:d.id,nm:String(x.nm||'Juragan').slice(0,16),nw:String(x.nw||'').slice(0,20),t:chClean(m.t),at:+m.at})})});
@@ -3304,14 +3304,16 @@ function chPaint(){if(sheet!=='chat')return;var b=$('jw-sh-b');if(!b)return;
     L.innerHTML=ms.length?ms.map(function(m){var me=m.id===CH.uid;return'<div class="cm'+(me?' me':'')+'"><div class="cmh"><b>'+chEsc(m.nm)+'</b><small>'+chEsc(m.nw)+' · '+chTime(m.at)+'</small>'+(!me?'<button class="cmx" data-v3="chmute" data-k="'+chEsc(m.id)+'" aria-label="Bisukan '+chEsc(m.nm)+'">🔇</button>':'')+(CH.own&&!me?'<button class="cmx" data-v3="chdel" data-k="'+chEsc(m.id)+'" aria-label="Hapus pesan">🗑️</button>':'')+'</div><p>'+chEsc(m.t)+'</p></div>'}).join(''):'<p class="note" style="text-align:center">Belum ada obrolan. Sapa juragan lain! 👋</p>';
     if(near||!L._init){L.scrollTop=L.scrollHeight;L._init=1}if(CH.msgs.length){CH.seen=Math.max(CH.seen,CH.msgs[CH.msgs.length-1].at);try{localStorage.setItem('jw_chseen',String(CH.seen))}catch(e){}}}
   else{var O=b.querySelector('.onl');if(!O)return;var on=chOnline();O.innerHTML=on.map(function(x){var me=x.id===CH.uid;return'<div class="row"><span style="font-size:20px">'+(x.w==='kawasan'?'🏪':'🖥️')+'</span><b>'+chEsc(x.nm||'Juragan')+(me?' (kamu)':'')+'<br><small style="font-weight:600;color:#8A7A66">'+chEsc(x.nw||'Warnet')+' · Lv '+(x.lv|0)+'</small></b>'+(me?'<i>🟢</i>':'<button class="btn sm go" data-v3="chvisit" data-k="'+chEsc(x.id)+'">Mampir</button>')+'</div>'}).join('')||'<p class="note">Belum ada yang online.</p>'}}
+function chDiag(){return CH.err?'<div class="cev">⚠️ Server belum nerima chat ('+chEsc(CH.err).slice(0,60)+'). Kalau kamu admin: upload worker.js terbaru, lalu cek alamat /v di worker harus tulisan "v3.1 (chat)".</div>':''}
 function chHtml(){if(!CH.on)return'<p class="note">Chat & daftar online butuh koneksi ke server. '+(JWNET.db&&JWNET.db()?'Lagi nyambung…':'Buka game lewat juraganwarnet.stickology.xyz buat ngobrol bareng pemain lain.')+'</p>';
   var h='<div class="tabs"><button class="tab'+(CH.tab==='chat'?' on':'')+'" data-v3="chtab" data-k="chat">💬 Chat</button><button class="tab'+(CH.tab==='online'?' on':'')+'" data-v3="chtab" data-k="online">🟢 Online ('+chOnline().length+')</button></div>';
+  h+=chDiag();
   if(CH.tab==='online')return h+'<div class="onl"></div>';
   return h+'<div class="chl" role="log" aria-live="polite"></div><div class="chc"><input class="chi" type="text" maxlength="120" autocomplete="off" enterkeyhint="send" placeholder="Tulis pesan buat semua juragan…" aria-label="Pesan chat"><button class="btn sm go" data-v3="chsend">Kirim</button></div><p class="note">Sopan ya. Kata kasar, link, & nomor HP otomatis disensor. Jangan bagi data pribadi.</p>'}
 V2SHEET.chat=function(){return['💬 Ngobrol bareng juragan',chHtml()]};
 var _renderSheet3c=renderSheet;renderSheet=function(force){_renderSheet3c(force);if(sheet==='chat')chPaint()};
 function chSend(){var b=$('jw-sh-b'),inp=b&&b.querySelector('.chi');if(!inp||!CH.on)return;var t=chClean(inp.value);if(!t){return}var now=Date.now();if(now-CH.last<3000){toast('Pelan-pelan, tunggu bentar ya');return}CH.last=now;var m=chMe(),arr=(CH.mine||[]).concat([{t:t,at:now}]).slice(-5);
-  CH.db.doc('chatwn/'+CH.uid).set({nm:m.nm,nw:m.nw,fc:m.fc,at:now,m:arr}).then(function(){CH.mine=arr},function(){toast('Pesan gagal kekirim, coba lagi')});inp.value='';sfx('pop')}
+  CH.db.doc('chatwn/'+CH.uid).set({nm:m.nm,nw:m.nw,fc:m.fc,at:now,m:arr}).then(function(){CH.mine=arr;CH.err=''},function(e){CH.err=String(e&&(e.code||e.message)||'gagal');toast('Pesan gagal kekirim: server belum nerima chat');renderSheet(true)});inp.value='';sfx('pop')}
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.classList&&e.target.classList.contains('chi')){e.preventDefault();chSend()}});
 document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest&&e.target.closest('[data-v3]');if(!b)return;var a=b.dataset.v3,k=b.dataset.k;if(a.indexOf('ch')!==0&&a!=='chat')return;
   if(a==='chat'){if(vis())return;openSheet('chat');return}
