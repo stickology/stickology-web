@@ -284,7 +284,7 @@ html.jw-on,html.jw-on body{overflow:hidden!important;touch-action:pan-x pan-y}
 #jw .chc .btn{width:auto;flex:none}</style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js?v=1795740676"></script>
+<script src="config.js?v=1795740936"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -3325,7 +3325,7 @@ var _ui3c=ui;ui=function(){_ui3c();var el=$('jw-onl');if(!el)return;el.hidden=!C
 
 /* ===== online: simpan, berlian, top up, peringkat, teman, kunjungi ===== */
 var JWNET=(function(){
-  var db=null,user=null,uid=null,akun=null,server=false,lastSave=0,lastBoard=0,saving=false,dirty=false,SAWERIA='https://saweria.co/stickologyid',rows=null,rowsTab='total',friends=null,VISIT=null;
+  var db=null,user=null,uid=null,akun=null,server=false,lastSave=0,lastBoard=0,saving=false,dirty=false,SAWERIA='https://saweria.co/stickologyid',rows=null,rowsTab='total',LIM=40,more=0,friends=null,VISIT=null;
   function fcode(u){var h=0;for(var i=0;i<u.length;i++)h=(h*31+u.charCodeAt(i))>>>0;var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var j=0;j<6;j++){s+=c[h%32];h=Math.floor(h/32)^(u.charCodeAt(j%u.length)*7919);h=h>>>0}return'T-'+s}
   function wibWeek(){return Math.floor((Date.now()+7*3600e3-4*864e5)/(7*864e5))}
   function bldVal(){var v=0,B=G.bld;Object.keys(G.pcs).forEach(function(k){var s=SLOTS[k];if(!s)return;var lv=G.pcs[k];v+=pcPrice(s);for(var l=pcStart(s)+1;l<=lv;l++)v+=UPC[l]});if(B.lebar&&!B.lebarSewa)v+=BANGUN.lebar.c;if(B.vip)v+=BANGUN.vip.c;if(B.lt2)v+=BANGUN.lt2.c;Object.keys(B.fas).forEach(function(k){if(B.fas[k])v+=FAS[k].c});Object.keys(G.usaha).forEach(function(k){var U=USAHA[k];v+=U.c;for(var l=1;l<G.usaha[k].lv;l++)v+=U.up[l-1]});try{if(typeof v2Val==='function'&&G.v2)v+=v2Val()}catch(e){}return Math.round(v*.7)}
@@ -3363,16 +3363,17 @@ var JWNET=(function(){
   NET.akunHtml=akunHtml;NET.guest=function(){return !!(server&&user&&user.google&&!(akun&&akun.google))};
   function google(){if(!user||!user.google){toast('Login Google belum tersedia di sini.');return}user.google().then(function(){toast('Tersambung ke Google!');return user.akun&&user.akun()}).then(function(a){if(a)akun=a;renderSheet(true)},function(e){toast(e&&e.message?e.message:'Gagal masuk Google.')})}
   /* ---- kampung: peringkat, teman, kunjungi ---- */
-  function loadRows(tab){rows='loading';rowsTab=tab;if(!db){rows=[board()];renderSheet(true);return}
-    var q=tab==='minggu'?db.collection('peringkatwn').where('wk','==',wibWeek()).orderBy('wg','desc').limit(40):db.collection('peringkatwn').orderBy('aset','desc').limit(40);
+  function loadRows(tab){if(!(more&&Array.isArray(rows)))rows='loading';rowsTab=tab;if(!db){rows=[board()];renderSheet(true);return}
+    var q=tab==='minggu'?db.collection('peringkatwn').where('wk','==',wibWeek()).orderBy('wg','desc').limit(LIM):db.collection('peringkatwn').orderBy('aset','desc').limit(LIM);
     if(tab==='teman'){var list=G.teman||[];Promise.all(list.map(function(fc){return db.collection('peringkatwn').where('fc','==',fc).limit(1).get().then(function(r){var o=null;r.forEach(function(d){o=d.data();o.id=d.id});return o},function(){return null})})).then(function(a){var me=board();me.id=uid;rows=a.filter(Boolean).concat([me]).sort(function(x,y){return y.aset-x.aset});renderSheet(true)});return}
-    q.get().then(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;if(typeof x.aset==='number')L.push(x)});rows=L;renderSheet(true)},function(){rows='err';renderSheet(true)})}
+    q.get().then(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;if(typeof x.aset==='number')L.push(x)});rows=L;more=0;renderSheet(true)},function(){if(more&&Array.isArray(rows)){more=0;toast('Gagal muat, coba lagi');renderSheet(true);return}rows='err';renderSheet(true)})}
   NET.kampungHtml=function(){var tab=NET.ktab||'total';if(rows===null||rowsTab!==tab)loadRows(tab);
     var h='<div class="tabs">'+[['total','🏆 Terkaya'],['minggu','📅 Minggu ini'],['teman','👥 Teman']].map(function(x){return'<button class="tab'+(tab===x[0]?' on':'')+'" data-net="ktab" data-k="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>';
     if(tab==='teman')h+='<div class="row"><b>ID kamu: '+(uid?fcode(uid):'-')+'</b><button class="btn sm" data-net="copyfc">Salin</button></div><div class="row"><input id="jw-tfc" placeholder="T-ABC123" maxlength="8" style="flex:1;border:2px solid #E8DCC6;border-radius:10px;padding:8px;font:700 14px system-ui;text-transform:uppercase"><button class="btn sm go" data-net="addfc">Tambah</button></div>';
     if(rows==='loading')return h+'<p>Memuat…</p>';if(rows==='err')return h+'<p>Peringkat belum bisa dimuat.</p>';
     h+='<p class="note">'+(tab==='minggu'?'Kenaikan aset terbesar minggu ini.':'Diurutkan dari total aset (uang + investasi + bangunan).')+' Ketuk "Mampir" buat lihat warnet mereka.</p>';
     (rows||[]).forEach(function(r,i){var me=r.id===uid;h+='<div class="row'+(me?' me':'')+'"><span style="font-size:18px;min-width:26px;text-align:center">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><b>'+(r.sp?'👑 ':'')+esc(r.nw)+'<br><small style="font-weight:600;color:#8A7A66">Juragan '+esc(r.nm)+' · '+esc(r.lvn||'')+' · '+(r.pc||0)+' PC'+(Date.now()-(r.on||0)<5*60e3?' · 🟢 main':'')+'</small></b><i style="color:#4A3B2A">'+(tab==='minggu'?(r.wg>=0?'+':'')+rp(r.wg||0):rp(r.aset))+'</i>'+(me||!db?'':'<button class="btn sm" data-net="visit" data-k="'+r.id+'">Mampir</button>')+'</div>'});
+    if(tab!=='teman'&&db&&Array.isArray(rows)){if(rows.length>=LIM&&LIM<300)h+='<button class="btn" data-net="more"'+(more?' disabled':'')+'>'+(more?'Memuat…':'⬇️ Muat lebih banyak ('+(LIM+1)+'–'+(LIM+40)+')')+'</button>';else if(rows.length>40)h+='<p class="note" style="text-align:center">Udah semua ('+rows.length+' warnet).</p>'}
     return h};
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function visit(id){if(!db)return;toast('Jalan ke warnet teman…');db.doc('warnet/'+id).get().then(function(sn){var d=sn.exists?sn.data():null;if(!d||!d.mulai){toast('Warnetnya belum buka.');return}
@@ -3430,7 +3431,8 @@ var JWNET=(function(){
     else if(a==='retry'){b.textContent='Menyambung…';initDom()}
     else if(a==='cek'){var before=G.ber;b.textContent='Mengecek…';initDom().then(function(r){if(r&&r.ber!=null)G.ber=r.ber;setTimeout(function(){toast(G.ber>before?'💎 Berlian masuk! Saldo sekarang '+G.ber:'Belum masuk. Saweria kadang butuh 1–2 menit, coba lagi ya.');renderSheet(true)},600)},function(){b.textContent='🔄 Sudah bayar? Cek saldo'})}
     else if(a==='google')google();
-    else if(a==='ktab'){NET.ktab=b.dataset.k;rows=null;renderSheet(true)}
+    else if(a==='ktab'){NET.ktab=b.dataset.k;rows=null;LIM=40;more=0;renderSheet(true)}
+    else if(a==='more'){if(more)return;more=1;LIM=Math.min(300,LIM+40);renderSheet(true);loadRows(NET.ktab||'total')}
     else if(a==='addfc'){var v=(document.getElementById('jw-tfc').value||'').trim().toUpperCase();if(!/^T-[A-Z0-9]{6}$/.test(v)){toast('ID teman salah. Contoh: T-ABC123');return}if(uid&&v===fcode(uid)){toast('Itu ID kamu sendiri 😄');return}G.teman=G.teman||[];if(G.teman.indexOf(v)<0)G.teman.push(v);save();rows=null;toast('Teman ditambah!');renderSheet(true)}
     else if(a==='visit')visit(b.dataset.k);
     else if(a==='share')doShare();else if(a==='shsave')saveImg();else if(a==='shlink')copyText(shareText()+' '+myLink(),'Link warnet disalin!');
