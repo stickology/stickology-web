@@ -75,6 +75,7 @@
       }
       .btn-primary:active{ box-shadow:0 2px 0 var(--amber-deep); }
       .btn-ghost{ background:rgba(19,28,51,.72); border:1px solid var(--line); width:100%; backdrop-filter:blur(3px); }
+      a.btn{ text-decoration:none; display:flex; align-items:center; justify-content:center; box-sizing:border-box; min-height:48px; }
       .title-btns{ width:100%; display:flex; flex-direction:column; gap:12px; }
       .credit{ margin-top:16px; font-size:12.5px; color:var(--muted); letter-spacing:.04em; }
       .credit b{ color:var(--cream); }
@@ -327,8 +328,10 @@
       .cust-wrap .char-img{
         width:100%; display:block;
         filter:drop-shadow(0 12px 24px rgba(0,0,0,.55));
-        -webkit-mask-image:radial-gradient(ellipse 76% 72% at 50% 44%, #000 58%, transparent 97%);
-        mask-image:radial-gradient(ellipse 76% 72% at 50% 44%, #000 58%, transparent 97%);
+        /* potret karakter kini berlatar transparan (tanpa panel/"layar" di belakang
+           figur) — masker hanya memudarkan ujung bawah bahu agar menyatu dengan meja */
+        -webkit-mask-image:linear-gradient(180deg, #000 84%, transparent 99%);
+        mask-image:linear-gradient(180deg, #000 84%, transparent 99%);
         animation:idleSway 5s ease-in-out infinite;
       }
       #cust-wrap.ghostly .char-img{ filter:drop-shadow(0 0 22px rgba(110,255,170,.5)) drop-shadow(0 12px 24px rgba(0,0,0,.55)); }
@@ -444,6 +447,19 @@
       .step-nav .step-next{ flex:1; }
       .step-nav .btn-clear{ border-radius:var(--radius); padding:0 15px; }
       .method-btn:disabled{ opacity:.45; cursor:not-allowed; }
+
+      /* ---------- TUTORIAL INTERAKTIF (pemain baru / diulang dari Cara Main) ---------- */
+      #tut-banner{ background:#0e2a33; border:1.5px dashed var(--teal); border-radius:12px; padding:10px 12px; margin-bottom:12px; }
+      #tut-banner[hidden]{ display:none; }
+      .tut-head{ display:flex; align-items:center; gap:8px; }
+      .tut-tag{ font-size:11px; font-weight:800; letter-spacing:.14em; color:var(--teal); }
+      .tut-step{ font-size:11.5px; color:var(--faint); }
+      .tut-skip{ margin-left:auto; background:none; border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:4px 12px; font-size:12.5px; font-weight:700; cursor:pointer; font-family:inherit; }
+      .tut-skip:active{ transform:scale(.96); }
+      .tut-text{ margin:7px 0 0; font-size:14px; line-height:1.55; color:var(--cream); }
+      .tut-text b{ color:var(--amber2); }
+      .tut-pulse{ animation:tutPulse 1.05s ease-in-out infinite !important; position:relative; z-index:2; }
+      @keyframes tutPulse{ 0%,100%{ box-shadow:0 0 0 2px rgba(246,169,59,.9), 0 0 0 5px rgba(246,169,59,.22); } 50%{ box-shadow:0 0 0 3px rgba(246,169,59,1), 0 0 18px 6px rgba(246,169,59,.45); } }
       .lock-tag{ font-size:10.5px; background:#0d1526; border:1px solid var(--line); color:var(--muted); border-radius:99px; padding:2px 7px; display:inline-flex; align-items:center; gap:3px; }
       .lock-tag svg{ width:11px; height:11px; }
       .build-list{ display:flex; flex-wrap:wrap; gap:6px; min-height:34px; align-items:center; margin-bottom:8px; }
@@ -581,7 +597,7 @@
       @media (prefers-reduced-motion: reduce){
         .scene.flicker img.bg{ animation:none; }
         .dlg-next, .hud .pill.clock.stuck{ animation:none; }
-        .cust-wrap .char-img, .cust-wrap.m-angry::before, .stage-steam i, .stage-bubbles i, .stage-sparks i, .stage-dish.plop img, .stage.pouring .stage-pour{ animation:none !important; }
+        .cust-wrap .char-img, .cust-wrap.m-angry::before, .stage-steam i, .stage-bubbles i, .stage-sparks i, .stage-dish.plop img, .stage.pouring .stage-pour, .tut-pulse{ animation:none !important; }
       }
     </style>
   </head>
@@ -703,6 +719,10 @@
           <path d="M12 6.8v6M9.6 10.6 12 13l2.4-2.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M10.4 17.8h3.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
         </symbol>
+        <symbol id="i-download" viewBox="0 0 24 24">
+          <path d="M12 3.5v10.2M7.6 10.4 12 14.8l4.4-4.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4.5 17.5v1.6a1.9 1.9 0 0 0 1.9 1.9h11.2a1.9 1.9 0 0 0 1.9-1.9v-1.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        </symbol>
         <symbol id="i-scroll" viewBox="0 0 24 24">
           <path d="M7 4.5h11a1.5 1.5 0 0 1 1.5 1.5v11a2.5 2.5 0 0 1-2.5 2.5H8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
           <path d="M7 4.5A2.5 2.5 0 0 0 4.5 7c0 1 .6 1.9 1.5 2.3V17a2.5 2.5 0 0 0 5 0v-.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
@@ -781,11 +801,12 @@
         <div class="sheet">
           <h2>Cara Main</h2>
           <p>Kamu adalah <b>Raka</b>, penjaga angkringan pojok perempatan. Angkringan buka pukul <b>21.00</b> dan tutup pukul <b>04.00</b>.</p>
-          <p><b>Racik sendiri pesanannya:</b> pilih wadah (gelas/mangkuk), klik bahan satu per satu — stok berkurang tiap klik. Bahan yang tampil mengikuti jenis pesanannya: pesanan minuman menampilkan <b>semua bahan minuman</b>, pesanan makanan menampilkan <b>semua bahan makanan</b>. Bahan di luar resep tetap bisa dimasukkan, tapi racikan yang melenceng dari resep bikin bintang turun. Tiap menu cuma menawarkan cara masak yang cocok: <b>sate dibakar</b> di atas anglo, gorengan <b>digoreng</b>, minuman <b>diseduh</b> lalu dituang dengan menahan tombol dan melepasnya di zona hijau. Racikan dinilai <b>bintang 1–3</b>; racikan yang pas dapat bonus tip. Hati-hati: racikan yang jauh dari pesanan bikin pelanggan <b>marah dan pergi tanpa membayar</b>.</p>
+          <p><b>Racik sendiri pesanannya:</b> pilih wadah (gelas/mangkuk), lalu klik bahannya. Kalau satu menu dipesan banyak (misal Bakwan ×2), semua porsinya dibikin <b>sekaligus dalam satu racikan</b>: sekali klik, bahan langsung masuk sejumlah porsinya — tidak perlu meracik satu per satu. Stok berkurang sesuai jumlah bahan yang masuk. Bahan yang tampil mengikuti jenis pesanannya: pesanan minuman menampilkan <b>semua bahan minuman</b>, pesanan makanan menampilkan <b>semua bahan makanan</b>. Bahan di luar resep tetap bisa dimasukkan, tapi racikan yang melenceng dari resep bikin bintang turun. Tiap menu cuma menawarkan cara masak yang cocok: <b>sate dibakar</b> di atas anglo, gorengan <b>digoreng</b>, minuman <b>diseduh</b> lalu dituang dengan menahan tombol dan melepasnya di zona hijau. Racikan dinilai <b>bintang 1–3</b>; racikan yang pas dapat bonus tip. Langkah masak dan tuang itu <b>wajib</b>: menu yang harusnya digoreng/dibakar tapi disajikan mentah — atau minuman yang tidak dituang air — langsung <b>bintang 1</b>, pelanggan marah dan pergi tanpa membayar. <b>Bintang 3</b> hanya untuk racikan yang bahannya pas, cara masaknya benar, dan tuangannya pas. Hati-hati: racikan yang jauh dari pesanan bikin pelanggan <b>marah dan pergi tanpa membayar</b>.</p>
           <p><b>Siang hari (mulai Malam 2):</b> baca grup chat warga untuk petunjuk, lalu <b>Belanja Sore</b> untuk membeli stok bahan dengan uang laci. Stok sisa terbawa ke malam berikutnya. Sebagian pelanggan mungkin minta <b>kasbon</b> — tercatat di Catatan.</p>
           <p><b>Dengarkan cerita mereka.</b> Setiap pelanggan membawa cerita — dan petunjuk. Petunjuk penting tercatat otomatis di <b>Catatan</b> (tombol buku di atas).</p>
           <p>Jaga selama <b>lima malam</b>. Perhatikan jam <b>03.33</b>… dan pria yang selalu datang di jam itu.</p>
           <p><b>Login Google</b> di layar judul menyimpan progresmu — malam yang selesai, uang laci, lencana, dan catatan — ke akunmu, jadi bisa lanjut di HP lain. Tanpa login pun tetap bisa main sebagai tamu; progres tamu tersimpan di perangkat ini saja.</p>
+          <button class="btn btn-ghost" id="btn-howto-tut" style="width:100%;margin-bottom:10px">Ulangi Tutorial Racik</button>
           <button class="btn btn-primary" id="btn-howto-back">Kembali</button>
         </div>
       </section>
@@ -834,6 +855,16 @@
               <div class="racik-items" id="racik-items"></div>
             </div>
 
+            <!-- TUTORIAL INTERAKTIF: pemandu langkah demi langkah untuk racikan pertama -->
+            <div id="tut-banner" hidden>
+              <div class="tut-head">
+                <span class="tut-tag">TUTORIAL</span>
+                <span class="tut-step" id="tut-step"></span>
+                <button class="tut-skip" id="btn-tut-skip">Lewati</button>
+              </div>
+              <p class="tut-text" id="tut-text"></p>
+            </div>
+
             <!-- LANGKAH 1 · PILIH WADAH -->
             <div class="rstep" id="step-1">
               <div class="step-prompt">Pilih wadah dulu:</div>
@@ -879,7 +910,7 @@
               <div class="step-label" id="step3-label" style="margin-top:10px">3 · Cara masak</div>
               <div id="method-row" class="method-row">
                 <button class="method-btn" data-method="bakar">Bakar</button>
-                <button class="method-btn" data-method="goreng" id="btn-goreng">Goreng <span class="lock-tag" id="goreng-lock"><svg><use href="#i-lock"/></svg>Terkunci</span></button>
+                <button class="method-btn" data-method="goreng">Goreng</button>
               </div>
               <div id="pour-ui" class="pour-ui" style="display:none">
                 <div class="pour-side">
@@ -1894,7 +1925,8 @@
         kasbon:{}, kasbonLog:[],
         badges:{}, stats:null,
         figChar:null, figMode:"near", figMood:"neutral",
-        pendingPay:null
+        pendingPay:null,
+        tutDone:false, tutArm:false, tutOn:false, tutPending:false
       };
       function freshStats(){
         return { nightsDone:0, threeStars:0, perfectByChar:{}, kasbonCount:0, pourPerfect:0,
@@ -2011,9 +2043,12 @@
 
       /* ---------- racik: stok, wadah, bahan, masak, tuang ---------- */
       function newRacik(cust){
-        const items = Object.keys(cust.order).map(id => ({ id, need: cust.order[id], built: 0, scores: [] }));
+        const items = Object.keys(cust.order).map(id => ({ id, need: cust.order[id], built: 0, scores: [], flags: [] }));
         state.racik = { items, cur: 0 };
         resetBuild();
+        /* tutorial interaktif: menyala untuk racikan pertama pemain baru,
+           atau sekali lagi bila diaktifkan dari tombol "Ulangi Tutorial Racik" */
+        if (!state.tutOn && (!state.tutDone || state.tutArm)) state.tutPending = true;
       }
       function resetBuild(){
         const r = state.racik;
@@ -2027,6 +2062,93 @@
       }
       function curItem(){ return state.racik.items[state.racik.cur]; }
       function allBuilt(){ return state.racik.items.every(it => it.built >= it.need); }
+      /* ---------- racik massal: satu item dipesan banyak = dibikin SEKALIGUS ----------
+         Pesanan 2 bakwan tidak lagi diracik satu per satu: semua sisa porsi item
+         yang sedang diracik dibuat dalam SATU sesi racik. Kebutuhan bahan diskalakan
+         sejumlah porsinya (2 bakwan → Tepung ×2), sekali ketuk kartu bahan langsung
+         mengisi sejumlah itu, dan sekali masak/tuang + "Selesai Racik" menuntaskan
+         semua porsinya. Total stok yang terpakai sama seperti cara lama. */
+      function batchOf(itemId){
+        if (!state.racik) return 1;
+        const it = state.racik.items.find(x => x.id === itemId);
+        return it ? Math.max(1, it.need - it.built) : 1;
+      }
+      function batchNeed(itemId, k){ return (RECIPES[itemId].bahan[k] || 0) * batchOf(itemId); }
+
+      /* ---------- tutorial interaktif: pemandu per langkah saat meracik ----------
+         Mengikuti alur racik yang sudah ada (wadah → bahan → masak/tuang → sajikan):
+         banner memberi tahu langkah saat ini, dan target yang harus diketuk dibuat
+         berdenyut (kartu wadah yang benar, kartu bahan sesuai resep, tombol metode /
+         tuang, tombol selesai). Aturan main tidak berubah selama tutorial: bahan
+         tetap tersaring per jenis pesanan, metode tetap wajib, bintang tetap dinilai. */
+      function tutEnd(finished){
+        if (!state.tutOn) return;
+        state.tutOn = false;
+        state.tutDone = true;
+        state.tutArm = false;
+        $("#tut-banner").hidden = true;
+        document.querySelectorAll(".tut-pulse").forEach(e => e.classList.remove("tut-pulse"));
+        saveProgress();
+        if (finished) toast("Tutorial selesai — selamat jaga malam pertamamu!");
+      }
+      function tutUpdate(){
+        if (!state.tutOn || !state.racik) return;
+        const r = state.racik, it = curItem(), rec = RECIPES[it.id];
+        document.querySelectorAll(".tut-pulse").forEach(e => e.classList.remove("tut-pulse"));
+        const txt = $("#tut-text"), stp = $("#tut-step");
+        const pulse = sel => { const el = $(sel); if (el) el.classList.add("tut-pulse"); };
+        if (allBuilt()){
+          stp.textContent = "Terakhir · Sajikan";
+          txt.innerHTML = "Pesanan lengkap! Ketuk <b>Sajikan</b> untuk menyerahkannya ke pelanggan. Racikan yang pas dapat <b>bintang 3</b> dan bonus tip.";
+          pulse("#btn-serve");
+          return;
+        }
+        const stepNow = r.step || 1;
+        if (stepNow === 1){
+          stp.textContent = "Langkah 1 dari 3 · Wadah";
+          txt.innerHTML = "<b>" + MENU[it.id].name + "</b> disajikan di <b>" + (rec.wadah === "gelas" ? "Gelas" : "Mangkuk") + "</b>. Ketuk wadah yang berdenyut itu.";
+          document.querySelectorAll(".wadah-card").forEach(b => { if (b.dataset.wadah === rec.wadah) b.classList.add("tut-pulse"); });
+        } else if (stepNow === 2){
+          stp.textContent = "Langkah 2 dari 3 · Bahan";
+          if (r.wadah !== rec.wadah){
+            txt.innerHTML = "Wadah ini tidak cocok untuk " + MENU[it.id].name + ". Ketuk <b>‹ Wadah</b>, lalu pilih " + (rec.wadah === "gelas" ? "Gelas" : "Mangkuk") + ".";
+            pulse("#btn-back-1");
+          } else {
+            const missing = Object.keys(rec.bahan).filter(k => (r.bahan[k] || 0) < batchNeed(it.id, k));
+            if (missing.length){
+              txt.innerHTML = "Ambil bahannya — kartu yang <b>berdenyut</b> adalah bahan yang dibutuhkan pesanan ini: <b>" + missing.map(k => ING[k].name).join(", ") + "</b>. Sekali ketuk, bahan langsung terisi untuk <b>semua porsi</b> pesanan ini — tidak perlu klik satu per satu. Bahan lain boleh dicoba, tapi bikin bintang turun.";
+              const ids = ING_ORDER.filter(id => ING_WADAH[id] === rec.wadah);
+              const grid = $("#ing-grid");
+              ids.forEach((id, i) => { if (missing.indexOf(id) >= 0 && grid.children[i]) grid.children[i].classList.add("tut-pulse"); });
+            } else {
+              txt.innerHTML = "Bahan lengkap dan pas! Ketuk <b>Lanjut ›</b> untuk ke langkah terakhir: cara masak.";
+              pulse("#btn-next-3");
+            }
+          }
+        } else if (stepNow === 3){
+          stp.textContent = "Langkah 3 dari 3 · Masak / Tuang";
+          if (rec.method){
+            if (r.method === rec.method){
+              txt.innerHTML = "Sudah dimasak dengan benar. Ketuk <b>Selesai Racik</b>.";
+              pulse("#btn-item-done");
+            } else {
+              txt.innerHTML = "<b>" + MENU[it.id].name + "</b> wajib <b>" + (rec.method === "bakar" ? "dibakar di atas anglo" : "digoreng") + "</b> — langkah ini tidak boleh dilewati. Disajikan mentah = bintang 1 dan pelanggan pergi tanpa membayar!";
+              document.querySelectorAll(".method-btn").forEach(b => { if (b.dataset.method === rec.method) b.classList.add("tut-pulse"); });
+            }
+          } else if (rec.pour){
+            if (r.pourDone){
+              txt.innerHTML = "Tuangannya pas di zona hijau. Ketuk <b>Selesai Racik</b>.";
+              pulse("#btn-item-done");
+            } else {
+              txt.innerHTML = "Minuman wajib dituang air: <b>tahan</b> tombol Tuang Air, lalu <b>lepas</b> saat airnya mencapai zona hijau di meteran. Tidak dituang = bintang 1!";
+              pulse("#btn-pour");
+            }
+          } else {
+            txt.innerHTML = "<b>" + MENU[it.id].name + "</b> memang langsung disajikan — tidak perlu dimasak atau dituang. Ketuk <b>Selesai Racik</b>.";
+            pulse("#btn-item-done");
+          }
+        }
+      }
 
       function renderOrderChips(){
         const box = $("#ob-items"); box.innerHTML = "";
@@ -2061,7 +2183,9 @@
         });
         $("#racik-title").innerHTML = allBuilt()
           ? "Semua racikan selesai — tinggal <span>Sajikan</span>!"
-          : `Racik: <span>${MENU[it.id].name}</span> (${it.built + 1} dari ${it.need})`;
+          : (batchOf(it.id) > 1
+            ? `Racik: <span>${MENU[it.id].name} ×${batchOf(it.id)}</span> — semua porsi dibikin sekaligus`
+            : `Racik: <span>${MENU[it.id].name}</span> (${it.built + 1} dari ${it.need})`);
         /* wadah */
         document.querySelectorAll(".wadah-card").forEach(b => b.classList.toggle("sel", b.dataset.wadah === r.wadah));
         /* bahan yang sudah diambil */
@@ -2090,7 +2214,7 @@
         const recNow = RECIPES[it.id];
         const wadahPas = !r.wadah || r.wadah === recNow.wadah;
         $("#step2-label").textContent = wadahPas
-          ? "2 · Bahan " + (recNow.wadah === "gelas" ? "minuman" : "makanan") + " untuk " + MENU[it.id].name + " — angka di pojok kartu = stok"
+          ? "2 · Bahan " + (recNow.wadah === "gelas" ? "minuman" : "makanan") + " untuk " + MENU[it.id].name + " — angka di pojok kartu = stok" + (batchOf(it.id) > 1 ? " · pesanan ×" + batchOf(it.id) + ": sekali ketuk, bahan langsung masuk sejumlah porsinya" : "")
           : "2 · Wadah ini tidak cocok untuk " + MENU[it.id].name;
         const g = $("#ing-grid"); g.innerHTML = "";
         if (!wadahPas){
@@ -2107,9 +2231,17 @@
             b.innerHTML = `${foodImg(ING_IMG[id])}<span class="stk-badge">${stk}</span><span class="nm">${ING[id].name}</span>`;
             b.addEventListener("click", () => {
               AudioSys.resume();
-              if ((state.stock[id] || 0) <= 0){ AudioSys.buzz(); return; }
-              state.stock[id]--;
-              r.bahan[id] = (r.bahan[id] || 0) + 1;
+              const stkNow = state.stock[id] || 0;
+              if (stkNow <= 0){ AudioSys.buzz(); return; }
+              /* sekali ketuk langsung mengisi bahan sejumlah sisa porsi item ini
+                 (pesan 2 bakwan → ketuk Tepung sekali, langsung masuk 2) — tidak
+                 perlu klik satu-satu per porsi. Kalau kebutuhan resepnya sudah
+                 penuh, ketukan berikutnya menambah 1 seperti biasa (bahan ekstra
+                 di luar resep, menurunkan nilai racikan). */
+              const target = batchNeed(it.id, id), cur = r.bahan[id] || 0;
+              const add = cur < target ? Math.min(target - cur, stkNow) : 1;
+              state.stock[id] -= add;
+              r.bahan[id] = cur + add;
               AudioSys.blip(); renderRacik();
               flyToStage(b, ING_IMG[id]);
               updateStage(true);
@@ -2125,12 +2257,9 @@
           $("#step3-label").textContent = "3 · Cara masak";
           mRow.style.display = "flex";
           /* cuma metode yang cocok untuk menu ini yang muncul: sate cuma bisa
-             dibakar di atas anglo, gorengan cuma bisa digoreng */
-          const locked = state.night === 0 && rec.method === "goreng";
-          const gb = $("#btn-goreng");
-          gb.disabled = locked;
-          $("#goreng-lock").style.display = locked ? "inline-flex" : "none";
-          if (locked) $("#goreng-lock").lastChild.textContent = "Buka Malam 2";
+             dibakar di atas anglo, gorengan cuma bisa digoreng. Semua cara masak
+             tersedia sejak Malam 1 — pesanan gorengan (bakwan, tempe, tahu)
+             memang sudah datang dari malam pertama. */
           document.querySelectorAll(".method-btn").forEach(b => {
             b.style.display = b.dataset.method === rec.method ? "" : "none";
             b.classList.toggle("sel", b.dataset.method === r.method);
@@ -2149,10 +2278,19 @@
           none.style.display = "block";
         }
         $("#btn-serve").disabled = !allBuilt();
-        const lastUnit = it.built + 1 >= it.need && r.items.every((x, i) => i === r.cur || x.built >= x.need);
+        /* satu racikan menuntaskan SEMUA sisa porsi item ini, jadi tombol jadi
+           "Sajikan" bila item lain sudah tuntas semua */
+        const lastUnit = r.items.every((x, i) => i === r.cur || x.built >= x.need);
         $("#btn-item-done").textContent = lastUnit ? "Sajikan" : "Selesai Racik";
         renderOrderChips();
         updateStage(false);
+        /* tutorial: nyalakan banner pemandu tepat setelah panel racik tergambar */
+        if (state.tutPending){
+          state.tutPending = false;
+          state.tutOn = true;
+          $("#tut-banner").hidden = false;
+        }
+        tutUpdate();
       }
 
       document.querySelectorAll(".wadah-card").forEach(b => b.addEventListener("click", () => {
@@ -2246,31 +2384,51 @@
       pourBtn.addEventListener("pointerleave", () => { if (pourTimer) pourStop(); });
       pourBtn.addEventListener("contextmenu", e => e.preventDefault());
 
-      /* ----- penilaian racikan (maks 5 poin) ----- */
-      function scoreBuild(itemId){
+      /* ----- penilaian racikan (maks 5 poin) -----
+         Langkah 3 itu WAJIB dan ikut dinilai: menu yang butuh dimasak (Bakar/Goreng)
+         tapi disajikan tanpa dimasak — atau metodenya salah — dinyatakan GAGAL LANGKAH
+         (stepFail): nilainya dipotong habis dan bintang pesanan ini maksimal 1,
+         pembeli komplain. Hal yang sama berlaku untuk minuman yang tidak dituang air.
+         Bintang 3 hanya untuk racikan yang sempurna langkahnya (flawless): wadah pas,
+         bahan persis resep, metode masak benar, dan tuangan pas di zona hijau. */
+      function assessBuild(itemId){
         const rec = RECIPES[itemId], r = state.racik;
         let s = 0;
-        if (r.wadah === rec.wadah) s += 1;
+        const wadahOk = r.wadah === rec.wadah;
+        if (wadahOk) s += 1;
+        /* kebutuhan bahan diskalakan sejumlah porsi yang dibuat sekaligus:
+           racikan 2 bakwan dinilai pas bila Tepung-nya 2, bukan 1 */
+        const batch = batchOf(itemId);
         const keys = new Set([...Object.keys(rec.bahan), ...Object.keys(r.bahan)]);
         let exact = true, got = 0, needTotal = 0, extra = 0;
         keys.forEach(k => {
-          const need = rec.bahan[k] || 0, have = r.bahan[k] || 0;
+          const need = (rec.bahan[k] || 0) * batch, have = r.bahan[k] || 0;
           needTotal += need;
           if (have !== need) exact = false;
           got += Math.min(have, need);
           extra += Math.max(0, have - need);
         });
         s += exact ? 2 : 2 * (got / Math.max(1, needTotal + extra)) * .8;
+        let stepFail = false, failKind = null;
+        let flawless = wadahOk && exact;
         if (rec.method){
-          if (state.night === 0 && rec.method === "goreng") s += 2; /* goreng masih terkunci di Malam 1: cara masak tidak dinilai */
-          else if (r.method === rec.method) s += 2;
-          else if (r.method) s += .5;
+          if (r.method === rec.method) s += 2;
+          else {
+            stepFail = true; failKind = "masak"; flawless = false;
+            if (r.method) s += .5;
+          }
         } else if (rec.pour){
-          if (r.pour === "perfect") s += 2;
-          else if (r.pour === "good") s += 1.3;
+          if (r.pourDone){
+            if (r.pour === "perfect") s += 2;
+            else if (r.pour === "good") s += 1.3;
+          } else {
+            stepFail = true; failKind = "tuang"; flawless = false;
+          }
         } else s += 2;
-        return s;
+        if (stepFail) s = Math.min(s, 2.4);
+        return { score: s, stepFail, failKind, flawless };
       }
+      function scoreBuild(itemId){ return assessBuild(itemId).score; }
       function starsOf(score){ return score >= 4.5 ? 3 : score >= 3 ? 2 : 1; }
 
       /* ---------- panggung racik: sajian terisi lapis demi lapis + animasi membuat ---------- */
@@ -2278,7 +2436,7 @@
         const r = state.racik; if (!r) return 4;
         const it = curItem(); const rec = RECIPES[it.id];
         let need = 0, have = 0;
-        Object.keys(rec.bahan).forEach(k => { need += rec.bahan[k]; have += Math.min(r.bahan[k] || 0, rec.bahan[k]); });
+        Object.keys(rec.bahan).forEach(k => { const nd = batchNeed(it.id, k); need += nd; have += Math.min(r.bahan[k] || 0, nd); });
         const frac = need ? have / need : 0;
         let f = (r.wadah ? .16 : .05) + .58 * frac;
         if (rec.method) f += r.method ? .26 : 0;
@@ -2289,8 +2447,8 @@
       function stageCaption(){
         const r = state.racik; const it = curItem(); const rec = RECIPES[it.id];
         if (!r.wadah) return "Langkah 1: pilih wadah — gelas atau mangkuk.";
-        const missing = Object.keys(rec.bahan).filter(k => (r.bahan[k] || 0) < rec.bahan[k]);
-        if (missing.length) return "Isi " + (rec.wadah === "gelas" ? "gelas" : "mangkuk") + " lapis demi lapis — masih perlu: " + missing.map(k => ING[k].name).join(", ") + ".";
+        const missing = Object.keys(rec.bahan).filter(k => (r.bahan[k] || 0) < batchNeed(it.id, k));
+        if (missing.length) return "Isi " + (rec.wadah === "gelas" ? "gelas" : "mangkuk") + " lapis demi lapis — masih perlu: " + missing.map(k => { const nd = batchNeed(it.id, k); return ING[k].name + (nd > 1 ? " ×" + nd : ""); }).join(", ") + ".";
         if (rec.method && !r.method) return rec.method === "bakar"
           ? "Bahan lengkap! Sekarang bakar di atas anglo sampai matang."
           : "Bahan lengkap! Sekarang goreng sampai matang keemasan.";
@@ -2345,8 +2503,13 @@
         AudioSys.resume();
         const r = state.racik; if (!r) return;
         const it = curItem();
-        it.scores.push(scoreBuild(it.id));
-        it.built++;
+        const a = assessBuild(it.id);
+        /* racikan ini dibuat sekaligus untuk semua sisa porsi item ini:
+           nilai yang sama dicatat per porsi (agregasi sajian membaca per porsi),
+           lalu item langsung tuntas — tidak ada racik ulang satu per satu */
+        const n = Math.max(1, it.need - it.built);
+        for (let i = 0; i < n; i++){ it.scores.push(a.score); it.flags.push(a); }
+        it.built = it.need;
         AudioSys.ding();
         const stEl = $("#stage");
         stEl.classList.add("burst");
@@ -2542,11 +2705,11 @@
       });
 
       /* ----- sajikan: nilai bintang, bayar / kasbon, lalu cerita ----- */
-      function showRating(stars, perfect, done){
+      function showRating(stars, perfect, done, failKind){
         const card = $("#rating-card");
         $("#rating-stars").innerHTML = "★".repeat(stars) + `<span class="off">${"★".repeat(3 - stars)}</span>`;
-        $("#rating-text").textContent = perfect ? "Racikan Pas Sempurna!" : stars === 3 ? "Racikan Pas!" : stars === 2 ? "Lumayan, Bisa Diterima" : "Asal Jadi…";
-        $("#rating-sub").textContent = perfect ? "Wadah, bahan, dan cara saji — semuanya tepat." : stars === 3 ? "Semua pas, pelanggan puas." : stars === 2 ? "Ada yang kurang pas di racikanmu — pelangganmu kecewa." : "Racikan jauh dari pesanan — pelangganmu marah besar.";
+        $("#rating-text").textContent = perfect ? "Racikan Pas Sempurna!" : stars === 3 ? "Racikan Pas!" : stars === 2 ? "Lumayan, Bisa Diterima" : failKind === "masak" ? "Masih Mentah!" : failKind === "tuang" ? "Nggak Dituang!" : "Asal Jadi…";
+        $("#rating-sub").textContent = perfect ? "Wadah, bahan, dan cara saji — semuanya tepat." : stars === 3 ? "Semua pas, pelanggan puas." : stars === 2 ? "Ada yang kurang pas di racikanmu — pelangganmu kecewa." : failKind === "masak" ? "Sajian belum dimasak sama sekali — pelangganmu marah besar." : failKind === "tuang" ? "Minumannya tidak dituang air — pelangganmu marah besar." : "Racikan jauh dari pesanan — pelangganmu marah besar.";
         card.classList.add("on");
         const close = () => { card.classList.remove("on"); card.removeEventListener("click", close); done(); };
         card.addEventListener("click", close);
@@ -2556,7 +2719,19 @@
       /* ----- reaksi pelanggan terhadap sajian yang salah -----
          Bintang 2: kecewa dan komplain, tapi tetap membayar (tanpa bonus kemurahan hati).
          Bintang 1: marah, protes keras, lalu pergi TANPA membayar — cerita malam itu pun terlewat. */
-      function reactionLines(stars, cust){
+      function reactionLines(stars, cust, failKind){
+        if (stars === 1 && failKind === "masak") return [
+          [cust.char, "Lho… ini kok masih MENTAH?! Nggak dimasak dulu apa?!"],
+          ["raka", "Aduh — maaf, maaf… saya lupa masak, itu masih adonan mentah…"],
+          [cust.char, "Nggak usah! Selera makan saya sudah hilang. Saya pergi saja — dan ini TIDAK saya bayar."],
+          ["nar", "Dia bangkit dan pergi begitu saja ke gelap perempatan. Laci tidak bertambah sepeser pun malam ini darinya."]
+        ];
+        if (stars === 1 && failKind === "tuang") return [
+          [cust.char, "Lho… ini kok kering begini?! Nggak dituang air sama sekali!"],
+          ["raka", "Aduh — maaf, maaf… saya lupa tuang airnya, itu cuma bahan di gelas…"],
+          [cust.char, "Nggak usah! Selera saya sudah hilang. Saya pergi saja — dan ini TIDAK saya bayar."],
+          ["nar", "Dia bangkit dan pergi begitu saja ke gelap perempatan. Laci tidak bertambah sepeser pun malam ini darinya."]
+        ];
         if (stars === 1) return [
           [cust.char, "Lho… ini apa?! Ini BUKAN yang saya pesan!"],
           ["raka", "Aduh — maaf, maaf… Saya salah racik. Biar saya buatkan ulang, sebentar—"],
@@ -2576,14 +2751,30 @@
         const cust = state.current;
         if (!cust || !cust.order || !state.racik || !allBuilt()) return;
         stopPatience();
+        if (state.tutOn) tutEnd(true);
         $("#order-bubble").classList.remove("on");
         $("#serve-ui").classList.remove("on");
         $("#screen-game").classList.remove("serving");
         /* nilai gabungan semua racikan pelanggan ini */
         let sum = 0, cnt = 0, perfect = true;
-        state.racik.items.forEach(it => it.scores.forEach(s => { sum += s; cnt++; if (s < 5) perfect = false; }));
+        let stepFail = false, failKind = null, allFlawless = true;
+        state.racik.items.forEach(it => it.scores.forEach((s, i) => {
+          sum += s; cnt++; if (s < 5) perfect = false;
+          const f = (it.flags || [])[i];
+          if (f){
+            if (f.stepFail){ stepFail = true; failKind = failKind || f.failKind; }
+            if (!f.flawless) allFlawless = false;
+          } else if (s < 5) allFlawless = false;
+        }));
+        if (!cnt) allFlawless = false;
         const avg = cnt ? sum / cnt : 0;
-        const stars = starsOf(avg);
+        /* aturan bintang: ada langkah wajib yang gagal → maksimal bintang 1;
+           bintang 3 hanya bila SEMUA racikan flawless (bahan pas + metode benar
+           + tuangan pas); selain itu ikuti nilai rata-rata seperti biasa. */
+        let stars = starsOf(avg);
+        if (stepFail) stars = 1;
+        else if (allFlawless) stars = 3;
+        else if (stars === 3) stars = 2;
         const base = Object.keys(cust.order).reduce((s,id) => s + MENU[id].price * cust.order[id], 0);
         let tip = 0;
         if (!cust.finale){
@@ -2619,7 +2810,7 @@
             /* sajian jauh dari pesanan: pelanggan marah, protes, pergi tanpa membayar */
             state.reactionMood = "angry";
             AudioSys.buzz();
-            playDialogue(reactionLines(1, cust), () => {
+            playDialogue(reactionLines(1, cust, failKind), () => {
               state.reactionMood = null;
               state.pendingPay = { base:0, tip:0, cust };
               toast("Pelanggan pergi tanpa membayar");
@@ -2642,7 +2833,7 @@
         if (cust.finale){
           proceed();
         } else {
-          showRating(stars, perfect, proceed);
+          showRating(stars, perfect, proceed, failKind);
         }
       }
       $("#btn-serve").addEventListener("click", doServe);
@@ -3072,6 +3263,18 @@
       $("#restart-overlay").addEventListener("click", (e) => { if (e.target.id === "restart-overlay") $("#restart-overlay").classList.remove("on"); });
       $("#btn-howto").addEventListener("click", () => show("howto"));
       $("#btn-howto-back").addEventListener("click", () => show("title"));
+      /* ulangi tutorial: dipersenjatai di sini, menyala saat racikan berikutnya dimulai */
+      $("#btn-howto-tut").addEventListener("click", () => {
+        AudioSys.resume(); AudioSys.blip();
+        state.tutArm = true;
+        show("title");
+        toast("Tutorial akan muncul saat kamu meracik pesanan berikutnya");
+      });
+      $("#btn-tut-skip").addEventListener("click", () => {
+        AudioSys.resume(); AudioSys.blip();
+        tutEnd(false);
+        toast("Tutorial dilewati — bisa diulang dari Cara Main");
+      });
       $("#btn-again").addEventListener("click", () => { AudioSys.stopBeep(); resetGame(); startNight(0); });
       $("#btn-to-title").addEventListener("click", () => { AudioSys.stopBeep(); resetGame(); show("title"); });
 
@@ -3131,6 +3334,7 @@
         return { v:1, progress: state.progress, money: state.money, servedTotal: state.servedTotal,
                  badges: state.badges, clues: state.clues, stats: state.stats,
                  stock: state.stock, kasbon: state.kasbon, kasbonLog: state.kasbonLog,
+                 tutDone: state.tutDone ? 1 : 0,
                  savedAt: Date.now() };
       }
       function writeLocalSave(d){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(d)); }catch(e){} }
@@ -3174,6 +3378,7 @@
         state.stock = Object.assign({}, START_STOCK, d.stock || {});
         state.kasbon = d.kasbon || {};
         state.kasbonLog = Array.isArray(d.kasbonLog) ? d.kasbonLog : [];
+        state.tutDone = !!d.tutDone;
         setMoney();
       }
       function refreshTitleSaveUI(){
