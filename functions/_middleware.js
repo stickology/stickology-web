@@ -15,6 +15,14 @@ const JL = {
   img: 'https://juraganlaundry.stickology.xyz/juragan-laundry-og.jpg',
   icon: '/juragan-laundry-logo',
 };
+// Kartu link preview kalau yang dibuka angkringan.stickology.xyz.
+const ANGK = {
+    title: 'Angkringan Simulator · Malam yang Sama',
+  desc: 'Jaga angkringan pojok perempatan selama lima malam yang selalu sama. Gratis, langsung main di browser tanpa download.',
+  url: 'https://angkringan.stickology.xyz/',
+  img: 'https://angkringan.stickology.xyz/angkringan-og.jpg',
+  icon: '/angkringan-logo',
+};
 const set = (v) => ({ element(e) { e.setAttribute('content', v); } });
 export async function onRequest(ctx) {
   const res = await ctx.next();
@@ -36,6 +44,24 @@ export async function onRequest(ctx) {
       .on('meta[name="theme-color"]', set('#14919B'))
       .on('meta[name="apple-mobile-web-app-title"]', set('Juragan Laundry'))
       .transform(res);
+  }
+  if (/^angkringan\./.test(host)) {
+      if (!(res.headers.get('content-type') || '').includes('text/html')) return res;
+    return new HTMLRewriter()
+      .on('title', { element(e) { e.setInnerContent('Angkringan Simulator — Malam yang Sama'); } })
+    .on('meta[name="description"]', set(ANGK.desc))
+    .on('meta[property="og:site_name"]', set('Angkringan Simulator'))
+    .on('meta[property="og:title"]', set(ANGK.title))
+    .on('meta[property="og:description"]', set(ANGK.desc))
+    .on('meta[property="og:url"]', set(ANGK.url))
+    .on('meta[property="og:image"]', set(ANGK.img))
+    .on('meta[name="twitter:title"]', set(ANGK.title))
+    .on('meta[name="twitter:image"]', set(ANGK.img))
+    .on('link[rel="icon"][type="image/png"]', { element(e) { e.setAttribute('href', ANGK.icon + '.png'); } })
+    .on('link[rel="apple-touch-icon"]', { element(e) { e.setAttribute('href', ANGK.icon + '.png'); } })
+    .on('meta[name="theme-color"]', set('#0d1526'))
+    .on('meta[name="apple-mobile-web-app-title"]', set('Angkringan Simulator'))
+  .transform(res);
   }
   if (!/^(juraganwarnet|play)\./.test(host)) return res;
   if (!(res.headers.get('content-type') || '').includes('text/html')) return res;
