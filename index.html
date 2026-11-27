@@ -284,7 +284,7 @@ html.jw-on,html.jw-on body{overflow:hidden!important;touch-action:pan-x pan-y}
 #jw .chc .btn{width:auto;flex:none}</style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="config.js?v=1795719405"></script>
+<script src="config.js?v=1795740676"></script>
 <script>
 /* Penghubung Stickology ↔ Server Kampung (Cloudflare).
    Login tetap Firebase Auth; data lewat WebSocket ke Cloudflare.
@@ -2126,7 +2126,7 @@ var USAHA={konter:{n:'Konter pulsa & voucher',ic:'📱',c:1500000,up:[1200000,20
 var SEWA_DP=500000,SEWA_HARI=150000,BELI_SEWA=4500000;
 var HARI=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
 var G;var LSK='jw_save_v1';
-function fresh(){return{uang:3000000,ber:25,rating:3.0,energi:20,emax:20,day:1,min:8*60,pcs:{0:1,1:1,2:1},rusak:{},virus:{},mouse:{},games:{web:1,ff:1},tarif:5000,mie:10,minum:10,wc:0,kasir:0,xp:0,lv:1,padam:0,
+function fresh(){return{uang:3000000,ber:5,rating:3.0,energi:20,emax:20,day:1,min:8*60,pcs:{0:1,1:1,2:1},rusak:{},virus:{},mouse:{},games:{web:1,ff:1},tarif:5000,mie:10,minum:10,wc:0,kasir:0,xp:0,lv:1,padam:0,
   staff:{},usaha:{},inv:{},idx:{depo:1,emas:1,reksa:1,saham:1,kripto:1},pidx:{depo:1,emas:1,reksa:1,saham:1,kripto:1},hist:{},berita:'',bld:{lebar:0,vip:0,lt2:0,fas:{},cat:'krem',lantai:'keramik',neon:0,hias:{}},jobs:[],
   hari:{sewa:0,kantin:0,keluar:0,tamu:0,kabur:0},kemarin:null,mis:{tamu:0,kantin:0,fix:0,got:[0,0,0]},rame:0,log:[],sp:0,snd:1,mus:1}}
 function load(){try{var s=JSON.parse(localStorage.getItem(LSK));if(s&&s.pcs){var f=fresh(),o=Object.assign(f,s);o.bld=Object.assign(fresh().bld,s.bld||{});o.bld.fas=o.bld.fas||{};o.bld.hias=o.bld.hias||{};o.jobs=o.jobs||[];o.staff=o.staff||{};o.usaha=o.usaha||{};o.inv=o.inv||{};o.idx=Object.assign(fresh().idx,s.idx||{});o.pidx=Object.assign(fresh().pidx,s.pidx||{});o.hist=o.hist||{};o.mouse=o.mouse||{};return o}}catch(e){}return fresh()}
@@ -2190,7 +2190,7 @@ function rate(d){G.rating=Math.max(1,Math.min(5,G.rating+d/100))}
 function finish(p){if(p.thief){steal(p);return}var s=p.slot,lv=G.pcs[s]||1,pay=G.tarif*p.played*PCLV[lv].m*AREA_M[SLOTS[s].area]*(G.tour&&SLOTS[s].area==='lt2'?1.5:1);if(p.t==='sultan'&&p.hap>60)pay+=20000;pay=Math.round(pay/500)*500;
   delete OCC[s];delete G.virus[s];p.st='bayar';p.path=routeFromPC(s);p.pay=pay;ICONS=ICONS.filter(function(ic){return ic.p!==p})}
 function payAt(p){G.kasir+=p.pay;G.hari.sewa+=p.pay;G.xp+=p.t==='sultan'?6:3;G.mis.tamu++;var happy=p.hap>=55;rate(happy?(2.5+(G.bld.fas.ac?1:0)+beauty()*.3):-3);say(p,happy?pick(TALK.pulang):pick(TALK.kesal));sfx('coin');FX.push({x:COUNTER[0]+.4,z:2.8,y:1.4,t:'+'+rp(p.pay),life:1.2});levelCheck();leave(p)}
-function levelCheck(){var need=40+G.lv*30;if(G.xp>=need){G.xp-=need;G.lv++;addBer(3);toast('Naik ke Level '+G.lv+'! +3 💎');sfx('up');logm('Naik ke level '+G.lv)}}
+function levelCheck(){var need=40+G.lv*30;if(G.xp>=need){G.xp-=need;G.lv++;addBer(1);toast('Naik ke Level '+G.lv+'! +1 💎');sfx('up');logm('Naik ke level '+G.lv)}}
 /* ---- ikon ---- */
 function addIcon(p,k,s){if(ICONS.some(function(i){return i.p===p&&i.k===k&&i.s===s}))return;ICONS.push({p:p,k:k,s:s,life:(['rusak','mouse','maling','telat','stik','cucian'].indexOf(k)>=0)?999:22})}
 var ICN={lapar:'🍜',haus:'🥤',virus:'⚠️',rusak:'🔧',wc:'🧽',mouse:'🖱️',maling:'🚨',telat:'💸',stik:'🎮',cucian:'🧺'};
@@ -2335,7 +2335,7 @@ function toast(t){var e=$('jw-toast');e.textContent=t;e.classList.add('on');clea
 function tgl(){var d=new Date(2026,0,1+G.day);return HARI[d.getDay()]+', '+d.getDate()+' Jan'}
 function ui(){$('jw-uang').textContent=rp(G.uang).replace('Rp','');$('jw-rat').textContent=G.rating.toFixed(1).replace('.',',');$('jw-en').style.width=(G.energi/G.emax*100)+'%';$('jw-ent').textContent=G.energi+'/'+G.emax;$('jw-tgl').textContent=tgl();$('jw-jam').textContent=jam();$('jw-ber').textContent=G.ber;$('jw-lvn').textContent='🏠 '+(G.namaW||'Warnet')+' · '+lvName();
   $('jw-b-mis').hidden=!misReady()&&!ciReady();$('jw-evp').hidden=!G.ev;if(G.ev)$('jw-evp').textContent=G.ev.n+(G.tour?' · 🏆 TURNAMEN':'');$('jw-b-hp').hidden=!G.log.length||G.logSeen===G.log.length;$('jw-b-akun').hidden=!(NET.guest&&NET.guest());if(sheet)renderSheet()}
-var MISI=[{t:'Layani 12 pelanggan',k:'tamu',n:12,rw:{ber:3}},{t:'Jual 6 makanan/minuman',k:'kantin',n:6,rw:{uang:100000}},{t:'Benerin 2 masalah PC',k:'fix',n:2,rw:{ber:2}}];
+var MISI=[{t:'Layani 12 pelanggan',k:'tamu',n:12,rw:{uang:150000}},{t:'Jual 6 makanan/minuman',k:'kantin',n:6,rw:{uang:100000}},{t:'Benerin 2 masalah PC',k:'fix',n:2,rw:{ber:1}}];
 function misReady(){return MISI.some(function(m,i){return !G.mis.got[i]&&G.mis[m.k]>=m.n})}
 var sheet=null,sarg=null,stab=null;
 function openSheet(k,a){sheet=k;sarg=a;if(k==='man'&&!stab)stab='bangun';$('jw-sheet').hidden=false;renderSheet(true);sfx('pop')}
@@ -2455,7 +2455,7 @@ function addBer(n){n=Math.round(n);if(n<=0)return;G.ber+=n;if(NET.earn)NET.earn(
 function spendBer(n,why){if(G.ber<n){toast('Berlian kurang 💎');sfx('no');return false}G.ber-=n;if(NET.spend)NET.spend(n,why);return true}
 function topupHtml(){if(NET.topupHtml)return NET.topupHtml();return'<div class="topup"><b>💎 '+G.ber+' berlian</b><p>Top up berlian lewat Saweria (Rp100 = 1 💎, bonus 2× top up pertama) cuma bisa di situs Stickology. Di sini berlian didapat dari check-in harian, misi, dan naik level.</p></div>'}
 /* ---- check-in harian (hari asli WIB) ---- */
-var CI=[{ber:1},{uang:100000},{ber:2},{uang:250000},{ber:3},{uang:500000},{ber:6}];
+var CI=[{uang:100000},{ber:1},{uang:250000},{uang:300000},{ber:1},{uang:500000},{ber:3}];
 function wibDay(){return Math.floor((Date.now()+7*3600e3)/864e5)}
 function ciReady(){return !G.ci||G.ci.d!==wibDay()}
 function ciStreak(){if(!G.ci)return 0;return G.ci.d>=wibDay()-1?G.ci.s:0}
@@ -2483,7 +2483,7 @@ function startTour(){if(!G.bld.lt2||G.tour)return;if(G.uang<500000){toast('Uang 
 var _payAt=payAt;payAt=function(p){var happy=p.hap>=55;_payAt(p);if(happy)p.jump=1.2;if(p.reg){G.reg=G.reg||{};var L=G.reg[p.reg]||{love:0,v:0,g:0};L.v++;var before=L.love;L.love=Math.max(0,Math.min(10,L.love+(happy?1:-1)));[3,6,10].forEach(function(th,i){if(before<th&&L.love>=th&&(L.g||0)<=i){L.g=i+1;var gift=[2,3,5][i];addBer(gift);say(p,'Ini buat abang 🎁',3);toast('🎁 '+p.reg+' ngasih hadiah '+gift+' 💎 (❤️ '+th+')')}});G.reg[p.reg]=L}};
 var _finish=finish;finish=function(p){var s=p.slot;_finish(p);if(!p.thief&&s!=null&&SLOTS[s]){var sl=SLOTS[s];FX.push({coin:1,x0:sl.x,y0:sl.y+1.3,z0:sl.z,x:COUNTER[0]+.4,y:1.3,z:2.85,life:.9,t:''})}};
 var _minute=minute;minute=function(){_minute();PEOPLE.forEach(function(p){if(p.st==='main'&&!p.thief&&Math.random()<.004){say(p,pick(p.t==='gamer'||p.t==='bocil'?['GG!','Wkwkwk','Ayo push!','Maniac!!','Noob lu'] :['Hmm...','Akhirnya beres','Sinyal kenceng nih']),1.6)}});
-  if(G.tour){G.tour.left--;if(G.tour.left<=0){G.tour=null;rate(10);G.xp+=20;addBer(1);if(typeof cnt==='function'&&!(NET.visiting&&NET.visiting())){cnt('tour');passXp(30)}toast('🏆 Turnamen selesai! Rating naik, +1 💎');logm('Turnamen selesai');sfx('up')}}
+  if(G.tour){G.tour.left--;if(G.tour.left<=0){G.tour=null;rate(10);G.xp+=20;G.uang+=150000;if(typeof cnt==='function'&&!(NET.visiting&&NET.visiting())){cnt('tour');passXp(30)}toast('🏆 Turnamen selesai! Rating naik, +Rp150rb');logm('Turnamen selesai');sfx('up')}}
   if(G.ev&&G.ev.k==='hujan'&&Math.random()<.02)G.wc++;
   tutMinute()};
 var _tick=tick;tick=function(dt){if(NET.visiting&&NET.visiting()&&G.min>22*60)G.min=12*60;_tick(dt);PEOPLE.forEach(function(p){if(p.jump>0)p.jump-=dt});FX.forEach(function(f){if(f.coin){var k=1-f.life/.9;f.cx=f.x0+(f.x-f.x0)*k;f.cz=f.z0+(f.z-f.z0)*k;f.cy=f.y0+(f.y-f.y0)*k+Math.sin(k*Math.PI)*1.2}})};
@@ -2551,7 +2551,7 @@ function tutDraw(t){var el=document.getElementById('jw-tut');if(!G.tut||!G.mulai
   var tgt=null;if(G.tut===2){var ic=ICONS.filter(function(i){return i.k==='lapar'})[0];if(ic)tgt=iconPos(ic)}else if(G.tut===4){var sl=SLOTS.filter(function(s,i){return !G.pcs[i]&&slotOpen(s)})[0];if(sl)tgt=ws(sl.x,0,sl.z+.25)}
   if(tgt){var r=S*.8+Math.sin(t*6)*5;ctx.strokeStyle='#FF4FD8';ctx.lineWidth=4;ctx.beginPath();ctx.arc(tgt.x,tgt.y,r,0,7);ctx.stroke();ctx.font='26px system-ui';ctx.textAlign='center';ctx.fillText('👇',tgt.x,tgt.y-r-14+Math.sin(t*6)*4)}
   document.getElementById('jw-money').classList.toggle('pulse',G.tut===3);document.querySelector('[data-open="man"]').classList.toggle('pulse',G.tut===5)}
-function tutEnd(skip){if(!G.tut)return;G.tut=0;if(!skip){addBer(5);toast('🎓 Tutorial selesai! +5 💎');sfx('up')}save();ui()}
+function tutEnd(skip){if(!G.tut)return;G.tut=0;if(!skip){addBer(2);toast('🎓 Tutorial selesai! +2 💎');sfx('up')}save();ui()}
 /* ---- waktu jalan saat offline ---- */
 function dailyCost(){var B=G.bld,l=0;Object.keys(G.pcs).forEach(function(k){if(slotOpen(SLOTS[k]))l+=5000*G.pcs[k]});if(B.fas.ac)l+=25000;if(B.lebar)l+=10000;if(B.lt2)l+=30000;var inet=20000+Object.keys(G.pcs).length*2000,g=0;Object.keys(G.staff).forEach(function(k){g+=PEGAWAI[k].gaji});return{listrik:l,inet:inet,gaji:g,sewa:B.lebar&&B.lebarSewa?SEWA_HARI:0}}
 function offlineEff(){var s=G.staff;return Math.min(.9,.4+(s.kasir?.15:0)+(s.pelayan?.1:0)+(s.teknisi?.1:0)+(s.ob?.05:0)+(s.satpam?.1:0))}
@@ -2762,7 +2762,7 @@ function ligaDaftar(){var v=V();if(!timOk()||v.tim.length<3){toast('Butuh minima
     var opp=new Array(7),slots=[];for(var d=s0;d<7;d++)slots.push(d);for(d=0;d<s0;d++)slots.push(d);if(kil&&s0<=6){opp[6]=kil;slots=slots.filter(function(x){return x!==6})}else if(kil)rest.push(kil);var all=real.concat(rest);slots.forEach(function(sl,i){opp[sl]=all[i]});
     v.liga={wk:wk,pw:pw,tn:timName(),s0:s0,opp:opp,seed:me+'|'+wk,seen:{},done:0};v.lh.main++;save();ligaPub();toast('✅ '+timName()+' terdaftar di Liga Minggu ke-'+(wk%52+1)+'!');sfx('up');renderSheet(true)})}
 function ligaPub(){var db=JWNET.db&&JWNET.db(),u=JWNET.uid&&JWNET.uid(),L=V().liga;if(!db||!u||!L)return;db.doc('ligawn/'+u).set({nm:String(G.nama||'').slice(0,16),nw:String(G.namaW||'Warnet').slice(0,20),tn:L.tn,pw:L.pw,wk:L.wk,fc:JWNET.fcode(u),at:Date.now(),jr:V().lh.juara||0}).catch(function(){})}
-var LPRIZE=[{u:5000000,b:15,dk:'pialae'},{u:3000000,b:8,dk:'pialap'},{u:2000000,b:5,dk:'pialab'},{u:800000,b:2},{u:500000,b:2},{u:500000,b:1},{u:300000,b:1},{u:300000,b:1}];
+var LPRIZE=[{u:5000000,b:5,dk:'pialae'},{u:3000000,b:3,dk:'pialap'},{u:2000000,b:2,dk:'pialab'},{u:800000},{u:500000},{u:500000},{u:300000},{u:300000}];
 function ligaTick(){var v=V(),L=v.liga;if(!L||vis())return;var news=[];
   for(var r=L.s0;r<7;r++){if(L.seen[r])continue;var m=ligaRound(L,r)[0],s=ligaGame(L,r,m[0],m[1]);if(!s)continue;L.seen[r]=1;var win=s[0]>s[1];if(win){v.lh.win++;cnt('win');G.uang+=200000;passXp(40)}else passXp(15);news.push((win?'🏆 MENANG ':'😓 Kalah ')+s[0]+'-'+s[1]+' lawan '+m[1].tn+(win?' · +Rp200rb':''))}
   if(news.length){toast(news[news.length-1]);logm('Liga: '+news.join(' | '));sfx(news[news.length-1].indexOf('MENANG')>=0?'up':'pop');save()}
@@ -2771,7 +2771,7 @@ function ligaTick(){var v=V(),L=v.liga;if(!L||vis())return;var news=[];
     if(!busy())dialog([['kiki',rank===1?'JUARA LIGA! '+L.tn+' juara satu minggu ini, Juragan!':rank<=3?'Liga minggu lalu selesai. Kita peringkat '+rank+', masuk 3 besar!':'Liga minggu lalu selesai. Kita peringkat '+rank+'. Latihan lagi, minggu ini kita balas!'],['nar','🏆 Hadiah liga: '+t+(pr.b?' · +'+pr.b+' 💎':'')]]);else toast('🏆 Liga selesai: peringkat '+rank+'. Hadiah masuk!')}}
 function ligaHtml(){var v=V(),L=v.liga,wk=wkNow(),h='';if(!timOk())return'<div class="mis"><b>🔒 Liga Mingguan</b><small>Bangun Ruang VIP & bikin tim dulu.</small></div>';
   if(v.lastLiga&&(!L||L.wk!==wk)&&v.lastLiga.wk===wk-1)h+='<div class="mis win"><b>🏁 Hasil liga minggu lalu: peringkat '+v.lastLiga.rank+'</b><small>Hadiah: '+v.lastLiga.rw+'</small></div>';
-  if(!L||L.wk!==wk){h+='<div class="mis"><b>⚔️ Liga Mingguan</b><small>8 tim, tiap hari 1 pertandingan Bo3 jam 19.00 WIB (Senin–Minggu). Hadiah: juara 1 Rp5jt + 15 💎 + piala emas · juara 2 Rp3jt + 8 💎 · juara 3 Rp2jt + 5 💎. Tiap menang +Rp200rb.</small>'+
+  if(!L||L.wk!==wk){h+='<div class="mis"><b>⚔️ Liga Mingguan</b><small>8 tim, tiap hari 1 pertandingan Bo3 jam 19.00 WIB (Senin–Minggu). Hadiah: juara 1 Rp5jt + 5 💎 + piala emas · juara 2 Rp3jt + 3 💎 · juara 3 Rp2jt + 2 💎. Tiap menang +Rp200rb.</small>'+
       (v.tim.length<3?'<small>🔒 Butuh minimal 3 pemain (tab Tim).</small>':B2('📝 Daftar liga minggu ini · kekuatan '+timPw(),'ldaftar','','go'))+'</div>';return h}
   var T=ligaTable(L),dn=wibDay()-wkDay0(L.wk);h+='<div class="tiles"><div><b>'+L.pw+'</b><small>kekuatan</small></div><div><b>#'+(T.findIndex(function(x){return x.t.me})+1)+'</b><small>posisi</small></div><div><b>'+(T.filter(function(x){return x.t.me})[0].w)+'-'+(T.filter(function(x){return x.t.me})[0].l)+'</b><small>menang-kalah</small></div></div>';
   h+='<h4>📅 Jadwal</h4>';var HR=['Sen','Sel','Rab','Kam','Jum','Sab','Min'];for(var r=0;r<7;r++){var m=ligaRound(L,r)[0],s=ligaGame(L,r,m[0],m[1]),op=m[1];
@@ -2784,8 +2784,8 @@ var MUSIM=['Era Mabar','Kembang Api','Kota Gaming','Liburan Panjang','Juara Kamp
 function season(){return Math.max(1,Math.floor((wibDay()-PASS_E)/PASS_LEN)+1)}
 function seasonLeft(){return PASS_E+season()*PASS_LEN-wibDay()}
 function seasonName(s){return'Musim '+s+': '+MUSIM[(s-1)%MUSIM.length]}
-var PF=[null,{u:200000},{dk:'bangku'},{e:1},{b:1},{u:300000},{dk:'lampu'},{r:1},{u:500000},{b:2},{dk:'bendera'},{e:1},{u:600000},{b:2},{dk:'payung'},{u:800000},{r:1},{b:2},{dk:'kolam'},{u:1000000},{b:3},{e:1},{u:1200000},{dk:'sakura'},{r:1},{b:2},{u:1500000},{e:1},{dk:'arcade'},{u:2000000},{b:3}];
-var PP=[null,{b:5},{u:500000},{dk:'gerobak'},{r:1},{b:5},{u:1000000},{dk:'capit'},{e:1},{b:5},{tm:'cyber'},{u:1500000},{dk:'papan'},{b:5},{r:1},{bj:'emas'},{u:2000000},{b:5},{dk:'beanbag'},{e:1},{tm:'anime'},{b:5},{u:3000000},{dk:'naga'},{r:1},{b:10},{u:4000000},{bj:'neon'},{e:1},{b:10},{dk:'mobil'}];
+var PF=[null,{u:200000},{dk:'bangku'},{e:1},{u:250000},{u:300000},{dk:'lampu'},{r:1},{u:500000},{b:1},{dk:'bendera'},{e:1},{u:600000},{u:700000},{dk:'payung'},{u:800000},{r:1},{u:900000},{dk:'kolam'},{u:1000000},{b:2},{e:1},{u:1200000},{dk:'sakura'},{r:1},{u:1300000},{u:1500000},{e:1},{dk:'arcade'},{u:2000000},{b:3}];
+var PP=[null,{b:5},{u:500000},{dk:'gerobak'},{r:1},{u:800000},{u:1000000},{dk:'capit'},{e:1},{b:5},{tm:'cyber'},{u:1500000},{dk:'papan'},{u:1800000},{r:1},{bj:'emas'},{u:2000000},{b:5},{dk:'beanbag'},{e:1},{tm:'anime'},{u:2500000},{u:3000000},{dk:'naga'},{r:1},{b:5},{u:4000000},{bj:'neon'},{e:1},{b:10},{dk:'mobil'}];
 var PASS_SET={};function PT(){var s=season();return PASS_SET[s]||{f:PF,p:PP}}
 function passS(){var P=V().pass,s=season();if(P.s!==s){P.s=s;P.xp=0;P.f=[];P.p=[]}return P}
 function passTier(){return Math.min(30,Math.floor(passS().xp/PASS_XP))}
@@ -2796,7 +2796,7 @@ function passClaim(i,prem){var P=passS();if(i>passTier())return'';var L=prem?P.p
 function passHtml(){var P=passS(),t=passTier(),pr=passPrem(),s=season(),into=P.xp-t*PASS_XP;
   var h='<div class="passh"><b>🎫 '+seasonName(s)+'</b><small>Berakhir '+seasonLeft()+' hari lagi · tingkat '+t+'/30</small><div class="bar"><i style="width:'+(t>=30?100:into/PASS_XP*100)+'%"></i></div><small>'+(t>=30?'Tingkat maksimal! 🎉':into+'/'+PASS_XP+' XP ke tingkat '+(t+1))+'</small></div>';
   h+='<p class="note">XP dari: layani pelanggan (+1), misi harian (+20), check-in (+30), main liga (+40 menang / +15 kalah), tutup warnet (+20), turnamen (+30), ambil kas cabang (+5), selesai bab cerita (+100).</p>';
-  if(!pr)h+='<div class="topup prem"><b>⭐ Jalur Premium</b><p>Buka semua hadiah premium musim ini: '+(PT().desc||'50 💎, tema Cyber Neon & Anime, seragam emas & neon, patung naga, mobil sport, mesin capit, dan uang game')+'. Hadiah tingkat yang udah lewat langsung bisa diambil.</p>'+B2(G.ber>=PASS_C?'Buka Premium · '+PASS_C+' 💎':'💎 Top up dulu (kurang '+(PASS_C-G.ber)+' 💎)','pbuy','','go')+'</div>';
+  if(!pr)h+='<div class="topup prem"><b>⭐ Jalur Premium</b><p>Buka semua hadiah premium musim ini: '+(PT().desc||'30 💎, tema Cyber Neon & Anime, seragam emas & neon, patung naga, mobil sport, mesin capit, dan uang game')+'. Hadiah tingkat yang udah lewat langsung bisa diambil.</p>'+B2(G.ber>=PASS_C?'Buka Premium · '+PASS_C+' 💎':'💎 Top up dulu (kurang '+(PASS_C-G.ber)+' 💎)','pbuy','','go')+'</div>';
   if(passReady())h+=B2('🎁 Ambil semua hadiah','pall','','go');
   h+='<div class="ptrack"><div class="ph"><span>Gratis</span><span>Tk</span><span>⭐ Premium</span></div>';
   for(var i=1;i<=30;i++){var fo=P.f.indexOf(i)>=0,po=P.p.indexOf(i)>=0,un=i<=t;
@@ -3060,34 +3060,34 @@ BAB.push(
   o:[['darto','Mantap! Satu usaha bisa ngidupin satu kawasan. Terusin!']],ff:function(){return false}},
  {t:'Ekonomi Rakyat',
   i:[['darto','Orang mampir ngopi, servis motor, terus lanjut main di warnetmu. Itu namanya ekonomi rakyat!'],['reza','Aku juga buka lapak di kawasanmu deh. Eh, maksudnya… aku bantu promosi.'],['kamu','Target: tiga usaha jalan, kasnya rutin diambil.']],
-  g:[{t:'Punya 3 usaha',v:usN,n:3},{t:'Ambil kas usaha 5×',v:cc3('kasu'),n:5}],rw:{u:4000000,b:5},
+  g:[{t:'Punya 3 usaha',v:usN,n:3},{t:'Ambil kas usaha 5×',v:cc3('kasu'),n:5}],rw:{u:4000000,b:2},
   o:[['hendra','Hmm. Kawasan Anda ramai juga. Tapi kami punya sesuatu yang tidak Anda punya: influencer.']],ff:function(){return false}},
  {t:'Viral',
   i:[['laras','Haiii! Aku Laras, streamer. MegaNet nawarin aku kontrak, tapi aku lebih suka warnet yang ada jiwanya.'],['laras','Kalau kamu punya PC Streamer, kita live bareng! Penontonku bisa jadi pelangganmu.'],['kamu','Siap! PC level 5 udah aku siapin. Ayo live!'],['nar','Tips: buka 🕹️ Main → Live Streaming. Butuh PC level 5 (Streamer) atau lebih.']],
-  g:[{t:'Live streaming 3×',v:cc3('live'),n:3},{t:'Kumpulkan 1.000 penonton',v:cc3('views'),n:1000}],rw:{u:5000000,b:5},
+  g:[{t:'Live streaming 3×',v:cc3('live'),n:3},{t:'Kumpulkan 1.000 penonton',v:cc3('views'),n:1000}],rw:{u:5000000,b:2},
   o:[['laras','Gila, live kita trending! Banyak yang nanya alamat warnetmu.'],['reza','Pelanggan baru berdatangan! MegaNet pasti panas nih.']],ff:function(){return false}},
  {t:'Perang Harga',
   i:[['hendra','Mulai hari ini MegaNet promo: main 1 jam cuma seribu rupiah. Kita lihat berapa lama Anda bertahan.'],['reza','Seribu?! Itu jual rugi. Mereka mau bikin kita bangkrut.'],
    ['pilih','Gimana kamu ngadepin perang harga?',[{t:'💎 Fokus kualitas & pelayanan',k:'kual',r:[['kamu','Kita nggak ikut banting harga. Kita menang di pelayanan. Rating harus tembus 4,5!'],['darto','Itu baru juragan. Harga bisa ditiru, rasa nyaman nggak.']]},{t:'🔥 Bikin pelanggan setia',k:'setia',r:[['kamu','Pelanggan setia nggak bakal pindah. Layani sebanyak-banyaknya dengan senyum!'],['reza','Aku bantu sebar brosur "member setia". Gas!']]}],function(k){s2().harga=k}]],
-  g:[{t:'Rating ⭐ 4,5',v:function(){return Math.round(G.rating*10)/10},n:4.5,f:1},{t:'Layani 120 pelanggan',v:cc('tamu'),n:120}],rw:{u:6000000,b:5},
+  g:[{t:'Rating ⭐ 4,5',v:function(){return Math.round(G.rating*10)/10},n:4.5,f:1},{t:'Layani 120 pelanggan',v:cc('tamu'),n:120}],rw:{u:6000000,b:2},
   o:[['nar','Seminggu kemudian, promo seribu rupiah MegaNet dihentikan diam-diam.'],['hendra','…Pelanggan Anda keras kepala juga.']],ff:function(){return false}},
  {t:'Teknisi Andalan',
   i:[['kiki','Juragan, aneh. Minggu ini PC kita sering rusak & kena virus. Terus ada maling yang mondar-mandir.'],['reza','Aku curiga ada yang sengaja. Orang berjaket MegaNet keliatan di depan warnet kemarin.'],['kamu','Biar aku yang turun tangan. Benerin PC, basmi virus, kejar malingnya!']],
-  g:[{t:'Benerin PC / basmi virus 8×',v:cc3('fixw'),n:8},{t:'Tangkap maling 3×',v:cc3('chase'),n:3}],rw:{u:7000000,b:5},
+  g:[{t:'Benerin PC / basmi virus 8×',v:cc3('fixw'),n:8},{t:'Tangkap maling 3×',v:cc3('chase'),n:3}],rw:{u:7000000,b:2},
   o:[['nar','Maling yang ketangkap ngaku: "Saya cuma disuruh…" lalu kabur sebelum sempat nyebut nama.'],['kiki','Yang penting warnet kita aman. Juragan teknisi terbaik!']],ff:function(){return false}},
  {t:'Turnamen Kota',
   i:[['kiki','MegaNet bikin tim e-sport sendiri: "MegaNet Titans". Mereka nantang kita di liga!'],['laras','Aku bakal nyiarin pertandingan kalian. Jangan malu-maluin ya!'],['kamu','Kita bukan cuma warnet. Kita rumahnya para jagoan.']],
-  g:[{t:'Menang 4 pertandingan liga',v:cc3('win'),n:4},{t:'Adakan 2 turnamen',v:cc('tour'),n:2}],rw:{u:8000000,b:5},
+  g:[{t:'Menang 4 pertandingan liga',v:cc3('win'),n:4},{t:'Adakan 2 turnamen',v:cc('tour'),n:2}],rw:{u:8000000,b:2},
   o:[['kiki','Titans tumbang! Penonton satu kota teriakin nama tim kita!']],ff:function(){return false}},
  {t:'Tawaran Pak Hendra',
   i:[['hendra','Saya akui Anda hebat. Jadi saya tawarkan 200 juta untuk semua warnet & usaha Anda. Tanda tangan saja.'],
    ['pilih','Jawab tawaran Pak Hendra:',[{t:'✋ Tolak mentah-mentah',k:'tolak',r:[['kamu','Maaf Pak. Warnet ini titipan Om Darto. Nggak dijual.'],['hendra','Sayang sekali. Kalau begitu, kita bersaing sampai akhir.']]},{t:'🤔 Dengerin dulu, terus tolak',k:'dengar',r:[['kamu','Tawaran yang menarik, Pak. Tapi uang segitu nggak bisa beli kenangan & pelanggan setia kami.'],['hendra','Hm. Jawaban yang bijak. Saya hormati… tapi persaingan tetap jalan.']]}],function(k){s2().tawar=k}],
    ['darto','(telepon) Om bangga sama kamu. Sekarang tunjukin: jaringanmu lebih kuat dari MegaNet!']],
-  g:[{t:'Punya 3 cabang',v:function(){return Object.keys(V().cab).length},n:3},{t:'Uang Rp50jt',v:function(){return G.uang},n:50000000}],rw:{u:10000000,b:5},
+  g:[{t:'Punya 3 cabang',v:function(){return Object.keys(V().cab).length},n:3},{t:'Uang Rp50jt',v:function(){return G.uang},n:50000000}],rw:{u:10000000,b:3},
   o:[['reza','Tiga cabang + kas segitu? Juragan beneran!']],ff:function(){return false}},
  {t:'Juragan Sejati',
   i:[['hendra','Ini pertandingan terakhir kita. Kalau tim Anda juara liga dan kawasan Anda lebih ramai, MegaNet mundur dari kota ini.'],['kiki','Juara liga, Juragan. Kita bisa!'],['darto','Om pulang minggu depan. Om mau lihat kawasan yang hidup!']],
-  g:[{t:'Juara 1 Liga Mingguan',v:function(){return V().lh.juara>(s2().j0||0)?1:0},n:1},{t:'Punya 6 lahan',v:lhN,n:6}],rw:{u:15000000,b:10,dk:'pialae'},
+  g:[{t:'Juara 1 Liga Mingguan',v:function(){return V().lh.juara>(s2().j0||0)?1:0},n:1},{t:'Punya 6 lahan',v:lhN,n:6}],rw:{u:15000000,b:5,dk:'pialae'},
   o:[['nar','Malam itu, satu kota tahu: warnet kecil di Rawa Indah menang.'],['hendra','Saya kalah. MegaNet akan menutup cabang di sini. Tapi… sebelum pergi, boleh saya bicara?'],
    ['pilih','Apa yang kamu lakukan ke Pak Hendra?',[{t:'🤝 Ajak kerja sama',k:'damai',r:[['kamu','Pak, gimana kalau MegaNet jadi sponsor turnamen kota? Kita bangun e-sport di sini bareng.'],['hendra','…Anda serius? Baik. Mulai musim depan, MegaNet sponsor Liga Rawa Indah.'],['nar','🤝 Akhir cerita: "Rival Jadi Kawan".']]},{t:'🚪 Persilakan pergi',k:'usir',r:[['kamu','Terima kasih, Pak. Kawasan ini punya warga sendiri. Silakan cari kota lain.'],['hendra','Hah. Anda keras. Saya suka itu. Selamat, Juragan.'],['nar','👑 Akhir cerita: "Raja Kawasan".']]}],function(k){s2().end=k}],
    ['darto','Ya ampun… kawasan ini sekarang hidup. Om nggak salah titip warnet ke kamu.'],['laras','Ini konten terbaik tahun ini. Juragan Sejati!'],['kamu','Makasih semuanya. Kita bikin kawasan ini makin rame!'],['nar','🎉 TAMAT Musim 2. Musim berikutnya nyusul!']],ff:function(){return false}});
@@ -3199,9 +3199,9 @@ function pwaHtml(){var ios=/iphone|ipad|ipod/i.test(navigator.userAgent),url=pwa
 V2SHEET.pwa=function(){return['📲 Pasang aplikasi',pwaHtml()]};
 var _renderSheet3=renderSheet;renderSheet=function(force){_renderSheet3(force);if(sheet!=='menu')return;var b=$('jw-sh-b');if(!b||b.querySelector('[data-v3="pwa"]'))return;b.insertAdjacentHTML('afterbegin',(pwaStandalone()?'':'<button class="btn go" data-v3="pwa">📲 Pasang sebagai aplikasi</button>')+'<button class="btn" data-v3="mgoff">'+(X3().mgOff?'🕹️ Mini-game perbaikan: mati':'🕹️ Mini-game perbaikan: nyala')+'</button>');if(pwaStandalone())b.insertAdjacentHTML('afterbegin','<span data-v3="pwa" hidden></span>')};
 /* ===== PASS MUSIM 2: KEMBANG API ===== */
-PASS_SET[2]={desc:'50 💎, tema Malam Tahun Baru, seragam Pesta, panggung mini, jam hitung mundur, peluncur kembang api, dan uang game',
- f:[null,{u:250000},{e:1},{dk:'balon'},{b:1},{u:350000},{r:1},{u:500000},{b:2},{e:1},{dk:'lampion'},{u:650000},{b:2},{r:1},{u:800000},{e:1},{b:3},{u:1000000},{r:1},{u:1200000},{b:2},{e:1},{dk:'terompet'},{u:1400000},{r:1},{b:2},{u:1600000},{e:1},{u:1800000},{b:3},{u:2500000}],
- p:[null,{b:5},{u:600000},{dk:'panggung'},{r:1},{b:5},{u:1000000},{e:1},{dk:'cemara'},{b:5},{tm:'tahunbaru'},{u:1500000},{r:1},{b:5},{e:1},{bj:'pesta'},{u:2000000},{b:5},{dk:'lampion'},{r:1},{u:2500000},{b:5},{e:1},{dk:'jam'},{u:3000000},{b:10},{r:1},{u:4000000},{e:1},{b:10},{dk:'kembang'}]};
+PASS_SET[2]={desc:'30 💎, tema Malam Tahun Baru, seragam Pesta, panggung mini, jam hitung mundur, peluncur kembang api, dan uang game',
+ f:[null,{u:250000},{e:1},{dk:'balon'},{u:300000},{u:350000},{r:1},{u:500000},{b:1},{e:1},{dk:'lampion'},{u:650000},{u:700000},{r:1},{u:800000},{e:1},{b:2},{u:1000000},{r:1},{u:1200000},{u:1300000},{e:1},{dk:'terompet'},{u:1400000},{r:1},{u:1500000},{u:1600000},{e:1},{u:1800000},{b:3},{u:2500000}],
+ p:[null,{b:5},{u:600000},{dk:'panggung'},{r:1},{u:800000},{u:1000000},{e:1},{dk:'cemara'},{b:5},{tm:'tahunbaru'},{u:1500000},{r:1},{u:1800000},{e:1},{bj:'pesta'},{u:2000000},{b:5},{dk:'lampion'},{r:1},{u:2500000},{u:2800000},{e:1},{dk:'jam'},{u:3000000},{b:5},{r:1},{u:4000000},{e:1},{b:10},{dk:'kembang'}]};
 
 mgEl().querySelector('.mgx').addEventListener('click',function(){mgCancel()});
 var _dkEnter3=dkEnter;dkEnter=function(){if(VIEW===3)kwExit();_dkEnter3()};
