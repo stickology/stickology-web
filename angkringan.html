@@ -61,6 +61,18 @@
         font-family:"Caveat",cursive; font-size:clamp(26px,7vw,34px); color:var(--teal);
         margin-top:10px; text-shadow:0 0 16px rgba(95,227,194,.55); transform:rotate(-2deg);
       }
+      .version-row{ display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px; }
+      .beta-badge{
+        display:inline-block; padding:3px 11px 4px; border-radius:999px;
+        background:linear-gradient(180deg,#ffb84d,#f08c1a); color:#2a1802;
+        font-size:12.5px; font-weight:800; letter-spacing:.22em; text-indent:.22em;
+        box-shadow:0 3px 0 var(--amber-deep), 0 6px 16px rgba(240,140,26,.4);
+        transform:rotate(-2deg);
+      }
+      .version-tag{
+        font-size:13px; font-weight:700; letter-spacing:.08em; color:var(--cream);
+        background:rgba(7,11,22,.66); border:1px solid rgba(38,52,83,.85); border-radius:999px; padding:3px 11px;
+      }
       .title-spacer{ flex:1; }
       .btn{
         border:0; border-radius:var(--radius); padding:12px 20px;
@@ -780,6 +792,7 @@
           </div>
           <h1 class="game-title">ANGKRINGAN<span class="thin">SIMULATOR</span></h1>
           <div class="game-sub">Malam yang Sama</div>
+          <div class="version-row"><span class="beta-badge">BETA</span><span class="version-tag">Versi 1.0</span></div>
           <div class="title-spacer"></div>
           <div class="title-btns">
             <button class="btn btn-primary" id="btn-continue" style="display:none">Lanjutkan</button>
@@ -794,7 +807,7 @@
             <button class="btn-wall" id="btn-treat-list"><svg><use href="#i-scroll"/></svg>Para Pentraktir Kopi</button>
             <a class="btn-treat" href="https://saweria.co/stickologyid" target="_blank" rel="noopener"><svg><use href="#i-cup"/></svg>Traktir Kopi</a>
           </div>
-          <div class="credit">Sebuah game dari <b>Stickology</b></div>
+          <div class="credit">Sebuah game dari <b>Stickology</b> · Versi 1.0 BETA</div>
         </div>
       </section>
 
