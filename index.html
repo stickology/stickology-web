@@ -3463,7 +3463,7 @@ var JWNET=(function(){
   var TQ=[],TL=[],tSeen={},tBusy=false,tRoot=null;
   function tick1(){if(tBusy||!TQ.length||!JW_ON)return;var d=TQ.shift();tBusy=true;if(!tRoot){tRoot=document.createElement('div');tRoot.className='tbub';document.getElementById('jw-cv').parentNode.appendChild(tRoot)}
     var n=Math.floor((+d.amount||0)/100);tRoot.innerHTML='<span class="ti">💎</span><span class="tt"><b></b> baru top up'+(n?' '+n+' berlian':'')+'. Makasih!</span>';tRoot.querySelector('b').textContent=String(d.name||'Seseorang').slice(0,24);
-    var top=0;['hud','visitbar'].forEach(function(k){var e=document.getElementById(k)||document.querySelector('.'+k);if(e&&!e.hidden){var r=e.getBoundingClientRect();if(r.height)top=Math.max(top,r.bottom)}});tRoot.style.top=(top+10)+'px';tRoot.classList.remove('go');void tRoot.offsetWidth;tRoot.classList.add('go');setTimeout(function(){tBusy=false},9500)}
+    tRoot.style.top='auto';tRoot.classList.remove('go');void tRoot.offsetWidth;tRoot.classList.add('go');setTimeout(function(){tBusy=false},9500)}
   setInterval(tick1,1000);
   setInterval(function(){if(TQ.length||!TL.length)return;TQ.push(TL[Math.floor(Math.random()*Math.min(6,TL.length))])},45000);
   function tickerSub(){if(!db)return;var first=true;db.collection('donatur').orderBy('at','desc').limit(12).onSnapshot(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;if(x.src==='saweria'&&x.name&&/^JW/i.test(x.code||''))L.push(x)});
