@@ -2040,7 +2040,7 @@
       function show(name){
         screens.forEach(s => $("#screen-" + s).classList.toggle("on", s === name));
         state.phase = name;
-        if (name === "title") refreshTitleSaveUI();
+        if (name === "title"){ refreshTitleSaveUI(); loadDonors(); }
       }
       function setClock(t, stuck){
         const c = $("#hud-clock");
@@ -2107,8 +2107,9 @@
 
       /* ---------- traktir kopi: nama pentraktir berjalan + dinding pentraktir ---------- */
       const PENTRAKTIR = [];
+      function escHtml(s){ return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
       function tickerText(){
-        if (PENTRAKTIR.length) return "<b>Pentraktir Kopi:</b> " + PENTRAKTIR.map(p => p.name).join(" · ");
+        if (PENTRAKTIR.length) return "<b>Pentraktir Kopi:</b> " + PENTRAKTIR.map(p => escHtml(p.name)).join(" · ");
         return "<b>Pentraktir Kopi:</b> jadilah yang pertama — traktir kopi untuk Raka lewat tombol Traktir Kopi";
       }
       function renderTicker(){
@@ -2142,7 +2143,37 @@
           list.appendChild(d);
         });
       }
-      function openTreat(){ renderTreatWall(); $("#treat-overlay").classList.add("on"); AudioSys.blip(); }
+      function openTreat(){ renderTreatWall(); loadDonors(); $("#treat-overlay").classList.add("on"); AudioSys.blip(); }
+
+      /* ---------- daftar pentraktir otomatis dari Saweria ----------
+         Diambil dari worker stickology-saweria (endpoint /donors): hanya donasi
+         polos tanpa kode top-up, maksimal 50, terbaru dulu. Nominal disimpan
+         sudah dalam format Rp. Kalau pengambilan gagal (jaringan mati atau
+         endpoint tidak menjawab), diam-diam pakai daftar yang sudah ada —
+         tanpa error dan tanpa mengganggu game. */
+      const DONORS_URL = "https://stickology-saweria.togetherco-and-8fc.workers.dev/donors";
+      function loadDonors(){
+        try {
+          fetch(DONORS_URL, { cache: "no-store" }).then(res => {
+            if (!res.ok) throw new Error("donors " + res.status);
+            return res.json();
+          }).then(data => {
+            const list = data && Array.isArray(data.donors) ? data.donors : null;
+            if (!list) return;
+            const next = [];
+            list.slice(0, 50).forEach(d => {
+              const name = d && typeof d.name === "string" ? d.name.trim() : "";
+              if (!name) return;
+              const amt = Number(d.amount);
+              next.push({ name: name, amount: isFinite(amt) && amt > 0 ? rp(amt) : "" });
+            });
+            PENTRAKTIR.length = 0;
+            next.forEach(p => PENTRAKTIR.push(p));
+            renderTicker();
+            if ($("#treat-overlay").classList.contains("on")) renderTreatWall();
+          }).catch(() => {});
+        } catch (e) { /* diam-diam: pakai daftar yang sudah ada */ }
+      }
 
       /* ---------- racik: stok, wadah, bahan, masak, tuang ---------- */
       function newRacik(cust){
@@ -3597,6 +3628,7 @@
       updateAccountUI();
       refreshTitleSaveUI();
       renderTicker();
+      loadDonors();
       setMoney();
     </script>
   </body>
