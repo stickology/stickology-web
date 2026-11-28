@@ -2605,7 +2605,10 @@ document.addEventListener('click',function(e){if(!e.__jw)return;if(e.target.clos
 
 /* ---- mulai ---- */
 var JW_ON=true,JW_STARTED=false;
-function jwStart(){if(JW_STARTED)return;JW_STARTED=true;lockVP(true);if(!JW_SITE){var xq=document.querySelector('.xq');if(xq)xq.remove()}resize();ui();requestAnimationFrame(loop);addEventListener('resize',function(){if(JW_ON)resize()});setInterval(function(){if(!JW_ON)return;ui();save()},1000);
+function jwStart(){if(JW_STARTED)return;JW_STARTED=true;
+Object.keys(G.rusak||{}).forEach(function(k){addIcon(null,'rusak',+k)});
+Object.keys(G.mouse||{}).forEach(function(k){addIcon(null,'mouse',+k)});
+Object.keys(G.virus||{}).forEach(function(k){addIcon(null,'virus',+k)});lockVP(true);if(!JW_SITE){var xq=document.querySelector('.xq');if(xq)xq.remove()}resize();ui();requestAnimationFrame(loop);addEventListener('resize',function(){if(JW_ON)resize()});setInterval(function(){if(!JW_ON)return;ui();save()},1000);
   if(!G.mulai)welcome();else{offline();if(G.min>=24*60)nextDay()}}
 
 /* ===== UPDATE 2.0 · Juragan Naik Kelas: cerita, kota & cabang, tim e-sport & liga, Juragan Pass, Kartu Juragan, dekor & tema ===== */
