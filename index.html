@@ -3457,7 +3457,7 @@ var JWNET=(function(){
     var top=0;['hud','visitbar'].forEach(function(k){var e=document.getElementById(k)||document.querySelector('.'+k);if(e&&!e.hidden){var r=e.getBoundingClientRect();if(r.height)top=Math.max(top,r.bottom)}});tRoot.style.top=(top+10)+'px';tRoot.classList.remove('go');void tRoot.offsetWidth;tRoot.classList.add('go');setTimeout(function(){tBusy=false},9500)}
   setInterval(tick1,1000);
   setInterval(function(){if(TQ.length||!TL.length)return;TQ.push(TL[Math.floor(Math.random()*Math.min(6,TL.length))])},45000);
-  function tickerSub(){if(!db)return;var first=true;db.collection('donatur').orderBy('at','desc').limit(12).onSnapshot(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;if(x.src==='saweria'&&x.name)L.push(x)});
+  function tickerSub(){if(!db)return;var first=true;db.collection('donatur').orderBy('at','desc').limit(12).onSnapshot(function(r){var L=[];r.forEach(function(d){var x=d.data()||{};x.id=d.id;if(x.src==='saweria'&&x.name&&!x.code)L.push(x)});
       L.forEach(function(x){if(!tSeen[x.id]){tSeen[x.id]=1;if(!first)TQ.push(x)}});TL=L.filter(function(x){return Date.now()-(x.at||0)<14*864e5});if(first&&TL.length)TQ.push(TL[0]);first=false},function(){})}
   document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.closest&&e.target.closest('[data-net]');if(!b)return;var a=b.dataset.net;
     if(a==='copy'||a==='saweria'){var k=(NET.dom||{}).kode||'';try{navigator.clipboard.writeText(k).then(function(){toast('ID '+k+' disalin')},function(){toast('Salin manual: '+k)})}catch(x){toast('Salin manual: '+k)}if(a==='saweria')window.open(SAWERIA,'_blank','noopener')}
