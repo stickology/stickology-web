@@ -1910,6 +1910,48 @@
             "Angkringan pojok perempatan itu masih buka setiap malam — bagi mereka yang bisa melihatnya. Lampunya menyala, kopinya hangat, dan penjaganya selalu tersenyum seperti baru pertama kali bertemu.",
             "Mungkin di putaran berikutnya, ia akan memilih pulang."
           ]
+        },
+        penjaga: {
+          name:"Ending: Penjaga Terakhir",
+          lines:[
+            ["raka","Aku tidak bisa pergi begitu saja. Mereka datang ke sini karena masih ada yang harus kuselesaikan."],
+            ["asing","Kebaikanmu membuatmu bertahan, Ka. Tapi apakah bertahan selalu berarti menyelamatkan?"],
+            ["nar","Aku menatap kursi-kursi kosong. Untuk pertama kalinya, aku tahu siapa yang sedang kutunggu."],
+            ["nar","Lampu petromak tetap menyala. Namun kali ini, aku tidak lagi menunggu pesanan berikutnya."]
+          ],
+          epi:[
+            "Raka memilih tinggal untuk menjaga tempat yang menjadi persinggahan terakhir banyak cerita.",
+            "Setiap malam ia mendengarkan, membantu, dan menemani. Ia tidak tahu kapan tugasnya akan selesai.",
+            "Di meja kasir, sebuah catatan tertinggal: “Kalau sudah siap, rumah selalu menunggumu.”"
+          ]
+        },
+        "0333": {
+          name:"Ending: Pukul 03.33",
+          lines:[
+            ["raka","Aku sudah melihat wajahmu. Aku tidak akan lari lagi."],
+            ["asing","Kalau begitu, lihatlah sampai selesai. Tidak semua kebenaran terasa seperti pulang."],
+            ["nar","Kami berdiri berhadapan di bawah lampu jalan. Wajah itu memang wajahku — tetapi matanya menyimpan malam yang selama ini kuhindari."],
+            ["nar","Ketika jam menunjukkan 03.34, suara bising perempatan perlahan menghilang."]
+          ],
+          epi:[
+            "Untuk pertama kalinya, Raka menghadapi ingatan tentang malam kecelakaan tanpa memalingkan wajah.",
+            "Ia belum membuka mata di rumah sakit. Namun kabut di perempatan mulai terangkat.",
+            "Ada satu hal yang kini ia tahu: kebenaran tidak akan datang jika terus dihindari."
+          ]
+        },
+        lingkaran: {
+          name:"Ending Rahasia: Lingkaran",
+          lines:[
+            ["raka","Aku ingat semuanya. Setiap pesanan, setiap wajah, setiap malam."],
+            ["asing","Kalau begitu, jangan ulangi kesalahan yang sama. Pilih sesuatu yang belum pernah kamu pilih."],
+            ["nar","Aku mematikan lampu petromak, lalu meletakkan kunci gerobak di atas meja."],
+            ["nar","Dari kejauhan, terdengar suara Ibu. Kali ini aku menjawab."]
+          ],
+          epi:[
+            "Semua petunjuk akhirnya terhubung. Tidak ada lagi malam yang perlu diulang untuk mengingat siapa yang menunggu Raka.",
+            "Di antara suara mesin monitor dan tangis lega, Raka menggenggam tangan ibunya.",
+            "Pagi datang. Dan untuk pertama kalinya, perempatan itu benar-benar sunyi."
+          ]
         }
       };
 
@@ -1923,7 +1965,7 @@
         stock:{}, racik:null, cart:{},
         nightStars:[], nightKasbon:0, modalTonight:0, progress:0,
         kasbon:{}, kasbonLog:[],
-        badges:{}, stats:null,
+        badges:{}, stats:null, story:freshStory(),
         figChar:null, figMode:"near", figMood:"neutral",
         pendingPay:null,
         tutDone:false, tutArm:false, tutOn:false, tutPending:false
@@ -1932,6 +1974,46 @@
         return { nightsDone:0, threeStars:0, perfectByChar:{}, kasbonCount:0, pourPerfect:0,
                  moneyPeak:0, bestNightAvg:0, strangerMeets:0, cluesTotal:0, endings:{} };
       }
+      const STORY_KEY = "angkringan_story_v1";
+      const ENDING_KEYS = ["pulang","tetap","penjaga","0333","lingkaran"];
+      function freshStory(){
+        return { trust:0, kindness:0, suspicion:0, pragmatism:0, choices:0, flags:{}, choiceLog:[] };
+      }
+      function readEndingArchive(){
+        try { const a = JSON.parse(localStorage.getItem(STORY_KEY) || "[]"); return Array.isArray(a) ? a.filter(k => ENDING_KEYS.includes(k)) : []; }
+        catch(e){ return []; }
+      }
+      function writeEndingArchive(a){
+        try { localStorage.setItem(STORY_KEY, JSON.stringify([...new Set(a)].filter(k => ENDING_KEYS.includes(k)))); } catch(e){}
+      }
+      function recordStoryChoice(option){
+        if (!state.story) state.story = freshStory();
+        state.story.choices++;
+        const label = String(option.label || "").toLowerCase();
+        if (label.includes("deg-degan")) state.story.trust++;
+        if (label.includes("boleh, kasbon")) state.story.kindness++;
+        if (label.includes("maaf, harus tunai")) state.story.pragmatism++;
+        if (label.includes("biasa aja")) state.story.suspicion++;
+        if (option.storyFlag) state.story.flags[option.storyFlag] = true;
+        state.story.choiceLog.push({ label:String(option.label || ""), night:state.night, at:Date.now() });
+        if (state.story.choiceLog.length > 40) state.story.choiceLog.shift();
+      }
+      function availableEndingChoices(){
+        const clues = state.clues.map(c => typeof c === "string" ? c : c.text || "");
+        const allClues = clues.join(" ").toLowerCase();
+        const opts = [];
+        if (state.story.kindness >= 1 && state.clues.length >= 10) {
+          opts.push({ label:"“Aku tidak bisa meninggalkan mereka.” (Ending: Penjaga)", then:"penjaga", storyFlag:"chose_guardian" });
+        }
+        if (allClues.includes("berwajah sama denganku") || state.clues.length >= 14) {
+          opts.push({ label:"“Aku ingin menghadapi diriku sendiri.” (Ending: Pukul 03.33)", then:"0333", storyFlag:"faced_self" });
+        }
+        if (state.clues.length >= 17 && state.story.choices >= 2) {
+          opts.push({ label:"“Aku harus memutus lingkaran ini.” (Ending: Lingkaran)", then:"lingkaran", storyFlag:"break_loop" });
+        }
+        return opts;
+      }
+      state.story = freshStory();
       state.stats = freshStats();
 
       const screens = ["title","howto","night","game","summary","ending","hub","day"];
@@ -1966,6 +2048,7 @@
         state.nightClues++;
         state.stats.cluesTotal = state.clues.length;
         toast("Petunjuk baru tercatat di catatanmu");
+        saveProgress();
       }
 
       /* ---------- lencana ---------- */
@@ -2606,6 +2689,8 @@
           b.className = "choice-btn"; b.textContent = o.label;
           b.addEventListener("click", () => {
             AudioSys.resume(); AudioSys.blip();
+            recordStoryChoice(o);
+            saveProgress();
             box.classList.remove("on"); box.innerHTML = "";
             $("#dlg-box").style.display = "";
             if (o.then){ finishFinale(o.then); return; }
@@ -2937,7 +3022,11 @@
         playDialogue(fin.preLines, () => {
           // asing duduk — sosok mendekat
           setFigure("asing", "near", "somber");
-          const cust = { char:"asing", order: fin.order, patience: 0, story: fin.story, finale: true, orderLine:"Kopi joss satu. Nasi kucing satu. Sate usus satu. Kayak biasa." };
+          const finaleStory = fin.story.map(node => {
+            if (node[0] !== "choice") return node;
+            return ["choice", node[1].concat(availableEndingChoices())];
+          });
+          const cust = { char:"asing", order: fin.order, patience: 0, story: finaleStory, finale: true, orderLine:"Kopi joss satu. Nasi kucing satu. Sate usus satu. Kayak biasa." };
           state.current = cust;
           setTimeout(() => openServeUI(cust), 600);
         });
@@ -2966,6 +3055,9 @@
         state.stats.endings[key] = true;
         state.stats.nightsDone = Math.max(state.stats.nightsDone, 5);
         state.progress = 5;
+        const archive = readEndingArchive();
+        if (!archive.includes(key)) archive.push(key);
+        writeEndingArchive(archive);
         checkBadges();
         $("#ending-name").textContent = end.name;
         const art = $("#ending-art");
@@ -2980,7 +3072,19 @@
         $("#end-money").textContent = rp(state.money);
         $("#end-cust").textContent = state.servedTotal;
         $("#end-clues").textContent = state.clues.length;
+        let collection = $("#ending-collection");
+        if (!collection){
+          collection = document.createElement("div");
+          collection.id = "ending-collection";
+          collection.style.cssText = "margin:16px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.035);";
+          $("#ending-epi").after(collection);
+        }
+        const unlocked = readEndingArchive();
+        collection.innerHTML = "<strong>Koleksi ending: " + unlocked.length + "/5</strong><div style='margin-top:8px;display:grid;gap:6px'>" +
+          ENDING_KEYS.map(k => "<div style='font-size:13px;color:" + (unlocked.includes(k) ? "var(--cream)" : "var(--faint)") + "'>" +
+          (unlocked.includes(k) ? "✓ " + ENDINGS[k].name : "🔒 Ending belum ditemukan") + "</div>").join("") + "</div>";
         show("ending");
+        saveProgress();
         $("#fade-white").classList.remove("on");
         $("#fade-black").classList.remove("on");
         if (key !== "pulang") AudioSys.stopBeep();
@@ -3285,7 +3389,7 @@
         state.racik = null; state.cart = {};
         state.nightStars = []; state.nightKasbon = 0; state.modalTonight = 0; state.progress = 0;
         state.kasbon = {}; state.kasbonLog = [];
-        state.badges = {}; state.stats = freshStats();
+        state.badges = {}; state.stats = freshStats(); state.story = freshStory();
         state.pendingPay = null; state.reactionMood = null;
         stopPatience(); stopPourAnim();
         $("#screen-game").classList.remove("serving");
@@ -3331,8 +3435,9 @@
       const SAVE_KEY = "angkringan_save_v1";
       let pendingSave = null;
       function buildSave(){
-        return { v:1, progress: state.progress, money: state.money, servedTotal: state.servedTotal,
-                 badges: state.badges, clues: state.clues, stats: state.stats,
+        return { v:2, progress: state.progress, money: state.money, servedTotal: state.servedTotal,
+                 badges: state.badges, clues: state.clues, stats: state.stats, story: state.story,
+                 endingArchive: readEndingArchive(),
                  stock: state.stock, kasbon: state.kasbon, kasbonLog: state.kasbonLog,
                  tutDone: state.tutDone ? 1 : 0,
                  savedAt: Date.now() };
@@ -3361,7 +3466,8 @@
         }catch(e){}
       }
       function saveProgress(){
-        if (state.progress <= 0 && state.money <= 0 && !Object.keys(state.badges).length) return;
+        if (state.progress <= 0 && state.money <= 0 && !Object.keys(state.badges).length &&
+            !(state.story && state.story.choices > 0) && state.clues.length === 0) return;
         const d = buildSave();
         writeLocalSave(d);
         pendingSave = d;
@@ -3375,6 +3481,11 @@
         state.badges = d.badges || {};
         state.clues = Array.isArray(d.clues) ? d.clues : [];
         state.stats = Object.assign(freshStats(), d.stats || {});
+        state.story = Object.assign(freshStory(), d.story || {});
+        state.story.flags = Object.assign({}, freshStory().flags, state.story.flags || {});
+        state.story.choiceLog = Array.isArray(state.story.choiceLog) ? state.story.choiceLog : [];
+        if (Array.isArray(d.endingArchive)) writeEndingArchive(d.endingArchive);
+        readEndingArchive().forEach(k => { state.stats.endings[k] = true; });
         state.stock = Object.assign({}, START_STOCK, d.stock || {});
         state.kasbon = d.kasbon || {};
         state.kasbonLog = Array.isArray(d.kasbonLog) ? d.kasbonLog : [];
