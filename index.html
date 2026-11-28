@@ -2153,6 +2153,11 @@ var PEGAWAI={kasir:{n:'Operator kasir',ic:'🧑‍💼',gaji:30000,d:'Uang di ka
   teknisi:{n:'Teknisi',ic:'🧑‍🔧',gaji:40000,d:'Otomatis hapus virus, benerin PC rusak & ganti mouse (biaya part tetap).'},ob:{n:'OB bersih-bersih',ic:'🧹',gaji:20000,d:'Toilet otomatis dibersihin.'},
   satpam:{n:'Satpam',ic:'👮',gaji:35000,d:'Jaga pintu & nangkep maling yang kabur (80%, 95% kalau ada CCTV). Maling juga jadi jarang datang.'}};
 var STAFFPOS={pelayan:[3.3,-1.45],teknisi:[1.7,1.2],ob:[2.75,.95],satpam:[1.9,4.75]};
+var STAFFMV={};
+function staffIdle(k){return !STAFFMV[k]}
+function staffPos(k){var m=STAFFMV[k];return m?{x:m.x,z:m.z}:{x:STAFFPOS[k][0],z:STAFFPOS[k][1]}}
+function taskPos(ic){if(ic.k==='wc')return{x:4.3,z:0};if(ic.p&&ic.k!=='rusak'&&ic.k!=='mouse')return{x:ic.p.x,z:ic.p.z};var s=SLOTS[ic.s];return s?{x:s.cx,z:s.cz}:null}
+function staffSend(k,ic){var tp=taskPos(ic);if(!tp)return;var cur=staffPos(k);STAFFMV[k]={x:cur.x,z:cur.z,tx:tp.x,tz:tp.z,ic:ic,back:false}}
 var USAHA={konter:{n:'Konter pulsa & voucher',ic:'📱',c:1500000,up:[1200000,2000000],lv:1,inc:[6000,9000,13000],d:'Jual pulsa, kuota & voucher game. Kecil tapi stabil.'},
   ps:{n:'Rental PS',ic:'🎮',c:3000000,up:[2500000,4000000],lv:2,inc:[12000,18000,26000],d:'Sewa PlayStation per jam. Bocil suka. Kadang stik rusak.',ev:'stik'},
   laundry:{n:'Laundry kiloan',ic:'🧺',c:4000000,up:[3000000,5000000],lv:3,inc:[15000,22000,32000],d:'Cuci-setrika kiloan. Kalau cucian numpuk, pemasukan setengah.',ev:'cucian'},
@@ -2245,11 +2250,12 @@ function tick(dt){jobsTick(dt);
   if(G.min>=24*60)return;
   acc+=dt;while(acc>=MINS&&G.min<24*60){acc-=MINS;G.min++;minute()}
   PEOPLE.forEach(function(p){move(p,dt)});PEOPLE=PEOPLE.filter(function(p){return !p.gone});
+Object.keys(STAFFMV).forEach(function(k){var m=STAFFMV[k],dx=m.tx-m.x,dz=m.tz-m.z,l=Math.hypot(dx,dz),mv=2.6*dt;if(l<=Math.max(mv,.4)){m.x=m.tx;m.z=m.tz;if(!m.back){if(ICONS.indexOf(m.ic)>=0)tapIcon(m.ic,1);var home=STAFFPOS[k];m.tx=home[0];m.tz=home[1];m.back=true}else delete STAFFMV[k]}else{var f=mv/l;m.x+=dx*f;m.z+=dz*f}});
   ICONS.forEach(function(i){if(i.life<999){i.life-=dt;if(i.life<=0&&i.p){i.p.hap-=18;if(i.k==='virus')i.life=8;else i.dead=1}}});ICONS=ICONS.filter(function(i){return !i.dead});
   BUBS.forEach(function(b){b.life-=dt});BUBS=BUBS.filter(function(b){return b.life>0});
   FX.forEach(function(f){f.life-=dt});FX=FX.filter(function(f){return f.life>0});
   if(Math.random()<dt/20&&G.energi<G.emax)G.energi++;
-  ICONS.forEach(function(ic){ic.age=(ic.age||0)+dt;var S2=G.staff;if((ic.k==='lapar'||ic.k==='haus')&&S2.pelayan&&ic.age>3&&(stokFor(ic)>0))tapIcon(ic,1);else if((ic.k==='virus'||ic.k==='rusak'||ic.k==='mouse')&&S2.teknisi&&ic.age>5&&(ic.k==='virus'||G.uang>=50000))tapIcon(ic,1);else if(ic.k==='wc'&&S2.ob&&ic.age>4)tapIcon(ic,1)})}
+  ICONS.forEach(function(ic){ic.age=(ic.age||0)+dt;var S2=G.staff;if((ic.k==='lapar'||ic.k==='haus')&&S2.pelayan&&ic.age>3&&(stokFor(ic)>0)&&staffIdle('pelayan'))staffSend('pelayan',ic);else if((ic.k==='virus'||ic.k==='rusak'||ic.k==='mouse')&&S2.teknisi&&ic.age>5&&(ic.k==='virus'||G.uang>=50000)&&staffIdle('teknisi'))staffSend('teknisi',ic);else if(ic.k==='wc'&&S2.ob&&ic.age>4&&staffIdle('ob'))staffSend('ob',ic)})}
 function minute(){var B=G.bld,h=Math.floor(G.min/60),base=h<10?.035:h<15?.06:h<22?.09:.05,tf=Math.max(.3,Math.min(1.6,1.6-(G.tarif-3000)/7000*1.1)),open=Object.keys(G.pcs).filter(function(k){return slotOpen(SLOTS[k])}).length,cap=open+3;
   var mult=(G.rating/3)*tf*(G.rame>0?2:1)*(B.fas.musala?1.1:1)*(B.fas.parkir?1.2:1)*(1+beauty()*.03)*(B.lebar?1.15:1)*evMult();
   if(G.min<23*60+30&&PEOPLE.filter(function(p){return p.st!=='pulang'}).length<cap&&Math.random()<base*mult)spawn();
@@ -2315,7 +2321,7 @@ function drawFrame(t){ctx.setTransform(D,0,0,D,0,0);ctx.fillStyle='#A8D98A';ctx.
   var E=[];
   Object.keys(G.pcs).forEach(function(k){k=+k;var s=SLOTS[k],lv=G.pcs[k];if(!slotOpen(s)||!slotVis(s))return;E.push({d:dot([s.x,0,s.z],Fv),f:function(){dspr('pc'+lv+'_'+rowIdx(s),s.x,s.y,s.z);screen(k,s,lv,t)}});var q=ws(s.x,s.y+.8,s.z);HITS.push({x:q.x,y:q.y,r:S*.75,f:function(){openSheet('pc',k)},lo:1})});
   G.jobs.forEach(function(j){var pos=jobPos(j);if(!pos||(pos[3]&&VIEW!==pos[3]))return;E.push({d:dot([pos[0],0,pos[2]],Fv),f:function(){dspr('scaf',pos[0],pos[1],pos[2]);dspr('tk',pos[0]+.6+Math.sin(t*2)*.3,pos[1]+Math.abs(Math.sin(t*6))*.08,pos[2]+1.3);if((t*1.7%1)<.45){var tq=ws(pos[0]+.4,pos[1]+1.8,pos[2]+1.3);ctx.font='900 12px system-ui';ctx.fillStyle='#8A5A00';ctx.textAlign='center';ctx.fillText('tok!',tq.x,tq.y-(t*1.7%1)*20)}}})});
-  if(VIEW===1)Object.keys(G.staff).forEach(function(k){var sp=STAFFPOS[k];if(!sp||k==='satpam')return;E.push({d:dot([sp[0],0,sp[1]],Fv),f:function(){var q=ws(sp[0],0,sp[1]);ctx.fillStyle='rgba(0,0,0,.15)';ctx.beginPath();ctx.ellipse(q.x,q.y,S*.28,S*.14,0,0,7);ctx.fill();dspr('st_'+k,sp[0],Math.abs(Math.sin(t*2+sp[0]))*.03,sp[1])}})});
+  if(VIEW===1)Object.keys(G.staff).forEach(function(k){var sp0=STAFFPOS[k];if(!sp0||k==='satpam')return;var pp=staffPos(k),sp=[pp.x,pp.z];E.push({d:dot([sp[0],0,sp[1]],Fv),f:function(){var q=ws(sp[0],0,sp[1]);ctx.fillStyle='rgba(0,0,0,.15)';ctx.beginPath();ctx.ellipse(q.x,q.y,S*.28,S*.14,0,0,7);ctx.fill();dspr('st_'+k,sp[0],Math.abs(Math.sin(t*2+sp[0]))*.03,sp[1])}})});
   var inside=[],outside=[];PEOPLE.forEach(function(p){if(!visible(p))return;(p.z>4.15?outside:inside).push(p)});
   inside.forEach(function(p){E.push({d:dot([p.x,0,p.z+(p.st==='main'?.05:0)],Fv),f:function(){person(p,t)}})});
   E.sort(function(a,b){return b.d-a.d}).forEach(function(e){e.f()});
@@ -2459,7 +2465,7 @@ document.addEventListener('click',function(e){if(!e.__jw)return;var b=e.target.c
   else if(a==='tukar'){if(!spendBer(1))return;G.uang+=500000;toast('+Rp500rb')}
   else if(a==='snd'){G.snd=G.snd?0:1}else if(a==='mus'){G.mus=G.mus?0:1}
   else if(a==='tips'){openSheet('tips');return}
-  else if(a==='reset'){if(b.dataset.ok!=='1'){b.dataset.ok='1';b.textContent='Yakin? Ketuk lagi buat mulai ulang';return}G=fresh();PEOPLE=[];ICONS=[];OCC={};BUBS=[];VIEW=1;rebuildLayers();closeSheet();toast('Mulai dari awal!')}
+  else if(a==='reset'){if(b.dataset.ok!=='1'){b.dataset.ok='1';b.textContent='Yakin? Ketuk lagi buat mulai ulang';return}G=fresh();PEOPLE=[];ICONS=[];STAFFMV={};OCC={};BUBS=[];VIEW=1;rebuildLayers();closeSheet();toast('Mulai dari awal!')}
   else if(a==='isi'){if(!spendBer(3))return;G.energi=G.emax;toast('⚡ Energi penuh!')}
   else if(a==='rame'){if(!spendBer(5))return;G.rame=120;toast('🔥 Pelanggan rame 2× selama 2 jam!')}
   else if(a==='beres'){if(!spendBer(4))return;G.virus={};G.rusak={};G.mouse={};G.wc=0;ICONS=ICONS.filter(function(i){return i.k==='lapar'||i.k==='haus'});toast('🧹 Semua masalah beres!')}
