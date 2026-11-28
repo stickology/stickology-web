@@ -74,12 +74,12 @@ html.jw-on,html.jw-on body{overflow:hidden!important;touch-action:pan-x pan-y}
 #jw .tiles small{font-size:11px;color:#8A7A66;font-weight:700}
 #jw .news{background:#FFF0C9;border-radius:12px;padding:8px 10px;font-size:13px;font-weight:700}
 #jw .side{gap:16px!important}
-#jw .side2{right:auto;left:max(10px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 214px)}
+#jw .side2{right:auto;left:max(10px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 244px)}
 #jw .rb.sm2{width:52px;height:52px;font-size:22px}
 @media (max-height:760px){#jw .rb{width:54px;height:54px;font-size:22px}
 #jw .side{gap:13px!important}
 #jw .rb.sm2{width:46px;height:46px;font-size:19px}
-#jw .side2{top:calc(env(safe-area-inset-top,0px) + 200px)}}
+#jw .side2{top:calc(env(safe-area-inset-top,0px) + 244px)}}/* Warnet: banner kunjungan tidak menutupi pill lantai & rel */#jw .visitbar b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#jw.visiting #jw-flr{top:calc(env(safe-area-inset-top,0px) + 196px)}#jw.visiting #jw-lantai{top:calc(env(safe-area-inset-top,0px) + 240px)}#jw.visiting .side{top:calc(env(safe-area-inset-top,0px) + 214px)}#jw.visiting .side2{top:calc(env(safe-area-inset-top,0px) + 288px)}
 #jw .rb.pass{background:radial-gradient(circle at 40% 30%,#E9D8FF,#B58CF0)}
 #jw .stp{grid-column:auto;background:#E3F6E8;color:#1E6B45;cursor:pointer}
 #jw .dlg{position:fixed;inset:0;z-index:8;background:rgba(25,18,10,.38);display:flex;align-items:flex-end;justify-content:center;padding:0 max(10px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(10px,env(safe-area-inset-left,0px))}
@@ -2080,7 +2080,7 @@ function buildFG2(){var B=G.bld;LAY=2;CAST=false;
   cyl(-.6,0,4.7,.04,.9,6,'#3A3F46');box(-.95,.75,4.66,-.25,1.05,4.72,'#2FA36B');
 }
 /* lantai 2 */
-function buildRoof(){var B=G.bld,C=CAT[B.cat];LAY=2;CAST=false;if(!B.lt2)return;box(-5.2,0,-4.2,5.2,Y2,4.2,C.w2);for(var x=-4.6;x<5;x+=1.6){box(x,1.2,4.19,x+1,2.2,4.21,'#BFE3F2')}box(-5.25,Y2-.12,-4.25,5.25,Y2,4.25,'#AEB6C1')}
+function buildRoof(){var B=G.bld,C=CAT[B.cat];LAY=2;CAST=false;if(!B.lt2)return;var topY=lantaiY(Math.max(2,FLR));box(-5.2,0,-4.2,5.2,topY,4.2,C.w2);for(var f=1;f<Math.max(2,FLR);f++){var y0=lantaiY(f);for(var x=-4.6;x<5;x+=1.6){box(x,y0+1.2,4.19,x+1,y0+2.2,4.21,'#BFE3F2')}box(-5.25,y0+2.68,-4.25,5.25,y0+2.8,4.25,'#AEB6C1')}}
 function buildL2BG(){var Y2=lantaiY(Math.max(2,FLR));var B=G.bld;if(!B.lt2)return;LAY=0;floorTiles(-5,5,-4,4,Y2+.01,'#2E3350','#282C46');
   LAY=1;box(-5.2,Y2,-4.2,5.2,Y2+2.6,-4,'#2B2F4A');box(-5.2,Y2,-4.2,-5,Y2+2.6,4.2,'#262A42');
   LAY=2;box(-1.5,Y2+1.2,-3.98,2.5,Y2+2.4,-3.9,'#1B1E24');box(-1.4,Y2+1.28,-3.9,2.4,Y2+2.32,-3.89,'#7B3FB8',1);
@@ -2335,7 +2335,7 @@ function drawFrame(t){ctx.setTransform(D,0,0,D,0,0);ctx.fillStyle='#A8D98A';ctx.
   if(G.padam>0&&!G.bld.fas.genset){ctx.fillStyle='rgba(10,10,30,.35)';ctx.fillRect(0,0,W,H)}
   Object.keys(USPOS).forEach(function(k){var P0=USPOS[k],U=G.usaha[k],Ux=USAHA[k];if(VIEW!==1&&!U)return;
     if(!U){if(building(k))return;var q=ws(P0[0],.3,P0[1]);var tx=(G.lv<Ux.lv?'🔒 ':'+ ')+Ux.ic+' '+Ux.n;ctx.font='800 11px system-ui';var w=ctx.measureText(tx).width+16;ctx.fillStyle='rgba(255,248,234,.92)';ctx.strokeStyle='#C9B27C';ctx.lineWidth=2;rr(q.x-w/2,q.y-12,w,24,12);ctx.fill();ctx.stroke();ctx.fillStyle='#6B5A44';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,q.x,q.y+1);HITS.push({x:q.x,y:q.y,r:40,f:function(){stab='usaha';openSheet('man')}});return}
-    var hh=k==='kos'?U.lv*1.6+.6:2.7,q1=ws(P0[0],hh+.3,P0[1]);wtext(P0[0],k==='kos'?.95:2.33,P0[1]+(k==='kos'?2.42:k==='konter'?1.11:k==='ps'?1.71:1.61),Ux.n.toUpperCase().replace(' & VOUCHER',''),k==='kos'?'#FFFFFF':'#1B2433',5,'z',1,k==='konter'?.95:1.3);
+    var hh=k==='kos'?U.lv*1.6+.6:2.7,q1=ws(P0[0],hh+.3,P0[1]);q1.x=Math.max(56,Math.min(W-56,q1.x));q1.y=Math.max(210,q1.y);if(VIEW===1)wtext(P0[0],k==='kos'?.95:2.33,P0[1]+(k==='kos'?2.42:k==='konter'?1.11:k==='ps'?1.71:1.61),Ux.n.toUpperCase().replace(' & VOUCHER',''),k==='kos'?'#FFFFFF':'#1B2433',5,'z',1,k==='konter'?.95:1.3);
     HITS.push({x:q1.x,y:q1.y+20,r:40,f:function(){stab='usaha';openSheet('man')}});
     if(U.kas>=1000){var tx2='💵 '+rp(U.kas);ctx.font='800 13px system-ui';var w2=ctx.measureText(tx2).width+20;ctx.fillStyle='#36B44A';rr(q1.x-w2/2,q1.y-16,w2,30,14);ctx.fill();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx2,q1.x,q1.y);HITS.unshift({x:q1.x,y:q1.y,r:34,f:function(){var v=Math.round(U.kas);G.uang+=v;U.kas=0;sfx('coin2');toast(Ux.n+': +'+rpF(v));ui()}})}});
   /* timer pembangunan */
@@ -2345,7 +2345,7 @@ function drawFrame(t){ctx.setTransform(D,0,0,D,0,0);ctx.fillStyle='#A8D98A';ctx.
     ctx.font=Math.round(r*1.05)+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(icEmoji(ic),pos.x,pos.y+bob+1);HITS.unshift({x:pos.x,y:pos.y+bob,r:r+6,f:function(){tapIcon(ic)}})});
   BUBS.forEach(function(b){if(b.p.gone||!visible(b.p))return;var q=ws(b.p.x,b.p.y+(b.p.st==='main'?1.75:1.85),b.p.z);ctx.font='700 12px system-ui';var w=Math.min(170,ctx.measureText(b.t).width+18),h=26,x=Math.max(6,Math.min(W-w-6,q.x-w/2)),y=q.y-h-6;ctx.globalAlpha=Math.min(1,b.life*2);
     ctx.fillStyle='#fff';ctx.strokeStyle='rgba(0,0,0,.15)';ctx.lineWidth=1;rr(x,y,w,h,12);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(q.x-5,y+h);ctx.lineTo(q.x+5,y+h);ctx.lineTo(q.x,y+h+6);ctx.fill();ctx.fillStyle='#2B2140';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b.t,x+w/2,y+h/2+1,w-10);ctx.globalAlpha=1});
-  FX.forEach(function(f){var q=ws(f.x,f.y,f.z);ctx.globalAlpha=Math.min(1,f.life*2);ctx.font='900 15px system-ui';ctx.textAlign='center';ctx.lineWidth=4;ctx.strokeStyle='#fff';ctx.fillStyle='#1E8A55';ctx.strokeText(f.t,q.x,q.y-(1.2-f.life)*30);ctx.fillText(f.t,q.x,q.y-(1.2-f.life)*30);ctx.globalAlpha=1});
+  FX.forEach(function(f){if(VIEW!==1)return;var q=ws(f.x,f.y,f.z);ctx.globalAlpha=Math.min(1,f.life*2);ctx.font='900 15px system-ui';var fw=ctx.measureText(f.t).width+22,fh=28,fy=Math.max(200,q.y-(1.2-f.life)*30-fh/2),fx=Math.max(8,Math.min(W-fw-8,q.x-fw/2));ctx.fillStyle='rgba(255,248,234,.95)';ctx.strokeStyle='rgba(0,0,0,.15)';ctx.lineWidth=1;rr(fx,fy,fw,fh,14);ctx.fill();ctx.stroke();ctx.fillStyle='#1E8A55';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(f.t,fx+fw/2,fy+fh/2+1);ctx.textBaseline='alphabetic';ctx.globalAlpha=1});
   var mb=document.getElementById('jw-money'),mp=ws(3.4,1.6,2.85);if(G.kasir>0&&VIEW===1){mb.hidden=false;mb.style.left=mp.x+'px';mb.style.top=mp.y+'px';var tx='💵 '+rp(G.kasir).replace('Rp','Rp ');if(mb._t!==tx){mb._t=tx;mb.textContent=tx}}else mb.hidden=true;
   var fb=document.getElementById('jw-flr');if(lantaiMax()>=2){fb.hidden=false;var other=ICONS.filter(function(ic){return !iconVisible(ic)}).length;var tx2='🏢 Lantai '+FLR+' / '+lantaiMax()+(other?' · '+other+'❗':'');if(fb._t!==tx2){fb._t=tx2;fb.textContent=tx2}}else fb.hidden=true}
 function mmss(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+((s%60)<10?'0':'')+(s%60)}
@@ -3389,7 +3389,7 @@ var JWNET=(function(){
     NET.bonus=function(src,n){act('bonus',{src:src,n:n}).then(function(r){if(r&&r.ber!=null){G.ber=r.ber;ui()}},function(){})};
     NET.buy=function(kind,cb){act(kind,{}).then(function(r){var d=r&&r.out&&r.out.dom;if(d)onDom(d);else if(r&&r.ber!=null)G.ber=r.ber;save();ui();cb(true)},function(e){toast((e&&e.message)||'Gagal beli');cb(false)})};
     NET.kclaim=function(cb){act('kartuc',{}).then(function(r){var d=r&&r.out&&r.out.dom;if(d)onDom(d);else if(r&&r.ber!=null)G.ber=r.ber;ui();cb(true)},function(e){toast((e&&e.message)||'Gagal ambil');cb(false)})};
-    NET.earn=function(n){act('earn',{n:n}).then(function(r){if(r&&r.ber!=null){G.ber=r.ber;ui()}},function(){})};
+    NET.earn=function(n){act('earn',{n:n}).then(function(r){if(r&&r.ber!=null){G.ber=Math.max(G.ber,r.ber);ui()}},function(){})};
     NET.ci=function(cb){act('ci',{}).then(function(r){var o=r&&r.out||{};G.ci={d:wibDay(),s:o.s||1};if(typeof passXp==='function')passXp(30);if(o.rw&&o.rw.uang)G.uang+=o.rw.uang;if(r&&r.ber!=null)G.ber=r.ber;toast('Check-in hari ke-'+(o.s||1)+': '+(o.rw&&o.rw.ber?'+'+o.rw.ber+' 💎':'+'+rp(o.rw&&o.rw.uang||0)));sfx('up');save();ui();renderSheet(true)},function(e){toast((e&&e.message)||'Gagal check-in');if(/Udah/.test(e&&e.message||'')){G.ci={d:wibDay(),s:ciStreak()||1};renderSheet(true)}})};
     NET.topupHtml=function(){var d=NET.dom||{},promo=!d.tu1&&d.t0&&Date.now()-d.t0<3*864e5,end=(d.t0||0)+3*864e5;
       var h='<div class="topup"><b>💎 '+G.ber+' berlian</b><div class="rate">Rp100 = 1 💎</div>'+(promo?'<div class="promo">🔥 Bonus 2× top up pertama! Sisa '+Math.floor((end-Date.now())/36e5)+' jam lagi<br>Rp10.000 → <s>100</s> <b>200 💎</b></div>':'');
@@ -3422,8 +3422,8 @@ var JWNET=(function(){
   function visit(id){if(!db)return;toast('Jalan ke warnet teman…');db.doc('warnet/'+id).get().then(function(sn){var d=sn.exists?sn.data():null;if(!d||!d.mulai){toast('Warnetnya belum buka.');return}
       VISIT={self:G,people:PEOPLE,icons:ICONS,occ:OCC,view:VIEW,pan:{x:PAN.x,y:PAN.y}};var f=fresh(),o=Object.assign(f,d);o.bld=Object.assign(fresh().bld,d.bld||{});o.bld.fas=o.bld.fas||{};o.bld.hias=o.bld.hias||{};o.usaha=o.usaha||{};o.staff=o.staff||{};o.jobs=[];o.inv=o.inv||{};
       G=o;G.tut=0;G.min=Math.max(10*60,Math.min(21*60,G.min||14*60));PEOPLE=[];ICONS=[];OCC={};VIEW=1;closeSheet();rebuildLayers();for(var i=0;i<6;i++)spawn();
-      var vb=document.getElementById('jw-visitbar');vb.hidden=false;vb.querySelector('b').textContent='🏠 Mampir ke '+(G.namaW||'Warnet')+' · Juragan '+(G.nama||'');ui()},function(){toast('Nggak bisa buka warnet teman.')})}
-  function pulang(){if(!VISIT)return;G=VISIT.self;PEOPLE=VISIT.people;ICONS=VISIT.icons;OCC=VISIT.occ;VIEW=VISIT.view;PAN.x=VISIT.pan.x;PAN.y=VISIT.pan.y;VISIT=null;document.getElementById('jw-visitbar').hidden=true;rebuildLayers();ui()}
+      var vb=document.getElementById('jw-visitbar');vb.hidden=false;document.getElementById('jw').classList.add('visiting');vb.querySelector('b').textContent='🏠 Mampir ke '+(G.namaW||'Warnet')+' · Juragan '+(G.nama||'');ui()},function(){toast('Nggak bisa buka warnet teman.')})}
+  function pulang(){if(!VISIT)return;G=VISIT.self;PEOPLE=VISIT.people;ICONS=VISIT.icons;OCC=VISIT.occ;VIEW=VISIT.view;PAN.x=VISIT.pan.x;PAN.y=VISIT.pan.y;VISIT=null;document.getElementById('jw').classList.remove('visiting');document.getElementById('jw-visitbar').hidden=true;rebuildLayers();ui()}
   NET.visiting=function(){return !!VISIT};
   /* ---- pamer warnet: kartu gambar + link mampir ---- */
   var LINK='https://juraganwarnet.stickology.xyz/',card=null;
@@ -3486,7 +3486,7 @@ var JWNET=(function(){
       if(user&&user.akun)user.akun().then(function(a){akun=a}).catch(function(){});
       tickerSub();if(!db||!uid)return;
       if(server){serverHooks();initDom();db.doc('jwdompet/'+uid).onSnapshot(function(s){if(s.exists)onDom(s.data())},function(){})}
-      return db.doc('warnet/'+uid).get().then(function(sn){var d=sn.exists?sn.data():null;if(d&&d.mulai&&(!G.mulai||(d.saveAt||0)>(G.saveAt||0))){var f=fresh(),o=Object.assign(f,d);o.bld=Object.assign(fresh().bld,d.bld||{});o.bld.fas=o.bld.fas||{};o.bld.hias=o.bld.hias||{};o.staff=o.staff||{};o.usaha=o.usaha||{};o.jobs=o.jobs||[];o.inv=o.inv||{};o.mouse=o.mouse||{};if(server&&NET.dom)o.ber=G.ber;G=o;try{localStorage.setItem(LSK,JSON.stringify(G))}catch(e){}}},function(){})})}
+      return db.doc('warnet/'+uid).get().then(function(sn){var d=sn.exists?sn.data():null;if(d&&d.mulai&&(!G.mulai||(d.saveAt||0)>(G.saveAt||0))){var f=fresh(),o=Object.assign(f,d);o.bld=Object.assign(fresh().bld,d.bld||{});o.bld.fas=o.bld.fas||{};o.bld.hias=o.bld.hias||{};o.staff=o.staff||{};o.usaha=o.usaha||{};o.jobs=o.jobs||[];o.inv=o.inv||{};o.mouse=o.mouse||{};if(server&&NET.dom)o.ber=Math.max(o.ber||0,G.ber||0);G=o;try{localStorage.setItem(LSK,JSON.stringify(G))}catch(e){}}},function(){})})}
   return{boot:boot,fcode:fcode,pulang:pulang,visit:visit,uid:function(){return uid},db:function(){return db},owner:function(){try{return Promise.resolve(user&&user.isOwner?user.isOwner():false).then(function(v){return !!v},function(){return false})}catch(e){return Promise.resolve(false)}}}})();
 
 function jwOpen(){var r=document.getElementById('jw');r.hidden=false;document.documentElement.classList.add('jw-on');JW_ON=true;lockVP(true);if(!jwOpen.b){jwOpen.b=1;var L=window.__jwLoad;if(L)L.show();var go=function(){try{jwStart()}finally{requestAnimationFrame(function(){requestAnimationFrame(function(){if(L)L.done()})})}};JWNET.boot().then(go,go)}else{resize();ui()}}
