@@ -850,7 +850,7 @@
           <div class="shade"></div>
           <div class="order-bubble" id="order-bubble">
             <div class="ob-top">
-              <img class="ob-avatar" id="ob-avatar" src="assets/img/char-wiryo.webp" alt="" />
+              <img class="ob-avatar" id="ob-avatar" src="assets/img/char-wiryo.webp?v=2" alt="" />
               <div class="ob-main">
                 <div class="who" id="ob-who">Pelanggan</div>
                 <div class="say" id="ob-say"></div>
@@ -1265,7 +1265,7 @@
       /* ================= ASET GAMBAR ILUSTRASI (generate, gaya komik anime ringan) ================= */
       const FOOD_IMG = { nasi:"nasi", usus:"usus", puyuh:"puyuh", ati:"ati", bakwan:"bakwan", tempe:"tempe", tahu:"tahu", jahe:"jahe", kopi:"kopi", esteh:"esteh", susu:"susu", kerupuk:"kerupuk" };
       const ING_IMG = { nasi:"nasi", tempe:"tempe", telur:"puyuh", usus:"usus", ati:"ati", tepung:"tepung", tahu:"tahu", kerupuk:"kerupuk", kopi:"kopi", jahe:"jahe", gula:"gula", teh:"esteh", susu:"susu", es:"es", arang:"arang" };
-      const foodImg = (key) => `<img class="fimg" src="assets/img/food-${key}.png" alt="">`;
+      const foodImg = (key) => `<img class="fimg" src="assets/img/food-${key}.png?v=2" alt="">`;
 
       /* ================= DATA: GRUP CHAT WARGA (fase siang, mulai Malam 2) ================= */
       const CHAT_COLORS = { "Bu Lastri":"#e5a3b0", "Pak Wiryo":"#d9a441", "Mbak Rani":"#8ec9d8", "Dimas":"#4caf7d", "Sinta":"#d98a99", "Pak Darto":"#bcaaa4" };
@@ -1468,7 +1468,7 @@
          Ekspresi/suasana ditampilkan lewat kelas mood pada bungkusnya (animasi + rona gambar). */
       function portraitSVG(id, mood){
         const c = CHARS[id];
-        return `<img class="char-img" src="assets/img/char-${id}.webp" alt="Potret ilustrasi ${c ? c.name : id}">`;
+        return `<img class="char-img" src="assets/img/char-${id}.webp?v=2" alt="Potret ilustrasi ${c ? c.name : id}">`;
       }
 
       /* ================= DATA: CERITA =================
@@ -2557,7 +2557,7 @@
         const st = $("#stage"); if (!st || !state.racik) return;
         const it = curItem(); const rec = RECIPES[it.id];
         const img = $("#stage-img");
-        const src = "assets/img/food-" + FOOD_IMG[it.id] + ".png";
+        const src = "assets/img/food-" + FOOD_IMG[it.id] + ".png?v=2";
         if (img.getAttribute("src") !== src) img.src = src;
         img.alt = "Ilustrasi " + MENU[it.id].name + " yang sedang diracik";
         const fill = stageFillPct();
@@ -2582,7 +2582,7 @@
         const a = fromEl.getBoundingClientRect(), b = st.getBoundingClientRect();
         if (!a.width || !b.width) return;
         const im = document.createElement("img");
-        im.src = "assets/img/food-" + imgKey + ".png";
+        im.src = "assets/img/food-" + imgKey + ".png?v=2";
         im.className = "fly-img"; im.alt = "";
         im.style.left = (a.left + a.width / 2 - 17) + "px";
         im.style.top = (a.top + a.height / 2 - 17) + "px";
@@ -2786,7 +2786,7 @@
         const ob = $("#order-bubble");
         $("#ob-who").textContent = CHARS[cust.char].name;
         $("#ob-say").textContent = "Pesanan: " + cust.orderLine;
-        $("#ob-avatar").src = "assets/img/char-" + cust.char + ".webp";
+        $("#ob-avatar").src = "assets/img/char-" + cust.char + ".webp?v=2";
         $("#screen-game").classList.add("serving");
         ob.classList.add("on");
         newRacik(cust);
