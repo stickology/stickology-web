@@ -200,8 +200,10 @@
         width:min(66%,280px); opacity:0; transition:opacity .8s ease, transform .8s ease; pointer-events:none; z-index:2;
       }
       .cust-wrap.in{ opacity:1; transform:translateX(-50%) translateY(0); }
-      .cust-wrap.far{ width:min(27%,128px); bottom:31%; opacity:0; }
+      .cust-wrap.far{ width:min(44%,200px); bottom:26%; opacity:0; }
       .cust-wrap.far.in{ opacity:.96; }
+      /* sosok jauh melayang di tengah adegan: tanpa noda bayangan tanah di bawahnya */
+      .cust-wrap.far::after{ display:none; }
       .cust-wrap::after{
         content:""; position:absolute; left:10%; right:10%; bottom:0; height:18px; border-radius:50%;
         background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.55), transparent 70%); z-index:-1;
@@ -3001,6 +3003,10 @@
         setFigure("asing", "far", "somber");
         await sleep(1200);
         scene.classList.remove("flicker");
+        // sosok itu melangkah mendekat ke gerobak — selama dialog ia tampil
+        // besar dan bersih di depan meja, sama seperti pelanggan lain
+        setFigure("asing", "near", "somber");
+        await sleep(750);
         playDialogue(ev.lines, () => {
           if (ev.clue) addClue(ev.clue);
           hideFigure();
@@ -3019,9 +3025,10 @@
         setFigure("asing", "far", "somber");
         await sleep(1400);
         scene.classList.remove("flicker");
+        // asing mendekat lalu duduk di depan gerobak — tampil besar selama dialog
+        setFigure("asing", "near", "somber");
+        await sleep(600);
         playDialogue(fin.preLines, () => {
-          // asing duduk — sosok mendekat
-          setFigure("asing", "near", "somber");
           const finaleStory = fin.story.map(node => {
             if (node[0] !== "choice") return node;
             return ["choice", node[1].concat(availableEndingChoices())];
