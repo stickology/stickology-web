@@ -20,7 +20,7 @@ const ANGK = {
     title: 'Angkringan Simulator · Malam yang Sama',
   desc: 'Jaga angkringan pojok perempatan selama lima malam yang selalu sama. Gratis, langsung main di browser tanpa download.',
   url: 'https://angkringan.stickology.xyz/',
-  img: 'https://angkringan.stickology.xyz/angkringan-og.jpg',
+  img: 'https://angkringan.stickology.xyz/angkringan-og-v2.jpg',
   icon: '/angkringan-logo',
 };
 const set = (v) => ({ element(e) { e.setAttribute('content', v); } });
